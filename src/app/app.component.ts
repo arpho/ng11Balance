@@ -1,4 +1,11 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router'
+import { configs } from './configs/credentials';
+import { Platform } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+// import * as firebase from '@ionic-native/firebase';
+
+import firebase from "firebase/app";
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -53,5 +60,32 @@ export class AppComponent {
     }
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {}
+  constructor(
+    private platform: Platform,
+    //private splashScreen: SplashScreen,
+    //private statusBar: StatusBar,
+    //private info: InfoService,
+    private router: Router,
+  ) {
+
+    this.initializeApp();{
+  firebase.initializeApp(configs.firebase);
+      // const  cat = this.categoriesService.getDummyItem();
+    }
+  }
+
+  initializeApp() {
+    this.platform.ready().then(() => {
+      //this.statusBar.styleDefault();
+      //this.splashScreen.hide();
+    });
+    // devo controllare perchè durante il routing ci sono condizioni che ripassano  da qui e ritorno alla home
+    /* this.info.areThereNews().then(v => {
+      if (v > 0) {
+        this.info.navigateTo().then(path => {
+          this.router.navigateByUrl(path);
+        });
+      }
+    }); */
+  }
 }
