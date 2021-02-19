@@ -1,6 +1,6 @@
 
 // tslint:disable:semicolon
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import { ItemModelInterface } from './itemModelInterface';
 import { Observable, BehaviorSubject } from 'rxjs';
 export interface ItemServiceInterface {
@@ -18,7 +18,7 @@ suppliersListRef?
      * @param key:string
      * @returns firebase.database reference
      */
-    getItem(key: string): firebase.database.Reference;
+    getItem(key: string): firebase.default.database.Reference;
 
     /**modifica un item su firebase
      * @param item: ItemModelInterface the item to update
