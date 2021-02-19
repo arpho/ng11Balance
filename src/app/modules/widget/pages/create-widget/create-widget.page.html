@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{title}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-dynamic-form [questions]="widgetFields" (interactiveSubmit)="filter($event)" (singleSubmit)="submit($event)" 
+   (Form)="setForm($event)">
+  </app-dynamic-form>
+</ion-content>

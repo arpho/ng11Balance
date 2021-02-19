@@ -17,7 +17,7 @@ import { ItemModelInterface } from '../../models/itemModelInterface';
 import { ItemServiceInterface } from '../../models/ItemServiceInterface';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { QuestionProperties } from 'src/app/modules/dynamic-form/models/questionproperties';
-import { CategoryModel } from '../../../../../models/CategoryModel';
+import { CategoryModel } from '../../../../models/CategoryModel';
 import { ModalsService } from 'src/app/modules/item/services/modals/modals-service';
 
 @Component({

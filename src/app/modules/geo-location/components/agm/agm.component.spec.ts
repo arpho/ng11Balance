@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AgmComponent } from './agm.component';
-import { AgmCoreModule } from '@agm/core';
+//import { AgmCoreModule } from '@agm/core';
 
 describe('AgmComponent', () => {
   let component: AgmComponent;
@@ -10,7 +10,7 @@ describe('AgmComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AgmComponent],
-      imports: [AgmCoreModule]
+      //imports: [AgmCoreModule]
     })
       .compileComponents();
   }));

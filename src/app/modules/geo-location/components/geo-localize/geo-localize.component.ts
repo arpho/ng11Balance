@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Plugins, GeolocationOptions } from '@capacitor/core';
-import { AgmCoreModule } from '@agm/core';
+//import { AgmCoreModule } from '@agm/core';
 const { Geolocation } = Plugins;
 
 
@@ -12,7 +12,7 @@ const { Geolocation } = Plugins;
 })
 export class GeoLocalizeComponent implements OnInit {
 
-  constructor(public agm: AgmCoreModule) { }
+  constructor(/* public agm: AgmCoreModule */) { }
 
   async getCurrentPosition() {
     const options: GeolocationOptions = {};

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { AgmCoreModule } from '@agm/core';
+//import { AgmCoreModule } from '@agm/core';
 import { GeoLocalizeComponent } from './components/geo-localize/geo-localize.component';
 import { AgmComponent } from './components/agm/agm.component';
 import { DistanceSorterPipe } from './pipes/distance-sorter.pipe';
@@ -23,9 +23,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 
     IonicModule.forRoot(),
-    AgmCoreModule.forRoot({
+    /* AgmCoreModule.forRoot({
       apiKey: configs.google.api_key
-    }),
+    }), */
     HttpClientModule
   ],
   exports: [GeoLocalizeComponent, AgmComponent, DistanceSorterPipe, InputGeolocationComponent],

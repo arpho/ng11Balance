@@ -1,0 +1,42 @@
+<p>
+
+</p>
+<ion-fab-button (click)="createWidget()">
+  <ion-icon name="add"></ion-icon>
+</ion-fab-button>
+<div *ngIf="showSpinner"><ion-spinner name="lines"></ion-spinner></div>
+<ion-list>
+<ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
+  <ion-item-sliding
+    *ngFor="let widget of service?.widgetsList  |async "
+    #sliding_item
+  >
+  <ion-item>
+  <app-widget [Widget]="widget" [items]="items" ></app-widget>
+  <ion-reorder slot="end"></ion-reorder>
+</ion-item>
+<ion-item-options side="start">
+  <ion-button
+  ion-button
+  danger
+  color="danger"
+    (click)="deleteWidget(widget, sliding_item)"
+  >
+    <ion-icon name="trash"></ion-icon>
+    Elimina
+  </ion-button>
+</ion-item-options>
+<ion-item-options side='end'>
+  <ion-button
+  ion-button
+  (click)="updateWidget(widget.key,sliding_item)"
+  >
+  <ion-icon name='eye'></ion-icon>
+  Modifica
+  </ion-button>
+</ion-item-options>
+
+
+  </ion-item-sliding>
+</ion-reorder-group>
+</ion-list>

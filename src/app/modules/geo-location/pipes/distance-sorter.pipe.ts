@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { SupplierModel } from 'src/app/models/supplierModel';
+import { SupplierModel } from '../../../models/supplierModel';
 import { ItemModelInterface } from '../../item/models/itemModelInterface';
 import { Geolocatated } from '../models/geolocationInterface';
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { AgmCoreModule } from '@agm/core';
+//import { AgmCoreModule } from '@agm/core';
 
 @Component({
   selector: 'my-agm-map',
@@ -20,7 +20,7 @@ export class AgmComponent implements OnInit {
 
 
 
-  constructor(public agm: AgmCoreModule) {
+  constructor(/* public agm: AgmCoreModule */) {
 
 
   }

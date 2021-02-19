@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { FilterPopupPage } from '../../pages/filter-popup/filter-popup.page';
 import { QuestionBase } from '../../../dynamic-form/models/question-base';
 import { ItemModelInterface } from '../../models/itemModelInterface';
-import { access } from 'fs';
+//import { access } from 'fs';
 // tslint:disable:semicolon
 @Component({
   selector: 'app-items-filter',

@@ -34,7 +34,7 @@ export class BarcodeScannerComponent implements OnInit, ControlValueAccessor {
     key:'barcode',
     label:'',
     type:'',
-    value:this.barcode
+    value:'to fix'//this.barcode
   })]
  
   private _id: string
