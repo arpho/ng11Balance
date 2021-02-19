@@ -65,11 +65,16 @@ export class AppComponent {
     //private splashScreen: SplashScreen,
     //private statusBar: StatusBar,
     //private info: InfoService,
-    private router: Router,
-  ) {
+    ) {
 
     this.initializeApp();{
   firebase.initializeApp(configs.firebase);
+  if (!firebase.apps.length) {
+    firebase.initializeApp(configs.firebase);
+    console.log('firebase initialized')
+    // const  cat = this.categoriesService.getDummyItem();
+  }
+  else{console.log('boh',firebase.apps.length)}
       // const  cat = this.categoriesService.getDummyItem();
     }
   }
