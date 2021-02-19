@@ -1,0 +1,15 @@
+<div class="error-message" *ngIf="errorMessage">
+  {{ errorMessage }}
+</div>
+
+<ion-button ion-button (click)="scanCode()"><ion-icon name="barcode" ></ion-icon></ion-button>
+
+<form
+[formGroup]="barcodeForm"
+>
+
+  <label for="barcode">Barcode</label>
+  <input type="text" class="form-control" id="barcode"
+  formControlName="barcode"
+  [(ngModel)]="barcode" name="barcode">
+</form>

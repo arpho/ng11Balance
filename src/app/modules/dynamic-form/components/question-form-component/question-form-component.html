@@ -1,0 +1,97 @@
+<div [formGroup]="form">
+  <label [attr.for]="question?.key">{{ question?.label }}</label>
+
+  <div [ngSwitch]="question?.controlType">
+    <input
+    ngDefaultControl
+      *ngSwitchCase="'textbox'"
+      [formControlName]="question?.key"
+      [id]="question?.key"
+      [type]="question?.type"
+      [value] = "question?.value"
+    />
+    
+    
+    <div [ngSwitch]="question?.controlType">
+      <ion-textarea
+      ngDefaultControl
+        *ngSwitchCase="'textArea'"
+        [formControlName]="question?.key"
+        [id]="question?.key"
+        autoGrow="question?.autoGrow"
+        [value]= "question?.value"
+      ></ion-textarea>
+      </div>
+
+
+    <div *ngSwitchCase="'barcodeScanner'">
+      <app-barcode-scanner  
+      [formControlName]="question?.key"
+      (ngModelChange)="question?.onChange($event)"
+      [id]="question?.key"
+      [value]="question?.value"
+      ></app-barcode-scanner>
+      </div>
+
+    <div *ngSwitchCase="'datebox'">
+      <ion-datetime [formControlName]="question?.key" [id]="question?.key">
+      </ion-datetime>
+    </div>
+
+    <div *ngSwitchCase="'switchBox'">
+      <p class="switchText">
+        {{ getValue ? question.labelTrue : question.labelFalse }}
+      </p>
+      <ion-icon
+        [name]="getValue ? question.iconTrue:question.iconFalse"
+      ></ion-icon>
+      <ion-toggle
+        [formControlName]="question?.key"
+        [id]="question?.key"
+      ></ion-toggle>
+    </div>
+    
+    <div 
+      [formControlName]="question?.key"
+  [id]="question?.key"
+    >
+    <div *ngSwitchCase="'itemSelector'"
+    [formControlName]="question?.key"
+    [id]="question?.key"
+    ngDefaultControl
+    >
+        <app-selector-items
+        [formControlName]="question?.key"
+        [id]="question?.key"
+         [text]="question?.text" [service]="question?.service" (selectedItem)="question.selectedItem($event)"
+          [sorterFunction]="question?.sorterFunction"
+          [filterFunction]="question?.ItemsFilterFunction"
+          [createPopup]= "question?.createPopup"
+          [item]="question?.value"
+          (selectedItem)="question.selectedItem($event)" ></app-selector-items>
+      
+    </div>
+    <select
+      [id]="question?.key"
+      *ngSwitchCase="'dropdown'"
+      [value]="question?.value"
+      [formControlName]="question?.key"
+    >
+      <option *ngFor="let opt of question?.options" [value]="opt?.value">{{
+        opt.key
+      }}</option>
+    </select>
+    <div *ngSwitchCase="'geobox'">
+      <input-geolocation
+        [id]="question?.key"
+        [address]="question.value?.adress"
+        [formControlName]="question?.key"
+      (ngModelChange)="question?.onChange($event)"
+      ></input-geolocation>
+    </div>
+  </div>
+
+  <div style="color:red" *ngIf="!isValid">
+    {{ question ? question.label : "" }} is required
+  </div>
+</div>
