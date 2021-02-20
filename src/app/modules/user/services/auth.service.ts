@@ -11,20 +11,21 @@ export class AuthService {
   constructor() { }
 
   loginUser(email: string, password: string): Promise<any> {
-    return firebase.auth().signInWithEmailAndPassword(email, password);
+    return firebase.default.auth().signInWithEmailAndPassword(email, password);
   }
 
   resetPassword(email: string): Promise<void> {
-    return firebase.auth().sendPasswordResetEmail(email);
+    return firebase.default.auth().sendPasswordResetEmail(email);
   }
 
   signupUser(email: string, password: string): Promise<any> {
-    return firebase
+    return firebase.default
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(newUserCredential => {
         newUserCredential.user.sendEmailVerification();
         firebase
+        .default
           .database()
           .ref(`/userProfile/${newUserCredential.user.uid}/email`)
           .set(email);
@@ -36,12 +37,13 @@ export class AuthService {
   }
 
   logoutUser(): Promise<void> {
-    const userId: string = firebase.auth().currentUser.uid;
+    const userId: string = firebase.default.auth().currentUser.uid;
     firebase
+    .default
       .database()
       .ref(`/userProfile/${userId}`)
       .off();
-    return firebase.auth().signOut();
+    return firebase.default.auth().signOut();
   }
 
 }
