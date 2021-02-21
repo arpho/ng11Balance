@@ -17,6 +17,8 @@ const routes: Routes = [
   loadChildren:()=>import('./modules/user/user.module').then(m=>m.UserModule)
 },
 { path: 'categorie', loadChildren:()=>import( './pages/categorie/categorie.module').then(m=>m.CategoriePageModule), canActivate: [AuthGuard] },
+{ path: 'pagamenti', loadChildren:()=>import( './pages/pagamenti/payments.module').then(m=>m.PaymentsPageModule), canActivate: [AuthGuard] },
+{ path: 'fornitori', loadChildren:()=>import( './pages/fornitori/fornitori.module').then(m=>m.FornitoriPageModule), canActivate: [AuthGuard] },
 ];
 
 @NgModule({
