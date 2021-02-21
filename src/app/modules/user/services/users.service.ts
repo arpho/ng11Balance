@@ -11,14 +11,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: "root"
 })
 export class UsersService implements ItemServiceInterface,OnInit {
-  public usersRef: firebase.database.Reference;
+  public usersRef: firebase.default.database.Reference;
   private loggedUser: UserModel;
   items_list: Array<UserModel> = []
   _items: BehaviorSubject<Array<UserModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<UserModel>> = this._items.asObservable()
 
   constructor() {
-    this.usersRef = firebase.database().ref("/userProfile");
+    this.usersRef = firebase.default.database().ref("/userProfile");
     this.loadItems()
     
   }
@@ -37,9 +37,9 @@ export class UsersService implements ItemServiceInterface,OnInit {
   }
 
   loadItems() {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
-        this.usersRef = firebase.database().ref(`/userProfile/`);
+        this.usersRef = firebase.default.database().ref(`/userProfile/`);
         this.usersRef.on('value', this.populateItems );
       }
     });
@@ -73,7 +73,7 @@ export class UsersService implements ItemServiceInterface,OnInit {
     return this.usersRef.push(item.serialize());
   }
 
-  getEntitiesList(): firebase.database.Reference {
+  getEntitiesList(): firebase.default.database.Reference {
     return this.usersRef;
   }
 
