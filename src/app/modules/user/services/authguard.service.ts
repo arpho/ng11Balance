@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
   ): boolean | Observable<boolean> | Promise<boolean> {
     console.log("can activate");
     return new Promise((resolve, reject) => {
-      firebase.auth().onAuthStateChanged((user: firebase.User) => {
+      firebase.default.auth().onAuthStateChanged((user: firebase.default.User) => {
         if (user) {
           console.log("user from auth", user);
           this.users.setLoggedUser(user.uid);
