@@ -1,0 +1,44 @@
+{
+  "rules": {
+    "categorie": {
+      "$uid": {
+        ".read": "$uid===auth.uid",
+        ".write": "$uid===auth.uid"
+      }
+    },
+    "fornitori": {
+      "$uid": {
+        ".read": "$uid===auth.uid",
+        ".write": "$uid===auth.uid"
+      }
+    },
+    "acquisti": {
+      "$uid": {
+        ".read": "$uid===auth.uid",
+        ".write": "$uid===auth.uid"
+      }
+    },
+    "userProfile": {
+      ".read": "auth!=null",
+      ".write": "auth!=null"
+    },
+    "widgets": {
+      "$uid": {
+        ".read": "$uid===auth.uid",
+        ".write": "$uid===auth.uid"
+      }
+    },
+    "pagamenti": {
+      "$uid": {
+        ".read": "$uid===auth.uid",
+        ".write": "$uid===auth.uid"
+      }
+    },
+    "fidelityCards": {
+      "$uid": {
+        ".read": "$uid===auth.uid",
+        ".write": "$uid===auth.uid"
+      }
+    }
+  }
+}
