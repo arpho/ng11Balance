@@ -1,0 +1,6 @@
+<h3>categorie</h3>
+<ion-button  (click)="showPopup()"><ion-icon name="pricetags" ></ion-icon></ion-button>
+<app-categories-viewer [categorie]="categoriesList"
+[categoryColor]="categoryColor"
+[categoryIcon]="categoryIcon"
+ (clickedCategory)="clickedCategory($event)"></app-categories-viewer>

@@ -1,0 +1,26 @@
+.row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid black;
+  border-radius: 90px;
+}
+.block {
+  // width: 10px;
+}
+
+.green{
+  background-color: green;
+  border-radius: 90px;
+}
+
+.orange{
+  background-color: orangered;
+  border-radius: 90px;
+}
+.blue{
+  background-color:blue;
+  border-radius:90px;
+  color:deepskyblue
+}
+
