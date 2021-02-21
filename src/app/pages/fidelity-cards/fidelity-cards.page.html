@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+
+    <ion-buttons slot="start">
+
+        <ion-back-button
+        class="button-clear ion-chevron-left"
+        defaultHref="/home"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>Fidelity Cards</ion-title>
+    <div slot='end'> </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>  <app-page-items-list [items_list]="ItemsList" [service]="service" [filterFunction]="filterFunction" [sorterFunction]="sorterFunction" [createModalPage]="createModalPage" [editModalPage]="editModalPage"></app-page-items-list>
+
+
+</ion-content>

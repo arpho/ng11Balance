@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button class="button-clear ion-chevron-left" defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Categorie</ion-title>
+    <div slot="end">
+      <app-items-filter [filterFields]="filterFields" 
+      (filterFunction)="setFilter($event)"></app-items-filter>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-page-items-list [items_list]="CategoriesList" [service]="categories" [filterFunction]="filterFunction"   [editModalPage]="editModalPage">
+  </app-page-items-list>
+</ion-content>

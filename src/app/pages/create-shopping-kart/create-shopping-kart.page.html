@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{title}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-dynamic-form [questions]="kartFields" (interactiveSubmit)="filter($event)" (singleSubmit)="submit($event)"
+  (Form)="setForm($event)"
+  >
+  </app-dynamic-form>
+
+  <ion-button (click)="addPurchase()">
+    <ion-icon name='basket'></ion-icon>
+  </ion-button>
+  <div class="spinner" [style.display]="showSpinner ? 'block' : 'none'">
+    <div class="loader">
+      <div class="face">
+        <div class="circle"></div>
+      </div>
+      <div class="face">
+        <div class="circle"></div>
+      </div>
+    </div>
+  </div>
+  <div class='purchaseList'>
+    <ion-list>
+      <ion-item-sliding *ngFor="let purchase of kart.items" #sliding_item>
+        <ion-item>
+          <article>
+            <h1>{{purchase?.descrizione}}</h1>
+            <h3 slot="end">{{purchase?.moneta}}{{purchase?.prezzo}}</h3>
+            <app-categories-viewer [categorie]="purchase?.categorie" [categoryIcon]="categoryIcon"
+              [categoryColor]="categoryColor"></app-categories-viewer>
+          </article>
+        </ion-item>
+        <ion-item-options side="start">
+          <ion-item-option ion-button danger class="danger" (click)="removeItem(purchase, sliding_item)">
+            <ion-icon name="trash" class="danger"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+        <ion-item-options>
+          <ion-item-option (click)="detailPurchase(purchase)">
+            <ion-icon name="eye"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+
+    <app-total [items]="kart?.items" (total)="setTotal($event)"></app-total>
+  </div>
+
+</ion-content>

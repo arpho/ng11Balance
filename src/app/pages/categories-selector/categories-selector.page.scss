@@ -1,0 +1,28 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: antiquewhite;
+    width:fit-content;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li app-category {
+    display: block;
+    color: black;
+    text-align: center;
+   //  padding: 16px;
+    text-decoration: none;
+    margin-top: -15px;
+    margin-bottom: -15px;
+  }
+  
+  li a:hover {
+    background-color: #111111;
+  }
+
+ 

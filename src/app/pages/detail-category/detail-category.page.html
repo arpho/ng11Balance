@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>detailCategory</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <app-dynamic-form [questions]="categoryFields" (interactiveSubmit)="filter($event)" (singleSubmit)="submit($event)">
+      </app-dynamic-form>
+      <div class="spinner" [style.display]="showSpinner ? 'block' : 'none'">
+        <div class="dot1"></div>
+        <div class="dot2"></div>
+      </div>
+
+</ion-content>

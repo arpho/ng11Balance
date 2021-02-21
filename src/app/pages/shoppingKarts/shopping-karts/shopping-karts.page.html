@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button class="button-clear ion-chevron-left" defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button>
+        <a routerLink="/graphs">
+          <ion-icon name="stats"></ion-icon>
+        </a>
+      </ion-button>
+
+    <app-items-filter [filterFields]="filterFields"(filterSet)="filter($event)"(filterFunction)="setFilterFunction($event)" ></app-items-filter>
+    </ion-buttons>
+    <ion-title>Carrelli della spesa</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <app-page-items-list [items_list]="ItemsList" [service]="service" [filterFunction]="filterFunction" [secondSpinner]="secondSpinner"    [sorterFunction]="sorterFunction" [createModalPage]="createModalPage" [editModalPage]="editModalPage"></app-page-items-list>
+
+
+</ion-content>

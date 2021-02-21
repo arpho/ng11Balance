@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>categoriesSelector</ion-title>
+    <form >
+    <ion-searchbar [id]="filterString" (ionChange)="onInput($event)" >
+    </ion-searchbar>
+    </form>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-button (click)="createCategory()" ><ion-icon name="create"></ion-icon></ion-button>
+      </ion-button>
+      <ion-button (click)="dismiss(selectedCategoriesList)">
+        <ion-icon name="checkmark"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <div class="selectedCategories">
+      <ul>
+        <li *ngFor="let category of selectedCategoriesList">
+          <app-category [category]="category" [icon]="selectedCategoryIcon" (clicked)="removeCategory(category)"
+            [color]="colorSelectedCategory"></app-category>
+        </li>
+      </ul>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let category of categoriesList|filterItems: filterFunction |sorterItems: sorterFunction">
+      <app-category [category]="category" [icon]="categoryIcon" (clicked)="addCategory(category)"
+        [color]="colorSelectableCategory">
+
+      </app-category>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
