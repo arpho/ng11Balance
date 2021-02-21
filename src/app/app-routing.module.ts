@@ -5,8 +5,12 @@ import { AuthGuard } from './modules/user/services/authguard.service';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folder/Inbox',
+    redirectTo: 'home',
     pathMatch: 'full'
+  },
+  {
+    path: 'home',
+    loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
   },
   {
     path: 'folder/:id',
