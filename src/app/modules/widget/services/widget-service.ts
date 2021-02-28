@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { Schedule } from '../../../app.component'
+// import { Schedule } from '../../../app.component'
 import { promise } from 'protractor';
 import { values } from 'd3';
 import { Widget } from '../models/Widget';
@@ -77,7 +77,7 @@ export class WidgetService {
   storeName = 'widgetsList';
   widgets_list: Array<Widget>
   widgetsServices: EntityWidgetServiceInterface[] = [this.categoriesService, this.paymentsService, this.SuppliersService]
-  widgetListRef: firebase.database.Reference;
+  widgetListRef: firebase.default.database.Reference;
   items_list: any[];
 
   updateWidget(item: any) {
@@ -100,7 +100,7 @@ export class WidgetService {
     })[0]
   }
 
-  getEntitiesList(): firebase.database.Reference {
+  getEntitiesList(): firebase.default.database.Reference {
     return this.widgetListRef;
   }
 
