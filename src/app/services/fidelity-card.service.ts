@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import { ItemServiceInterface } from '../modules/item/models/ItemServiceInterface';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { FidelityCardModel } from '../models/fidelityCardModel';
@@ -10,7 +10,7 @@ import { ItemModelInterface } from '../modules/item/models/itemModelInterface';
 })
 export class FidelityCardService implements ItemServiceInterface {
 
-  public fidelityCardsListRef: firebase.database.Reference;
+  public fidelityCardsListRef: firebase.default.database.Reference;
   _items: BehaviorSubject<Array<FidelityCardModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<FidelityCardModel>> = this._items.asObservable()
   items_list: Array<FidelityCardModel> = []
@@ -20,7 +20,7 @@ export class FidelityCardService implements ItemServiceInterface {
 
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.fidelityCardsListRef = firebase.database().ref(`/fidelityCards/${user.uid}/`)
+        this.fidelityCardsListRef = firebase.default.database().ref(`/fidelityCards/${user.uid}/`)
         this.fetchItems()
 
       }
@@ -41,7 +41,7 @@ export class FidelityCardService implements ItemServiceInterface {
   suppliersService?: ItemServiceInterface;
   paymentsService?: ItemServiceInterface;
   suppliersListRef?: any;
-  getItem(key: string): firebase.database.Reference {
+  getItem(key: string): firebase.default.database.Reference {
     return this.fidelityCardsListRef.child(key)
   }
   updateItem(item: ItemModelInterface) {
@@ -63,7 +63,7 @@ export class FidelityCardService implements ItemServiceInterface {
     })
     return FidelityCard;
   }
-  getEntitiesList(): firebase.database.Reference {
+  getEntitiesList(): firebase.default.database.Reference {
     return this.fidelityCardsListRef
   }
 }
