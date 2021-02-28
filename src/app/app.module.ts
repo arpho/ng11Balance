@@ -29,10 +29,11 @@ import { CategoriesSelectorComponent } from './components/categories-selector/ca
 import { CategoriesSelectorPage } from './pages/categories-selector/categories-selector.page';
 import { CategoryComponent } from './components/category/category.component';
 import { CategoriesViewerComponent } from './components/categories-viewer/categories-viewer.component';
+import { DynamicFormModule } from './modules/dynamic-form/dynamic-form.module';
 
 @NgModule({
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ItemModule,UserModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ItemModule,UserModule,DynamicFormModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent,
     ],

@@ -24,9 +24,9 @@ export class WidgetService {
 
   constructor(public service: WidgetService, public categoriesService: CategoriesService, public SuppliersService: SuppliersService, public paymentsService: PaymentsService) {
 
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
-        this.widgetListRef = firebase.database().ref(`/widgets/${user.uid}/`);
+        this.widgetListRef = firebase.default.database().ref(`/widgets/${user.uid}/`);
 
         this.loadAllWidgets()
       }
