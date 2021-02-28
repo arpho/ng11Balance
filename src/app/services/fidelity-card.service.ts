@@ -18,7 +18,7 @@ export class FidelityCardService implements ItemServiceInterface {
   constructor() {
 
 
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.fidelityCardsListRef = firebase.default.database().ref(`/fidelityCards/${user.uid}/`)
         this.fetchItems()
