@@ -22,7 +22,7 @@ import { SelectorItemsComponent } from '../../item/components/selector-items/sel
 })
 export class WidgetService {
 
-  constructor(public service: WidgetService, public categoriesService: CategoriesService, public SuppliersService: SuppliersService, public paymentsService: PaymentsService) {
+  constructor( public categoriesService: CategoriesService, public SuppliersService: SuppliersService, public paymentsService: PaymentsService) {
 
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
