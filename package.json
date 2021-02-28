@@ -33,6 +33,7 @@
     "file-system": "^2.2.2",
     "firebase": "^8.2.7",
     "firebase-admin": "^9.5.0",
+    "ng-connection-service": "^1.0.4",
     "phonegap-plugin-barcodescanner": "^8.1.0",
     "quagga": "^0.12.1",
     "rxjs": "~6.6.0",
