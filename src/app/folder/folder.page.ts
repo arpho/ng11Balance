@@ -18,8 +18,8 @@ export class FolderPage implements OnInit {
   filterString: string;
   secondSpinner: boolean;
 
-  createModalPage= CreateShoppingKartPage
-  public editModalPage= DetailShoppingKartPage
+  createModalPage = CreateShoppingKartPage
+  public editModalPage = DetailShoppingKartPage
   filterFields: any;
   compareDate = (a: Date, b: Date) => a > b ? -1 : a < b ? 1 : 0
   filterFunction: (item: ItemModelInterface) => boolean;
@@ -31,17 +31,17 @@ export class FolderPage implements OnInit {
       return this.compareDate(dateA, dateB)
     }
 
-  constructor(private activatedRoute: ActivatedRoute,public service: ShoppingKartsService) { 
-    const oneWeekIn_ms = 60*60 /* sec in 1 hour */ 
-    *24 /**sec in one day */ 
-    * 7 /**sec in one week */
-    *1000 /**ms in one week */
-    this.filterFunction = (item:ShoppingKartModel)=>{
+  constructor(private activatedRoute: ActivatedRoute, public service: ShoppingKartsService) {
+    const oneWeekIn_ms = 60 * 60 /* sec in 1 hour */
+      * 24 /**sec in one day */
+      * 7 /**sec in one week */
+      * 1000 /**ms in one week */
+    this.filterFunction = (item: ShoppingKartModel) => {
 
-      const today  = new Date()
-      console.log(today,item.purchaseDate,today.getTime() -item.purchaseDate.getTime(),oneWeekIn_ms)
-      return today.getTime() -item.purchaseDate.getTime()< oneWeekIn_ms
-      
+      const today = new Date()
+      console.log(today, item.purchaseDate, today.getTime() - item.purchaseDate.getTime(), oneWeekIn_ms)
+      return today.getTime() - item.purchaseDate.getTime() < oneWeekIn_ms
+
     }
   }
 
@@ -50,8 +50,7 @@ export class FolderPage implements OnInit {
 
     this.secondSpinner = true
     this.ItemsList = [];
-    this.service.items.subscribe(items=>{
-      console.log('itms§:',this.ItemsList.length)
+    this.service.items.subscribe(items => {
       this.secondSpinner = false
     })
   }
