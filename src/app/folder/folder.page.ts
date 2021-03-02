@@ -31,7 +31,19 @@ export class FolderPage implements OnInit {
       return this.compareDate(dateA, dateB)
     }
 
-  constructor(private activatedRoute: ActivatedRoute,public service: ShoppingKartsService) { }
+  constructor(private activatedRoute: ActivatedRoute,public service: ShoppingKartsService) { 
+    const oneWeekIn_ms = 60*60 /* sec in 1 hour */ 
+    *24 /**sec in one day */ 
+    * 7 /**sec in one week */
+    *1000 /**ms in one week */
+    this.filterFunction = (item:ShoppingKartModel)=>{
+
+      const today  = new Date()
+      console.log(today,item.purchaseDate,today.getTime() -item.purchaseDate.getTime(),oneWeekIn_ms)
+      return today.getTime() -item.purchaseDate.getTime()< oneWeekIn_ms
+      
+    }
+  }
 
   ngOnInit() {
     this.folder = this.activatedRoute.snapshot.paramMap.get('id');
@@ -39,7 +51,7 @@ export class FolderPage implements OnInit {
     this.secondSpinner = true
     this.ItemsList = [];
     this.service.items.subscribe(items=>{
-      this.ItemsList = items
+      console.log('itms§:',this.ItemsList.length)
       this.secondSpinner = false
     })
   }
