@@ -17,5 +17,7 @@
   <div id="container">
     <strong class="capitalize">{{ folder }}</strong>
     <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <app-page-items-list [items_list]="ItemsList" [service]="service" [filterFunction]="filterFunction" [secondSpinner]="secondSpinner"    [sorterFunction]="sorterFunction" [createModalPage]="createModalPage" [editModalPage]="editModalPage"></app-page-items-list>
+
   </div>
 </ion-content>
