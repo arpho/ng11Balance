@@ -89,7 +89,7 @@ export class CategoriesService implements ItemServiceInterface, EntityWidgetServ
   }
 
   blowCategoriesUp = (karts: ShoppingKartModel[]) => {
-    return karts.reduce(this.ItemskartMapper2, []).map(this.itemsMapper2).map(this.blowupCategories).reduce(this.flattener)
+    return karts.reduce(this.ItemskartMapper2, []).map(this.itemsMapper2).map(this.blowupCategories).reduce(this.flattener,[])
   }
 
 
