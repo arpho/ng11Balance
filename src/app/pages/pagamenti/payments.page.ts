@@ -20,7 +20,7 @@ export class PaymentsPage implements OnInit {
   public createModalPage = CreatePaymentPage
   public editModalPage = DetailPaymentPage
 
-  public filterFunction: (item: ItemModelInterface) => Boolean;
+  public filterFunction: (item: ItemModelInterface) => boolean;
   constructor(public payments: PaymentsService) {
     this.filterFields = [
       new TextboxQuestion({
