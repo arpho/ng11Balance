@@ -31,7 +31,6 @@ export class PageItemComponent extends MyItemComponent implements OnInit {
   constructor(public alertCtrl: AlertController, public router: Router, public ref: ChangeDetectorRef, public modal: ModalController) {
     super(alertCtrl);
     this.Note = new Value({label:'note',value:this.note})
-    console.log('value2',this.value2)
 
   }
 

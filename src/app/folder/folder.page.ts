@@ -39,7 +39,6 @@ export class FolderPage implements OnInit {
     this.filterFunction = (item: ShoppingKartModel) => {
 
       const today = new Date()
-      console.log(today, item.purchaseDate, today.getTime() - item.purchaseDate.getTime(), oneWeekIn_ms)
       return today.getTime() - item.purchaseDate.getTime() < oneWeekIn_ms
 
     }

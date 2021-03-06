@@ -71,10 +71,9 @@ export class AppComponent {
   firebase.initializeApp(configs.firebase);
   if (!firebase.apps.length) {
     firebase.initializeApp(configs.firebase);
-    console.log('firebase initialized')
     // const  cat = this.categoriesService.getDummyItem();
   }
-  else{console.log('boh',firebase.apps.length)}
+  else{}
       // const  cat = this.categoriesService.getDummyItem();
     }
   }
