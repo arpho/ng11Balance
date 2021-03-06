@@ -30,6 +30,7 @@ export class DetailCategoryPage implements OnInit {
     this.category.title = ev['category']
   }
   async submit(ev: {}) {
+
     // tslint:disable-next-line: no-string-literal
     this.category.father = ev['father'];
     this.showSpinner = true;

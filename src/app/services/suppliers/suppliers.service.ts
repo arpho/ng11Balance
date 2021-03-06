@@ -38,8 +38,7 @@ export class SuppliersService implements ItemServiceInterface, EntityWidgetServi
         this.suppliersListRef.on('value', eventSuppliersListSnapshot => {
           this.items_list = [];
           eventSuppliersListSnapshot.forEach(snap => {
-            const supplier = new SupplierModel(undefined, snap.key).initialize(snap.val())
-            supplier.key = snap.key // alcuni item non hanno il campo key
+            const supplier = new SupplierModel(undefined, snap.key).initialize(snap.val()).setKey(snap.key)
             this.items_list.push(supplier);
             if (supplier.key === '') {
             }
