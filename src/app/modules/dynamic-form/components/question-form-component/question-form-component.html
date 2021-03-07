@@ -17,6 +17,7 @@
       ngDefaultControl
         *ngSwitchCase="'textArea'"
         [formControlName]="question?.key"
+
         [id]="question?.key"
         autoGrow="question?.autoGrow"
         [value]= "question?.value"
