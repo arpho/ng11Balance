@@ -57,11 +57,7 @@ export class AppComponent {
       title: 'info',
       url: '/info/release',
       icon: 'information-circle'
-    },{
-      title:'test',
-      url:'/test',
-      icon:'disc'
-    }
+    },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
   constructor(

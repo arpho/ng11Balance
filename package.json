@@ -13,6 +13,8 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/core": "^11.2.3",
+    "@angular-devkit/schematics": "^11.2.3",
     "@angular/common": "~11.2.0",
     "@angular/core": "~11.2.0",
     "@angular/forms": "~11.2.0",
@@ -26,6 +28,7 @@
     "@ionic-native/native-audio": "^5.31.1",
     "@ionic-native/splash-screen": "^5.31.1",
     "@ionic/angular": "^5.5.2",
+    "@schematics/angular": "^11.2.3",
     "cordova-plugin-firebase": "^2.0.5",
     "cordova-plugin-nativeaudio": "^3.0.9",
     "cordova-plugin-splashscreen": "^6.0.0",
