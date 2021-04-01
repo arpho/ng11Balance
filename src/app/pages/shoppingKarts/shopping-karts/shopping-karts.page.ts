@@ -25,15 +25,15 @@ import { CreatePaymentPage} from '../../create-payment/create-payment.page'
   styleUrls: ['./shopping-karts.page.scss'],
 })
 export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
-  ItemsList: ItemModelInterface[];
+  ItemsList: ShoppingKartModel[];
   filterLabel: string;
   filterString: string;
   secondSpinner: boolean;
   createModalPage= CreateShoppingKartPage
   public editModalPage= DetailShoppingKartPage
   filterFields: any;
-  filterFunction: (item: ItemModelInterface) => boolean;
-  sorterFunction: (a: ItemModelInterface, b: ItemModelInterface) => number =
+  filterFunction: (item: ShoppingKartModel) => boolean;
+  sorterFunction: (a: ShoppingKartModel, b: ShoppingKartModel) => number =
     (a: ShoppingKartModel, b: ShoppingKartModel) => {
       // tslint:disable: semicolon
       const dateA = a.purchaseDate.getFullDate()
