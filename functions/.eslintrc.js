@@ -9,7 +9,6 @@ module.exports = {
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
-    "google",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
