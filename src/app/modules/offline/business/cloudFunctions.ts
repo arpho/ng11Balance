@@ -9,15 +9,16 @@ export class CloudFunctions {
   toBeSynchronized = (
     operation: Operations,
     entity: string,
-    data: functions.Change<functions.database.DataSnapshot>,
+    key: string,
     context: functions.EventContext) => {
-    console.log('updating', entity, operation, data, context);
+    console.log('updating', entity, operation, key, context);
+    // registriamo la chiave dell'oggetto modificato o creato
     const ref = firebase.default.database().ref(`/toBeSynchronized/${context.params.uid}/`);
     const item = {
       entityKey: entity,
       operation,
       date: new DateModel().formatDate(),
-      item_key: data.after.key
+      key 
     };
     ref.push(item);
   }

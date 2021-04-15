@@ -34,7 +34,7 @@ const setClaims = async (data: {
 exports.createdCategory = functions.database.ref("/categorie/{uid").onUpdate((data, context) => {
   console.log("triggered")
   const cloud = new CloudFunctions;
-  cloud.toBeSynchronized(Operations.created, "categories", data, context);
+  cloud.toBeSynchronized(Operations.created, "categories", data.after.key, context);
 });
 
 // set user's role
