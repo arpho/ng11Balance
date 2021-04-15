@@ -12,7 +12,7 @@ export class CloudFunctions {
     data: functions.Change<functions.database.DataSnapshot>,
     context: functions.EventContext) => {
     console.log('updating', entity, operation, data, context);
-    const ref = firebase.database().ref(`/toBeSynchronized/${context.params.uid}/`);
+    const ref = firebase.default.database().ref(`/toBeSynchronized/${context.params.uid}/`);
     const item = {
       entityKey: entity,
       operation,
