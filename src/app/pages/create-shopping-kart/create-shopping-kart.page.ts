@@ -161,6 +161,8 @@ export class CreateShoppingKartPage implements OnInit {
   }
   removeItem(item, slidingItem) {
     this.kart.removeItem(item)
+    this.kart.totale = this.calculateTotal()
+    this.title = `nuovo carrello: ${this.kart.moneta} ${this.kart.totale}`
   }
 
   async detailPurchase(purchase) {
