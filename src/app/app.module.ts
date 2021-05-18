@@ -24,7 +24,6 @@ import { CreateFidelityCardPage } from './pages/create-fidelity-card/create-fide
 import { DetailShoppingKartPage } from './pages/detail-shopping-kart/detail-shopping-kart.page';
 import { ScannerPopupPage } from './modules/barcode/pages/scanner-popup/scanner-popup.page';
 import { CreatePaymentPage } from './pages/create-payment/create-payment.page';
-import { TotalComponent } from './components/total/total.component';
 import { CategoriesSelectorComponent } from './components/categories-selector/categories-selector.component';
 import { CategoriesSelectorPage } from './pages/categories-selector/categories-selector.page';
 import { CategoryComponent } from './components/category/category.component';
@@ -58,7 +57,6 @@ import { WidgetModule } from './modules/widget/widget.module';
       DetailShoppingKartPage,
       ScannerPopupPage,
       CreatePaymentPage,
-      TotalComponent,
       CategoriesSelectorComponent,
       CategoriesSelectorPage,
       CategoryComponent,
