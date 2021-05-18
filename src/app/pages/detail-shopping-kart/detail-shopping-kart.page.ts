@@ -113,6 +113,14 @@ export class DetailShoppingKartPage implements OnInit {
 
   }
 
+
+  calculateTotal() {
+    const reducer: (acc: number, curr: PurchaseModel) => number = (acc: number, curr: PurchaseModel) => {
+      return (curr && curr.prezzo) ? acc + curr.prezzo : acc
+    }
+    return this.kart.items ? this.kart.items.reduce<number>(reducer, 0) : 0
+  }
+
   ngOnInit() {
     this.kart = this.navParams.get('item')
     /**
@@ -177,6 +185,8 @@ export class DetailShoppingKartPage implements OnInit {
 
   removeItem(item: PurchaseModel, slidingitem) {
     this.kart.removeItem(item)
+    this.kart.totale = this.calculateTotal()
+    this.title = `${this.kart.title}: ${this.kart.moneta} ${this.kart.totale}`
   }
 
   async addPurchase() {
@@ -184,6 +194,8 @@ export class DetailShoppingKartPage implements OnInit {
     modal.onDidDismiss().then((purchase) => {
       const Purchase = purchase.data
       this.kart.addItem(Purchase)
+      this.kart.totale = this.calculateTotal()
+      this.title = `${this.kart.title}: ${this.kart.moneta} ${this.kart.totale}`
     })
     return await modal.present()
   }
