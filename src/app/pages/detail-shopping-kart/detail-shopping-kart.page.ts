@@ -22,6 +22,7 @@ import { SelectorQuestion } from 'src/app/modules/dynamic-form/models/question-s
 import { CreatePaymentPage } from '../create-payment/create-payment.page';
 import { CreateSupplierPage } from '../create-supplier/create-supplier.page'
 import { TextAreaBox } from 'src/app/modules/dynamic-form/models/question-textArea';
+import { RoundPipe } from 'src/app/modules/utilities/pipes/round.pipe';
 
 @Component({
   selector: 'app-detail-shopping-kart',
@@ -45,6 +46,7 @@ export class DetailShoppingKartPage implements OnInit {
     public toastCtrl: ToastController,
     public supplierService: SuppliersService,
     public paymentsService: PaymentsService,
+    public rounder:RoundPipe,
     public geo: GeoService,
     public modalCtrl: ModalController,
     public navParams: NavParams,
@@ -185,7 +187,7 @@ export class DetailShoppingKartPage implements OnInit {
 
   removeItem(item: PurchaseModel, slidingitem) {
     this.kart.removeItem(item)
-    this.kart.totale = this.calculateTotal()
+    this.kart.totale = this.rounder.transform(this.calculateTotal())
     this.title = `${this.kart.title}: ${this.kart.moneta} ${this.kart.totale}`
   }
 
@@ -194,7 +196,7 @@ export class DetailShoppingKartPage implements OnInit {
     modal.onDidDismiss().then((purchase) => {
       const Purchase = purchase.data
       this.kart.addItem(Purchase)
-      this.kart.totale = this.calculateTotal()
+      this.kart.totale = this.rounder.transform(this.calculateTotal())
       this.title = `${this.kart.title}: ${this.kart.moneta} ${this.kart.totale}`
     })
     return await modal.present()
