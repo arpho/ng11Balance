@@ -46,7 +46,7 @@ export class DetailShoppingKartPage implements OnInit {
     public toastCtrl: ToastController,
     public supplierService: SuppliersService,
     public paymentsService: PaymentsService,
-    public rounder:RoundPipe,
+    public rounderPipe:RoundPipe,
     public geo: GeoService,
     public modalCtrl: ModalController,
     public navParams: NavParams,
@@ -187,7 +187,7 @@ export class DetailShoppingKartPage implements OnInit {
 
   removeItem(item: PurchaseModel, slidingitem) {
     this.kart.removeItem(item)
-    this.kart.totale = this.rounder.transform(this.calculateTotal())
+    this.kart.totale = this.rounderPipe.transform(this.calculateTotal())
     this.title = `${this.kart.title}: ${this.kart.moneta} ${this.kart.totale}`
   }
 
@@ -196,7 +196,7 @@ export class DetailShoppingKartPage implements OnInit {
     modal.onDidDismiss().then((purchase) => {
       const Purchase = purchase.data
       this.kart.addItem(Purchase)
-      this.kart.totale = this.rounder.transform(this.calculateTotal())
+      this.kart.totale = this.rounderPipe.transform(this.calculateTotal())
       this.title = `${this.kart.title}: ${this.kart.moneta} ${this.kart.totale}`
     })
     return await modal.present()
