@@ -21,6 +21,7 @@ import { FormGroup } from '@angular/forms';
 import { CreateSupplierPage } from '../create-supplier/create-supplier.page';
 import { CreatePaymentPage } from '../create-payment/create-payment.page'
 import { TextAreaBox } from 'src/app/modules/dynamic-form/models/question-textArea';
+import { RoundPipe } from 'src/app/modules/utilities/pipes/round.pipe';
 // tslint:disable: semicolon
 @Component({
   selector: 'app-create-shopping-kart',
@@ -46,9 +47,11 @@ export class CreateShoppingKartPage implements OnInit {
     public supplierService: SuppliersService,
     public paymentsService: PaymentsService,
     public geo: GeoService,
+    public rounderPipe: RoundPipe,
     public modalCtrl: ModalController,
     public service: ShoppingKartsService,
   ) {
+
     this.kart = new ShoppingKartModel()
     this.supplierSorterFunction = (a: SupplierModel, b: SupplierModel) => {
       return this.geo.distance(a.address.latitude, a.address.longitude, this.position.latitude, this.position.longitude) -
@@ -60,7 +63,13 @@ export class CreateShoppingKartPage implements OnInit {
 
   setTotal(total: number) {
     this.kart.totale = Math.round(total * 100) / 100
-    this.title = `nuovo carrello ${this.kart.moneta} ${this.kart.totale} `
+    this.title = `nuovo carrello ${this.kart.moneta} ${this.rounderPipe.transform(this.kart.totale)} `
+  }
+  calculateTotal() {
+    const reducer: (acc: number, curr: PurchaseModel) => number = (acc: number, curr: PurchaseModel) => {
+      return (curr && curr.prezzo) ? acc + curr.prezzo : acc
+    }
+    return this.kart.items ? this.kart.items.reduce<number>(reducer, 0) : 0
   }
 
   async addPurchase() {
@@ -68,6 +77,8 @@ export class CreateShoppingKartPage implements OnInit {
     modal.onDidDismiss().then((purchase) => {
       const Purchase = purchase.data
       this.kart.addItem(Purchase)
+      this.kart.totale = this.calculateTotal()
+      this.title = `nuovo carrello: ${this.kart.moneta} ${this.kart.totale}`
     })
     return await modal.present()
   }
@@ -132,7 +143,7 @@ export class CreateShoppingKartPage implements OnInit {
 
 
   ngOnInit() {
-    this.title = 'nuovo carrello '
+    this.title = 'nuovo carrello  **'
     this.kart = new ShoppingKartModel()
     this.kartFields = this.setFormFields(this.kart, this.supplierFilterFunction) // kartFields must be initialized asap 
     this.geo.getPosition().then(coords => {
