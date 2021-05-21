@@ -141,7 +141,7 @@ export class CreateShoppingKartPage implements OnInit {
 
 
   ngOnInit() {
-    this.title = 'nuovo carrello  **'
+    this.title = 'nuovo carrello  '
     this.kart = new ShoppingKartModel()
     this.kartFields = this.setFormFields(this.kart, this.supplierFilterFunction) // kartFields must be initialized asap 
     this.geo.getPosition().then(coords => {
@@ -168,6 +168,7 @@ export class CreateShoppingKartPage implements OnInit {
     modal.onDidDismiss().then(data => {
       if (data.data) {
         this.kart.updateItem(data.data)
+        this.title = `nuovo carrello: ${this.kart.moneta} ${this.kart.totale}`
       }
     })
     return await modal.present()
