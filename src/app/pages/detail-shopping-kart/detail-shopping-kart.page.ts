@@ -205,6 +205,7 @@ export class DetailShoppingKartPage implements OnInit {
     const modal = await this.modalCtrl.create({ component: DetailPurchasePage, componentProps: { purchase } })
     modal.onDidDismiss().then(data => {
       this.kart.updateItem(data.data)
+      this.title = `nuovo carrello: ${this.kart.moneta} ${this.rounderPipe.transform(this.kart.totale)}`
       slidingitem.close()
     })
     return await modal.present()

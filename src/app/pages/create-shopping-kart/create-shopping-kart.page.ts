@@ -159,7 +159,7 @@ export class CreateShoppingKartPage implements OnInit {
   }
   removeItem(item, slidingItem) {
     this.kart.removeItem(item)
-    this.title = `nuovo carrello: ${this.kart.moneta} ${this.kart.totale}`
+    this.title = `nuovo carrello: ${this.kart.moneta} ${this.rounderPipe.transform( this.kart.totale)}`
   }
 
   async detailPurchase(purchase) {
@@ -168,7 +168,7 @@ export class CreateShoppingKartPage implements OnInit {
     modal.onDidDismiss().then(data => {
       if (data.data) {
         this.kart.updateItem(data.data)
-        this.title = `nuovo carrello: ${this.kart.moneta} ${this.kart.totale}`
+        this.title = `nuovo carrello: ${this.kart.moneta} ${this.rounderPipe.transform(this.kart.totale)}`
       }
     })
     return await modal.present()
