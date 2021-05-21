@@ -217,7 +217,6 @@ export class ShoppingKartModel implements ItemModelInterface {
 
             title: this.title || '',
 
-            totale: this.totale || 0,
 
             items: this.items.map((item: PurchaseModel) => item.serialize())
         }
