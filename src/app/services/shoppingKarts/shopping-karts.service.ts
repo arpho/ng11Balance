@@ -45,12 +45,9 @@ export class ShoppingKartsService implements ItemServiceInterface {
   }
   async createItem(item: ItemModelInterface) {
     var Kart
-    console.log('serialized kart',item.serialize())
     const kart = await this.shoppingKartsListRef.push(item.serialize())
     kart.on('value', value => {
-      console.log('creatied kart',value)
       Kart = this.initializeSingleKart(value)
-      console.log('initialized kart',kart)
 
       this.updateItem(Kart) // add the key to the firebase's node
     })
