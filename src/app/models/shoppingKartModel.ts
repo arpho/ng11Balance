@@ -60,6 +60,7 @@ export class ShoppingKartModel implements ItemModelInterface {
           }
           return this.items ? this.items.reduce<number>(reducer, 0) : 0
     }
+     set totale(value){} //dummy setter to let initialization of the model 
 
     getCategoriesKeys() {
         const reducer = (accumulator: Array<string>, cv: Array<string>) => accumulator = [...accumulator, ...cv]
