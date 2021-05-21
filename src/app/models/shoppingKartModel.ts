@@ -32,7 +32,6 @@ export class ShoppingKartModel implements ItemModelInterface {
     public pagamento: PaymentsModel
     online: boolean
     tassoConversione: number
-    totale: number
     items: Array<PurchaseModel> // for back compatibility
     purchases: Array<PurchaseModel>
     note: string
@@ -53,6 +52,13 @@ export class ShoppingKartModel implements ItemModelInterface {
         ]
 
 
+    }
+
+    get totale(){
+        const reducer: (acc: number, curr: PurchaseModel) => number = (acc: number, curr: PurchaseModel) => {
+            return (curr && curr.prezzo) ? acc + curr.prezzo : acc
+          }
+          return this.items ? this.items.reduce<number>(reducer, 0) : 0
     }
 
     getCategoriesKeys() {

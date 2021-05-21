@@ -62,7 +62,6 @@ export class CreateShoppingKartPage implements OnInit {
   }
 
   setTotal(total: number) {
-    this.kart.totale = Math.round(total * 100) / 100
     this.title = `nuovo carrello ${this.kart.moneta} ${this.rounderPipe.transform(this.kart.totale)} `
   }
   calculateTotal() {
@@ -77,7 +76,6 @@ export class CreateShoppingKartPage implements OnInit {
     modal.onDidDismiss().then((purchase) => {
       const Purchase = purchase.data
       this.kart.addItem(Purchase)
-      this.kart.totale = this.rounderPipe.transform(this.calculateTotal())
       this.title = `nuovo carrello: ${this.kart.moneta} ${this.kart.totale}`
     })
     return await modal.present()
@@ -161,7 +159,6 @@ export class CreateShoppingKartPage implements OnInit {
   }
   removeItem(item, slidingItem) {
     this.kart.removeItem(item)
-    this.kart.totale = this.rounderPipe.transform(this.calculateTotal())
     this.title = `nuovo carrello: ${this.kart.moneta} ${this.kart.totale}`
   }
 
