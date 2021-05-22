@@ -24,7 +24,7 @@
       </div>
 
 
-    <div *ngSwitchCase="'barcodeScanner'">
+    <div *ngSwitchCase="'barcodeScanner'" class="question">
       <app-barcode-scanner  
       [formControlName]="question?.key"
       (ngModelChange)="question?.onChange($event)"
@@ -38,7 +38,7 @@
       </ion-datetime>
     </div>
 
-    <div *ngSwitchCase="'switchBox'">
+    <div *ngSwitchCase="'switchBox'" class="question">
       <p class="switchText">
         {{ getValue ? question.labelTrue : question.labelFalse }}
       </p>
@@ -53,6 +53,7 @@
     
  
     <div *ngSwitchCase="'itemSelector'"
+    class="question"
     [formControlName]="question?.key"
     [id]="question?.key"
     ngDefaultControl
