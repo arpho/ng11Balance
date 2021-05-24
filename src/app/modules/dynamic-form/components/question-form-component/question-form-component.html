@@ -33,7 +33,7 @@
       ></app-barcode-scanner>
       </div>
 
-    <div *ngSwitchCase="'datebox'">
+    <div *ngSwitchCase="'datebox'" class='question'>
       <ion-datetime [formControlName]="question?.key" [id]="question?.key">
       </ion-datetime>
     </div>
