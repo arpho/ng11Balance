@@ -76,7 +76,7 @@ export class CreateShoppingKartPage implements OnInit {
     modal.onDidDismiss().then((purchase) => {
       const Purchase = purchase.data
       this.kart.addItem(Purchase)
-      this.title = `nuovo carrello: ${this.kart.moneta} ${this.kart.totale}`
+      this.title = `nuovo carrello: ${this.kart.moneta} ${this.rounderPipe.transform(this.kart.totale)}`
     })
     return await modal.present()
   }
