@@ -17,6 +17,7 @@ import { QuestionBase } from '../../models/question-base';
 @Component({
   selector: 'app-question',
   templateUrl: './question-form-component.html',
+  styleUrls:['./question-form-component.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   
 })
