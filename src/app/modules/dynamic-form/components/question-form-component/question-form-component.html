@@ -1,8 +1,9 @@
-<div [formGroup]="form">
+<div [formGroup]="form" >
   <label [attr.for]="question?.key">{{ question?.label }}</label>
 
   <div [ngSwitch]="question?.controlType">
     <input
+    class='question'
     ngDefaultControl
       *ngSwitchCase="'textbox'"
       [formControlName]="question?.key"
@@ -11,7 +12,7 @@
     />
     
     
-    <div [ngSwitch]="question?.controlType">
+    <div [ngSwitch]="question?.controlType" class='question'>
       <ion-textarea
       ngDefaultControl
         *ngSwitchCase="'textArea'"
