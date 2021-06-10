@@ -25,6 +25,7 @@ const routes: Routes = [
 {
   path: 'shopping-karts', loadChildren:()=>import( './pages/shoppingKarts/shopping-karts/shopping-karts.module').then(m=>m.ShoppingKartsPageModule), canActivate: [AuthGuard]
 },
+{path:'fidelityCards',loadChildren:()=>import('./pages/fidelity-cards/fidelity-cards.module').then(m=>m.FidelityCardsPageModule),canActivate:[AuthGuard]},
 { path: 'fornitori', loadChildren:()=>import( './pages/fornitori/fornitori.module').then(m=>m.FornitoriPageModule), canActivate: [AuthGuard] },
   
 ];

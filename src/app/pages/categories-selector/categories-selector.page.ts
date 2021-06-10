@@ -53,8 +53,13 @@ export class CategoriesSelectorPage implements OnInit {
     }
   }
 
+  onKeydown(event) {
+    console.log('enter',event);
+  }
+
   onInput(ev) {
 
+    console.log('input',ev.detail.value)
     this.filterFunction = this.makeFilter(ev.detail.value)
     this.filterString = ev.detail.value // spaghetti code waiting to be refactored
   }
