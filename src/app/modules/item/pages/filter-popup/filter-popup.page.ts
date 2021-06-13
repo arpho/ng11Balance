@@ -29,4 +29,8 @@ export class FilterPopupPage implements OnInit {
     this.modalCtrl.dismiss()
   }
 
+  editing(ev){
+    console.log('editing',ev)
+  }
+
 }
