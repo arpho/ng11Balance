@@ -6,8 +6,10 @@ export class DateModel extends Date {
   fullDate = new Date()
   constructor(d?: any) {
     super(d)
-    // tslint:disable: quotemark
-    // tslint:disable: no-string-literal
+    this.initialize(d)
+  }
+
+  initialize(d){
     if (d && d["day"] && d["year"] && d["month"]) {
       this.day = d["day"];
       this.month = d["month"];
@@ -32,6 +34,17 @@ export class DateModel extends Date {
     return [this.year, (mm > 9 ? "" : "0") + mm, (dd > 9 ? "" : "0") + dd].join(
       "-"
     );
+  }
+/**
+ * 
+ * @param days  number numbers of days to shift the date 
+ * @returns DateModel
+ */
+  shiftDate(days:number){
+    const milliSecInOneDay = 1000*60*60*24
+    this.fullDate = new Date( this.fullDate.getTime()+days*milliSecInOneDay)
+    this.initialize(this.fullDate)
+    return this
   }
 
   getFullDate() {

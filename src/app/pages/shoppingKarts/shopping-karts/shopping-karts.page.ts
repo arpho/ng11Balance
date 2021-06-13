@@ -91,7 +91,7 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
       }),
       new DateQuestion({
         key: 'dateAfter',
-        value: new DateModel(new Date(today.getTime()-30*(1000*60*60*24) )).formatDate(),
+        value: new DateModel(new Date(today)).shiftDate(-30).formatDate(),
         // tslint:disable-next-line: quotemark
         label: " acquistato dopo",
         // value: kart.purchaseDate.formatDate(),
