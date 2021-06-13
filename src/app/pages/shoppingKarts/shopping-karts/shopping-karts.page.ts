@@ -17,7 +17,7 @@ import { SuppliersService } from 'src/app/services/suppliers/suppliers.service';
 import { CreateShoppingKartPage } from '../../create-shopping-kart/create-shopping-kart.page';
 import { DetailShoppingKartPage } from '../../detail-shopping-kart/detail-shopping-kart.page';
 import { CreateSupplierPage } from '../../create-supplier/create-supplier.page';
-import { CreatePaymentPage} from '../../create-payment/create-payment.page'
+import { CreatePaymentPage } from '../../create-payment/create-payment.page'
 import { DateModel } from 'src/app/modules/user/models/birthDateModel';
 
 @Component({
@@ -30,8 +30,8 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
   filterLabel: string;
   filterString: string;
   secondSpinner: boolean;
-  createModalPage= CreateShoppingKartPage
-  public editModalPage= DetailShoppingKartPage
+  createModalPage = CreateShoppingKartPage
+  public editModalPage = DetailShoppingKartPage
   filterFields: any;
   filterFunction: (item: ShoppingKartModel) => boolean;
   sorterFunction: (a: ShoppingKartModel, b: ShoppingKartModel) => number =
@@ -43,7 +43,7 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
     }
 
   compareDate = (a: Date, b: Date) => a > b ? -1 : a < b ? 1 : 0
-  
+
 
 
 
@@ -52,8 +52,8 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
   }
 
   constructor(public service: ShoppingKartsService,
-    public paymentsService:PaymentsService,
-    public SuppliersService:SuppliersService) {
+    public paymentsService: PaymentsService,
+    public SuppliersService: SuppliersService) {
     const filterDescription = (value: string, item: ShoppingKartModel) =>
       (item.title) ? item.title.toUpperCase().includes(value.toUpperCase()) : true // i vecchi acquisti non hanno il campo title
     const filterNote = (value: string, item: ShoppingKartModel) => item.note ? item.note.toUpperCase().includes(value.toUpperCase()) : false
@@ -90,7 +90,7 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
       }),
       new DateQuestion({
         key: 'dateAfter',
-        //value:new DateModel().formatDate(),
+        value: new DateModel(new Date()).formatDate(),
         // tslint:disable-next-line: quotemark
         label: " acquistato dopo",
         // value: kart.purchaseDate.formatDate(),
@@ -99,7 +99,7 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
       }),
       new DateQuestion({
         key: 'dateBefore',
-        //value:new DateModel().formatDate(),
+        value: new DateModel(new Date()).formatDate(),
         label: "acquistato prima",
         filterFunction: filterBeforeDate,
         order: 4
@@ -111,12 +111,12 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
         service: this.SuppliersService,
         filterFunction: filterBySupplier,
         order: 5,
-        createPopup:CreateSupplierPage
+        createPopup: CreateSupplierPage
       }),
       new SelectorQuestion({
         key: 'payment',
         text: 'Pagamento',
-        createPopup:CreatePaymentPage,
+        createPopup: CreatePaymentPage,
         label: 'filtra per pagamento',
         service: this.paymentsService,
         filterFunction: filterByPayment,
@@ -130,7 +130,7 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
         service: this.service.categoriesService,
         filterFunction: filterByCategory,
         order: 7,
-        createPopup:''
+        createPopup: ''
       }),
       new TextboxQuestion({
         key: 'purchaseDescription',
@@ -148,12 +148,12 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
   }
 
   async ngOnInit() {
-        this.secondSpinner = true
-        this.ItemsList = [];
-        this.service.items.subscribe(items=>{
-          this.ItemsList = items
-          this.secondSpinner = false
-        })
+    this.secondSpinner = true
+    this.ItemsList = [];
+    this.service.items.subscribe(items => {
+      this.ItemsList = items
+      this.secondSpinner = false
+    })
   }
 
   filter(fileds) {
