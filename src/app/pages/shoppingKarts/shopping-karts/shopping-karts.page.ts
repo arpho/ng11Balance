@@ -64,6 +64,7 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
     const filterByPayment = (value: PaymentsModel, item: ShoppingKartModel) => item.pagamento ? item.pagamento.key == value.key : false
     const filterByCategory = (value: CategoryModel, item: ShoppingKartModel) => item.hasCategoryKey(value.key)
     const flterByPurchaseDescription = (value: string, item: ShoppingKartModel) => item.hasPurchaseDescription(value)
+    const today = new Date()
     this.filterFields = [
       new TextboxQuestion({
         key: 'description',
@@ -90,7 +91,7 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
       }),
       new DateQuestion({
         key: 'dateAfter',
-        value: new DateModel(new Date()).formatDate(),
+        value: new DateModel(new Date(today.getTime()-30*(1000*60*60*24) )).formatDate(),
         // tslint:disable-next-line: quotemark
         label: " acquistato dopo",
         // value: kart.purchaseDate.formatDate(),
