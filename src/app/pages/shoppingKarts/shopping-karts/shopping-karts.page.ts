@@ -18,6 +18,7 @@ import { CreateShoppingKartPage } from '../../create-shopping-kart/create-shoppi
 import { DetailShoppingKartPage } from '../../detail-shopping-kart/detail-shopping-kart.page';
 import { CreateSupplierPage } from '../../create-supplier/create-supplier.page';
 import { CreatePaymentPage} from '../../create-payment/create-payment.page'
+import { DateModel } from 'src/app/modules/user/models/birthDateModel';
 
 @Component({
   selector: 'app-shopping-karts',
@@ -89,6 +90,7 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
       }),
       new DateQuestion({
         key: 'dateAfter',
+        //value:new DateModel().formatDate(),
         // tslint:disable-next-line: quotemark
         label: " acquistato dopo",
         // value: kart.purchaseDate.formatDate(),
@@ -97,6 +99,7 @@ export class ShoppingKartsPage implements OnInit, ItemControllerInterface {
       }),
       new DateQuestion({
         key: 'dateBefore',
+        //value:new DateModel().formatDate(),
         label: "acquistato prima",
         filterFunction: filterBeforeDate,
         order: 4
