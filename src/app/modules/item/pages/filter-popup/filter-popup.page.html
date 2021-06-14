@@ -10,6 +10,6 @@
 </ion-header>
 
 <ion-content>
-  <app-dynamic-form [questions]="filterFields" (singleSubmit)="submit($event)"(interactiveSubmit)="editing($event)"></app-dynamic-form>
+  <app-dynamic-form [questions]="filterFields" (singleSubmit)="submit($event)"(changes)="editing($event)"></app-dynamic-form>
 
 </ion-content>

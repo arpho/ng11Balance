@@ -4,7 +4,9 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  OnChanges,
+  SimpleChanges
   // tslint:disable: semicolon
   // tslint:disable: quotemark
 } from "@angular/core";
@@ -25,11 +27,12 @@ import { QuestionControlService } from "../../services/question-control.service"
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [QuestionControlService]
 })
-export class DynamicFormComponent implements OnInit {
+export class DynamicFormComponent implements OnInit,OnChanges {
   @Output() interactiveSubmit: EventEmitter<{}> = new EventEmitter();
   @Output() singleSubmit: EventEmitter<{}> = new EventEmitter();
   // the page could need to observe the form
   @Output() Form: EventEmitter<FormGroup> = new EventEmitter()
+  @Output() changes:EventEmitter<SimpleChanges> = new EventEmitter()
   @Input() questions: QuestionBase<any>[] = [];
   @Input() submitText: string;
 
@@ -37,9 +40,16 @@ export class DynamicFormComponent implements OnInit {
   payLoad
 
   constructor(private qcs: QuestionControlService) { }
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('changes',changes)
+    this.changes.emit(changes)
+  }
 
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questions);
+    this.form.valueChanges.subscribe(data =>{
+      this.changes.emit(data)
+    })
     if (this.questions.filter(v => v.key === "location").length > 0) {
       this.form.addControl("address", new FormControl()); // input-geolocation usa un control in più
     }
