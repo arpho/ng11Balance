@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): boolean | Observable<boolean> | Promise<boolean> {
     return new Promise((resolve, reject) => {
-      firebase.auth().onAuthStateChanged((user: firebase.User) => {
+      firebase.default.auth().onAuthStateChanged((user: firebase.default.User) => {
         if (user) {
           console.log('authorised',user)
           this.User.setLoggedUser(user.uid);

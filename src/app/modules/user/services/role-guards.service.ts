@@ -19,7 +19,7 @@ export class RoleGuardService implements CanActivate {
     console.log('role guard')
     const expectedRole = route.data.expectedRole[0];
 
-    firebase.auth().onAuthStateChanged((user: firebase.User) => {
+    firebase.default.auth().onAuthStateChanged((user: firebase.default.User) => {
       if (user) {
         if (!this.Users.getLoggedUser()) {
         }
@@ -29,6 +29,7 @@ export class RoleGuardService implements CanActivate {
       }
     });
     firebase
+    .default
       .auth()
       .currentUser.getIdTokenResult(true)
       .then(token => {
