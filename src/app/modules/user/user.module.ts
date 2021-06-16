@@ -51,7 +51,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [LoginPage],
-  imports: [FormsModule,ReactiveFormsModule,IonicModule.forRoot(),RouterModule.forChild([{path:'login',component:LoginPage}]),
+  imports: [FormsModule,ReactiveFormsModule,IonicModule.forRoot(),RouterModule.forChild(routes),
     CommonModule
   ],
 })
