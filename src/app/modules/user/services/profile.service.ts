@@ -11,15 +11,15 @@ export class ProfileService {
   public currentUser: firebase.default.User;
 
   constructor() {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.currentUser = user;
-        this.userProfile = firebase.database().ref(`/userProfile/${user.uid}`);
+        this.userProfile = firebase.default.database().ref(`/userProfile/${user.uid}`);
       }
     });
   }
 
-  getUserProfile(): firebase.database.Reference {
+  getUserProfile(): firebase.default.database.Reference {
     return this.userProfile;
   }
 
