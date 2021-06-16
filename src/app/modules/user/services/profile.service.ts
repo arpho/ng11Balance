@@ -7,8 +7,8 @@ import "firebase/database";
   providedIn: "root"
 })
 export class ProfileService {
-  public userProfile: firebase.database.Reference;
-  public currentUser: firebase.User;
+  public userProfile: firebase.default.database.Reference;
+  public currentUser: firebase.default.User;
 
   constructor() {
     firebase.auth().onAuthStateChanged(user => {
@@ -38,7 +38,7 @@ export class ProfileService {
   }
 
   updateEmail(newEmail: string, password: string): Promise<any> {
-    const credential: firebase.auth.AuthCredential = firebase.auth.EmailAuthProvider.credential(
+    const credential: firebase.default.auth.AuthCredential = firebase.default.auth.EmailAuthProvider.credential(
       this.currentUser.email,
       password
     );
@@ -55,7 +55,7 @@ export class ProfileService {
   }
 
   updatePassword(newPassword: string, oldPassword: string): Promise<any> {
-    const credential: firebase.auth.AuthCredential = firebase.auth.EmailAuthProvider.credential(
+    const credential: firebase.default.auth.AuthCredential = firebase.default.auth.EmailAuthProvider.credential(
       this.currentUser.email,
       oldPassword
     );
