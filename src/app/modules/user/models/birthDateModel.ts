@@ -4,12 +4,12 @@ export class DateModel extends Date {
   month = 10;
   year = 2020;
   fullDate = new Date()
-  constructor(d?: any) {
+  constructor(d?: any ){
     super(d)
     this.initialize(d)
   }
 
-  initialize(d) {
+  initialize(d:   Date|any) {
     if (d && d["day"] && d["year"] && d["month"]) {
       this.day = d["day"];
       this.month = d["month"];
