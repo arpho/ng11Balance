@@ -3,6 +3,7 @@ import { FormGroup, Validators, FormBuilder } from "@angular/forms";
 import { LoadingController, AlertController } from "@ionic/angular";
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
+import * as firebase from "firebase";
 
 @Component({
   selector: "app-login",
@@ -39,6 +40,7 @@ export class LoginPage implements OnInit {
       const password = loginForm.value.password;
       this.authService.loginUser(email, password).then(
         () => {
+          firebase.default.auth().setPersistence(firebase.default.auth.Auth.Persistence.LOCAL)
           this.loading.dismiss().then(() => {
             this.router.navigateByUrl("home");
           });
