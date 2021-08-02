@@ -7,28 +7,32 @@ import "firebase/database";
   providedIn: "root"
 })
 export class ProfileService {
-  public userProfile: firebase.default.database.Reference;
+  public userProfileReference: firebase.default.database.Reference;
   public currentUser: firebase.default.User;
 
   constructor() {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
+        console.log('user',user.uid)
         this.currentUser = user;
-        this.userProfile = firebase.default.database().ref(`/userProfile/${user.uid}`);
+        this.userProfileReference = firebase.default.database().ref(`/userProfile/${user.uid}/`);
+
+        console.log('profile',this.userProfileReference)
       }
     });
   }
 
-  getUserProfile(): firebase.default.database.Reference {
-    return this.userProfile;
+  getUserProfileReference(): firebase.default.database.Reference {
+console.log('getting usr profile reference')
+    return this.userProfileReference;
   }
 
   updateName(firstName: string, lastName: string): Promise<any> {
-    return this.userProfile.update({ firstName, lastName });
+    return this.userProfileReference.update({ firstName, lastName });
   }
 
   updateDOB(birthDate: Date): Promise<any> {
-    return this.userProfile.update({
+    return this.userProfileReference.update({
       birthDate: {
         year: birthDate.getFullYear(),
         month: birthDate.getMonth(),
@@ -46,7 +50,7 @@ export class ProfileService {
       .reauthenticateWithCredential(credential)
       .then(() => {
         this.currentUser.updateEmail(newEmail).then(() => {
-          this.userProfile.update({ email: newEmail });
+          this.userProfileReference.update({ email: newEmail });
         });
       })
       .catch(error => {

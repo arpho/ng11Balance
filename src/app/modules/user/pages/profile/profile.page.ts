@@ -3,6 +3,8 @@ import { AlertController } from "@ionic/angular";
 import { AuthService } from "../../services/auth.service";
 import { ProfileService } from "../../services/profile.service";
 import { Router } from "@angular/router";
+import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
+import { textChangeRangeIsUnchanged } from "typescript";
 
 @Component({
   selector: "app-profile",
@@ -17,14 +19,18 @@ export class ProfilePage implements OnInit {
     private authService: AuthService,
     private profileService: ProfileService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
-    if (this.profileService.getUserProfile()) {
+    console.log('init profile')
+    this.userProfile = {firstName:'nome',lastName:'cognome'}
+    if (this.profileService.getUserProfileReference()) {
+      console.log('getting profile')
       this.profileService
-        .getUserProfile()
-        .once("value", userProfileSnapshot => {
-          this.userProfile = userProfileSnapshot.val();
+        .getUserProfileReference()
+        .on("value", userProfileSnapshot => {
+          console.log('got profile',userProfileSnapshot)
+          this.userProfile = userProfileSnapshot.val() || { firstName: '', lastName: '' };
           if (this.userProfile.birthDate) {
             var dob = new Date();
             dob.setFullYear(this.userProfile.birthDate.year);
@@ -32,7 +38,7 @@ export class ProfilePage implements OnInit {
             dob.setDate(this.userProfile.birthDate.day);
             this.birthDate = dob.toISOString();
           }
-        });
+        })
     }
   }
 
@@ -50,13 +56,13 @@ export class ProfilePage implements OnInit {
           type: "text",
           name: "firstName",
           placeholder: "Il tuo Nome",
-          value: this.userProfile.firstName
+          value: this.userProfile ? this.userProfile.firstName : ''
         },
         {
           type: "text",
           name: "lastName",
           placeholder: "Il tuo Cognome",
-          value: this.userProfile.lastName
+          value: this.userProfile ? this.userProfile.lastName : ''
         }
       ],
       buttons: [
@@ -66,7 +72,7 @@ export class ProfilePage implements OnInit {
           handler: data => {
             this.userProfile.firstName = data.firstName;
             this.userProfile.lastName = data.lastName;
-            this.profileService.updateName(data.firstName, data.lastName);
+            this.profileService.updateName(data.firstName, data.lastName).then((value=>{console.log('updated',value)}));
           }
         }
       ]

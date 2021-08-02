@@ -132,6 +132,7 @@ export class DetailShoppingKartPage implements OnInit {
       if (this.kart) {
         this.kart.setPayment(payments.filter(pay => pay.key == this.kart.pagamentoId)[0])
         this.setKartFields()
+        console.log('kart',this.kart)
       }
     })
     /**

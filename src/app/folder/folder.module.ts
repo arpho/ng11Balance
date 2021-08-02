@@ -17,6 +17,7 @@ import { ItemModule } from '../modules/item/item.module';
     FolderPageRoutingModule,
     ItemModule
   ],
-  declarations: [FolderPage]
+  declarations: [FolderPage],
 })
 export class FolderPageModule {}
+File
