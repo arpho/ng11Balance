@@ -4,7 +4,7 @@ import { AuthGuard } from "./services/authguard.service";
 import { RoleGuardService } from './services/role-guards.service';
 // import { CanActivate } from "@angular/router/src/utils/preactivation";
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: "profile",
     loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule),
@@ -24,6 +24,11 @@ const routes: Routes = [
       "./pages/reset-password/reset-password.module").then(m => m.ResetPasswordPageModule),
     canActivate: [AuthGuard]
 
+  },
+  {
+    path: "profile",
+    loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: "users",

@@ -6,17 +6,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginPage } from './pages/login/login.page';
 import { AuthGuard } from './services/authguard.service';
 import { RoleGuardService } from './services/role-guards.service';
+import {routes} from './user-routing.module'
 
-const routes: Routes = [
+const routes2: Routes = [
   {
     path: "login",
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },
-  {
-    path: "profile",
-    loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule),
-    canActivate: [AuthGuard]
-  },
+  
   {
     path: "signup",
     loadChildren: () => import("./pages/signup/signup.module").then(m => m.SignupPageModule)
