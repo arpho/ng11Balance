@@ -21,7 +21,7 @@ export class WidgetServiceMocker implements ItemServiceInterface, EntityWidgetSe
     _items: import("rxjs").BehaviorSubject<ItemModelInterface[]>;
     items_list: ItemModelInterface[];
     items: import("rxjs").Observable<ItemModelInterface[]>;
-    getItem(key: string): import("firebase").database.Reference {
+    getItem(key: string): import("firebase").default.database.Reference {
         throw new Error("Method not implemented.");
     }
     updateItem(item: ItemModelInterface) {
@@ -33,10 +33,10 @@ export class WidgetServiceMocker implements ItemServiceInterface, EntityWidgetSe
     getDummyItem(): ItemModelInterface {
         throw new Error("Method not implemented.");
     }
-    createItem(item: ItemModelInterface): import("firebase").database.ThenableReference {
+    createItem(item: ItemModelInterface): import("firebase").default.database.ThenableReference {
         throw new Error("Method not implemented.");
     }
-    getEntitiesList(): import("firebase").database.Reference {
+    getEntitiesList(): import("firebase").default.database.Reference {
         throw new Error("Method not implemented.");
     }
 
