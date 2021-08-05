@@ -56,9 +56,7 @@ describe('serialize must not have undefined fields', () => {
         expect(kart.serialize().pagamentoId).toBe('')
     })
 
-    it('check total', () => {
-        expect(kart.serialize().totale).toBe(0)
-    })
+
 
     it('checking fornitoreId', () => {
         expect(kart.serialize().fornitoreId).toBe('')
