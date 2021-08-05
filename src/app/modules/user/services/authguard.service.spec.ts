@@ -6,7 +6,7 @@ import { configs } from '../../../configs/credentials';
 import * as firebase from 'firebase/app';
 
 describe('AuthguardService', () => {
-  firebase.initializeApp(configs.firebase);
+  firebase.default.initializeApp(configs.firebase);
   beforeEach(() => TestBed.configureTestingModule({
     imports: [RouterModule, RouterTestingModule],
   }));
