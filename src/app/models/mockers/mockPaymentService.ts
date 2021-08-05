@@ -10,7 +10,7 @@ export class MockPaymentService implements ItemServiceInterface {
     readonly items: Observable<Array<ItemModelInterface>> = this._items.asObservable()
     items_list: Array<ItemModelInterface> = []
     paymentsService?: ItemServiceInterface;
-    public categoriesListRef: firebase.database.Reference;
+    public categoriesListRef: firebase.default.database.Reference;
 
 
     getItem(key: string): any {
@@ -38,10 +38,10 @@ export class MockPaymentService implements ItemServiceInterface {
     getDummyItem(): ItemModelInterface {
         return new PaymentsModel()
     }
-    createItem(item: ItemModelInterface): import('firebase').database.ThenableReference {
+    createItem(item: ItemModelInterface): import('firebase').default.database.ThenableReference {
         throw new Error('Method not implemented.');
     }
-    getEntitiesList(): import('firebase').database.Reference {
+    getEntitiesList(): import('firebase').default.database.Reference {
         throw new Error('Method not implemented.');
     }
 

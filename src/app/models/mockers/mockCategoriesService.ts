@@ -9,7 +9,7 @@ export class MockCategoriesService implements ItemServiceInterface {
     _items: BehaviorSubject<Array<ItemModelInterface>> = new BehaviorSubject([])
     readonly items: Observable<Array<ItemModelInterface>> = this._items.asObservable()
     items_list: Array<ItemModelInterface> = []
-    public categoriesListRef: firebase.database.Reference;
+    public categoriesListRef: firebase.default.database.Reference;
     getItem(key: string): any {
         const data = {
             a: { title: 'a' },
@@ -48,10 +48,10 @@ export class MockCategoriesService implements ItemServiceInterface {
         return new CategoryModel()
     }
     createItem(item: import('../../modules/item/models/itemModelInterface').
-        ItemModelInterface): import('firebase').database.ThenableReference {
+        ItemModelInterface): import('firebase').default.database.ThenableReference {
         throw new Error('Method not implemented.');
     }
-    getEntitiesList(): import('firebase').database.Reference {
+    getEntitiesList(): import('firebase').default.database.Reference {
         throw new Error('Method not implemented.');
     }
 

@@ -10,7 +10,7 @@ export class MockSupplierService implements ItemServiceInterface {
     _items: BehaviorSubject<Array<ItemModelInterface>> = new BehaviorSubject([])
     readonly items: Observable<Array<ItemModelInterface>> = this._items.asObservable()
     items_list: Array<ItemModelInterface> = []
-    public suppliersListRef: firebase.database.Reference;
+    public suppliersListRef: firebase.default.database.Reference;
     getItem(key: string): any {
         const data = {
             address: {
@@ -49,10 +49,10 @@ export class MockSupplierService implements ItemServiceInterface {
         return new SupplierModel();
     }
     createItem(item: import('../../modules/item/models/itemModelInterface').ItemModelInterface):
-        import('firebase').database.ThenableReference {
+        import('firebase').default.database.ThenableReference {
         throw new Error('Method not implemented.');
     }
-    getEntitiesList(): import('firebase').database.Reference {
+    getEntitiesList(): import('firebase').default.database.Reference {
         throw new Error('Method not implemented.');
     }
 

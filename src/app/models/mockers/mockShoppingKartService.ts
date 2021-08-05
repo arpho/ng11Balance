@@ -14,7 +14,7 @@ export class MockShoppingKartervice implements ItemServiceInterface {
     categoriesService?: MockCategoriesService; suppliersService?: MockSupplierService;
     paymentsService?: MockPaymentService;
     data: {}
-    public shoppingKartsListRef: firebase.database.Reference
+    public shoppingKartsListRef: firebase.default.database.Reference
      _items:BehaviorSubject<Array<ShoppingKartModel>> = new BehaviorSubject([])
     public readonly items:Observable<Array<ShoppingKartModel>> = this._items.asObservable()
      items_list:Array<ShoppingKartModel> = []
@@ -51,10 +51,10 @@ export class MockShoppingKartervice implements ItemServiceInterface {
         return new ShoppingKartModel()
     }
     createItem(item: import('../../modules/item/models/itemModelInterface').ItemModelInterface):
-        import('firebase').database.ThenableReference {
+        import('firebase').default.database.ThenableReference {
         throw new Error('Method not implemented.');
     }
-    getEntitiesList(): import('firebase').database.Reference {
+    getEntitiesList(): import('firebase').default.database.Reference {
         throw new Error('Method not implemented.');
     }
 
