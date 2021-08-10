@@ -17,7 +17,7 @@ describe('ShoppingKart should instantiate', () => {
         dataAcquisto: '1977-03-16',
         fornitoreId: 'qwerty',
         pagamentoId: 'asdfghj',
-        totale: 15,
+        totale: 0,
         title: 'title',
         note: 'note',
         key: 'zxcvbnm'
