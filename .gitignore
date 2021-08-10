@@ -33,3 +33,5 @@ npm-debug.log*
 roor-folder.png
 
 functions/src/index.old.ts
+
+*.cache

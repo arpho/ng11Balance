@@ -66,16 +66,11 @@ export class AppComponent {
     //private statusBar: StatusBar,
     //private info: InfoService,
     ) {
-
-    this.initializeApp();{
-  firebase.initializeApp(configs.firebase);
-  if (!firebase.apps.length) {
-    firebase.initializeApp(configs.firebase);
-    // const  cat = this.categoriesService.getDummyItem();
-  }
-  else{}
-      // const  cat = this.categoriesService.getDummyItem();
+      if (firebase.apps.length === 0) {
+        firebase.initializeApp(configs.firebase);
     }
+
+  
   }
 
   initializeApp() {
