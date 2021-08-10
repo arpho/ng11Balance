@@ -20,7 +20,7 @@ export class AppComponent {
     },
     {
       title: 'profilo',
-      url: '/user/profile',
+      url: '/users/profile',
       icon: 'person'
     },
     {

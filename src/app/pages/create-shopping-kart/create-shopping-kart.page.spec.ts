@@ -4,6 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateShoppingKartPage } from './create-shopping-kart.page';
 import { ModalController, AngularDelegate } from '@ionic/angular';
 import { HttpClient, HttpHandler } from '@angular/common/http';
+import { UtilitiesModule } from 'src/app/modules/utilities/utilities.module';
 
 describe('CreateShoppingKartPage', () => {
   let component: CreateShoppingKartPage;
@@ -12,7 +13,7 @@ describe('CreateShoppingKartPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CreateShoppingKartPage],
-      providers: [ModalController, AngularDelegate, HttpClient, HttpHandler],
+      providers: [ModalController, AngularDelegate, HttpClient, HttpHandler,UtilitiesModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
       .compileComponents();
