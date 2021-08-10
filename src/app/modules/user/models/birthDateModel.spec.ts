@@ -8,7 +8,7 @@ describe('model should create from object', () => {
         expect(modelDate.day).toBe(16)
         expect(modelDate.month).toBe(3)
         expect(modelDate.year).toBe(1977)
-        expect(modelDate.fullDate).toBeFalsy()
+        expect(modelDate.fullDate).toBeTruthy() // non so perchè fosse toBEFalsy()
     })
     it('checking formatDate', () => {
         expect(modelDate.formatDate()).toBe('1977-04-16')
