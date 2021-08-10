@@ -25,7 +25,7 @@ export class AppComponent {
     },
     {
       title: 'Utenti',
-      url: '/user/users',
+      url: '/users/users',
       icon: 'people'
     },
     {
