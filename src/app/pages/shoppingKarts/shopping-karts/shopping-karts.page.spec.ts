@@ -1,5 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { UtilitiesModule } from 'src/app/modules/utilities/utilities.module';
 
 import { ShoppingKartsPage } from './shopping-karts.page';
 
@@ -11,6 +12,7 @@ describe('ShoppingKartsPage', () => {
     TestBed.configureTestingModule({
       declarations: [ ShoppingKartsPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      providers:[UtilitiesModule]
     })
     .compileComponents();
   }));
