@@ -5,6 +5,7 @@ import { DetailShoppingKartPage } from './detail-shopping-kart.page';
 import { ModalController, AngularDelegate, NavParams } from '@ionic/angular';
 import { MockNavParams } from './mockNavParams';
 import { HttpClientModule } from '@angular/common/http';
+import { UtilitiesModule } from 'src/app/modules/utilities/utilities.module';
 
 describe('DetailShoppingKartPage', () => {
   let component: DetailShoppingKartPage;
@@ -18,6 +19,7 @@ describe('DetailShoppingKartPage', () => {
         ModalController,
         AngularDelegate,
         { provide: NavParams, useClass: MockNavParams },
+        UtilitiesModule
       ],
       imports: [HttpClientModule]
     })

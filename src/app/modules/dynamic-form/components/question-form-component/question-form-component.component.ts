@@ -43,8 +43,8 @@ export class QuestionFormComponent implements OnInit, OnChanges {
       ? this.form
       : this.fb.group({
         // I need an instance of formgroup for run the tests
-        name: new FormControl(this.question.key),
-        value: new FormControl(this.question.value)
+        name: new FormControl(this.question?.key),
+        value: new FormControl(this.question?.value)
       });
   }
 
