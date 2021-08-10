@@ -5,6 +5,7 @@ import { CreateShoppingKartPage } from './create-shopping-kart.page';
 import { ModalController, AngularDelegate } from '@ionic/angular';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { UtilitiesModule } from 'src/app/modules/utilities/utilities.module';
+import { RoundPipe } from 'src/app/modules/utilities/pipes/round.pipe';
 
 describe('CreateShoppingKartPage', () => {
   let component: CreateShoppingKartPage;
@@ -13,7 +14,7 @@ describe('CreateShoppingKartPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CreateShoppingKartPage],
-      providers: [ModalController, AngularDelegate, HttpClient, HttpHandler,UtilitiesModule],
+      providers: [ModalController, AngularDelegate, HttpClient, HttpHandler,UtilitiesModule,RoundPipe],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
       .compileComponents();
