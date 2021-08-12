@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DecoratorServiceService } from './decorator-service.service';
+import { DecoratorService } from './decorator-service.service';
 
-describe('DecoratorServiceService', () => {
-  let service: DecoratorServiceService;
+describe('DecoratorService', () => {
+  let service: DecoratorService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DecoratorServiceService);
+    service = TestBed.inject(DecoratorService);
   });
 
   it('should be created', () => {
