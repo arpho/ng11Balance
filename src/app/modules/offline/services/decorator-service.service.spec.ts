@@ -6,11 +6,14 @@ describe('DecoratorService', () => {
   let service: DecoratorService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(DecoratorService);
+    TestBed.configureTestingModule({
+      providers:[DecoratorService]
+    });
+
   });
 
   it('should be created', () => {
+    const service:DecoratorService = TestBed.get(DecoratorService);
     expect(service).toBeTruthy();
   });
 });

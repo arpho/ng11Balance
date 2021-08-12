@@ -5,8 +5,8 @@ import { DecoratorService } from './services/decorator-service.service';
 
 
 @NgModule({
-  declarations: [DecoratorService],
-  exports:[DecoratorService],
+  declarations: [],
+  exports:[],
   providers:[DecoratorService],
   imports: [
     CommonModule
