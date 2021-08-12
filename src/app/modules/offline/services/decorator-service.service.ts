@@ -6,6 +6,7 @@ export class DecoratorService {
      private static service: CategoriesService | undefined = undefined;
      public constructor(service: CategoriesService) {
          DecoratorService.service = service;
+         console.log('ciao decoratorService')
      }
      public static getService(): CategoriesService {
          if(!DecoratorService.service) {

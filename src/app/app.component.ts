@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 // import * as firebase from '@ionic-native/firebase';
 
 import firebase from "firebase/app";
+import { DecoratorService } from './modules/offline/services/decorator-service.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -65,6 +66,7 @@ export class AppComponent {
     //private splashScreen: SplashScreen,
     //private statusBar: StatusBar,
     //private info: InfoService,
+    dS:DecoratorService
     ) {
       if (firebase.apps.length === 0) {
         firebase.initializeApp(configs.firebase);

@@ -30,11 +30,12 @@ import { CategoryComponent } from './components/category/category.component';
 import { CategoriesViewerComponent } from './components/categories-viewer/categories-viewer.component';
 import { DynamicFormModule } from './modules/dynamic-form/dynamic-form.module';
 import { WidgetModule } from './modules/widget/widget.module';
+import { DecoratorService } from './modules/offline/services/decorator-service.service';
 
 @NgModule({
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ItemModule,UserModule,DynamicFormModule,WidgetModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },DecoratorService],
   bootstrap: [AppComponent,
     ],
     declarations: [
