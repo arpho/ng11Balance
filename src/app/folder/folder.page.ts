@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ShoppingKartModel } from '../models/shoppingKartModel';
 import { ItemModelInterface } from '../modules/item/models/itemModelInterface';
+import { DecoratorService } from '../modules/offline/services/decorator-service.service';
 import { CreateShoppingKartPage } from '../pages/create-shopping-kart/create-shopping-kart.page';
 import { DetailShoppingKartPage } from '../pages/detail-shopping-kart/detail-shopping-kart.page';
 import { ShoppingKartsService } from '../services/shoppingKarts/shopping-karts.service';
@@ -31,7 +32,9 @@ export class FolderPage implements OnInit {
       return this.compareDate(dateA, dateB)
     }
 
-  constructor(private activatedRoute: ActivatedRoute, public service: ShoppingKartsService) {
+  constructor(private activatedRoute: ActivatedRoute,
+     public service: ShoppingKartsService,
+     ds:DecoratorService) {
     const oneWeekIn_ms = 60 * 60 /* sec in 1 hour */
       * 24 /**sec in one day */
       * 7 /**sec in one week */

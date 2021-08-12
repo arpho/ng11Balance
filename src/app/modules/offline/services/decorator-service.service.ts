@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { CategoriesService } from 'src/app/services/categories/categorie.service';
+import { UsersService } from '../../user/services/users.service';
 
 @Injectable()
 export class DecoratorService {
-     private static service: CategoriesService | undefined = undefined;
-     public constructor(service: CategoriesService) {
+     private static service: UsersService | undefined = undefined;
+     public constructor(service: UsersService) {
          DecoratorService.service = service;
          console.log('ciao decoratorService')
      }
-     public static getService(): CategoriesService {
+     public static getService(): UsersService {
          if(!DecoratorService.service) {
              throw new Error('DecoratorService not initialized');
          }

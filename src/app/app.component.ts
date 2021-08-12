@@ -66,7 +66,7 @@ export class AppComponent {
     //private splashScreen: SplashScreen,
     //private statusBar: StatusBar,
     //private info: InfoService,
-    dS:DecoratorService
+    // dS:DecoratorService
     ) {
       if (firebase.apps.length === 0) {
         firebase.initializeApp(configs.firebase);
