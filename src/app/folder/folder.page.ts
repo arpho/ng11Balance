@@ -34,7 +34,8 @@ export class FolderPage implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
      public service: ShoppingKartsService,
-     ds:DecoratorService) {
+     public ds:DecoratorService) {
+       console.log(DecoratorService.getService())
     const oneWeekIn_ms = 60 * 60 /* sec in 1 hour */
       * 24 /**sec in one day */
       * 7 /**sec in one week */
