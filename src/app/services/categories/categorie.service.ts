@@ -149,8 +149,12 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
   }
-  publish: (items: ItemModelInterface[]) => void;
-  fetchItemsFromFirebase: () => {}[];
+  publish= (items: CategoryModel[]) => {
+    this._items.next(items)
+  };
+   async fetchItemsFromCloud() {
+     return []
+   };
   initializeItems: (items: {}[]) => ItemModelInterface[];
   setFather(category: CategoryModel, categoriesList: CategoryModel[]) {
     if (category && category.fatherKey) {
