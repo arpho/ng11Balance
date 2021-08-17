@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { offLineDbStatus } from '../models/offlineDbStatus';
 import { OfflineItemServiceInterface } from '../models/offlineItemServiceInterface';
 
 @Injectable({
@@ -6,6 +8,8 @@ import { OfflineItemServiceInterface } from '../models/offlineItemServiceInterfa
 })
 export class OfflineManagerService {
 servicesList:Array<OfflineItemServiceInterface>=[]
+_offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
+readonly offlineDbStatus:Observable<offLineDbStatus> = this._offlineDbStatus.asObservable()
   constructor() { }
 
   registerService(service:OfflineItemServiceInterface){
