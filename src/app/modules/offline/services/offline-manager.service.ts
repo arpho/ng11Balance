@@ -7,12 +7,12 @@ import { OfflineItemServiceInterface } from '../models/offlineItemServiceInterfa
   providedIn: 'root'
 })
 export class OfflineManagerService {
-servicesList:Array<OfflineItemServiceInterface>=[]
-_offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
-readonly offlineDbStatus:Observable<offLineDbStatus> = this._offlineDbStatus.asObservable()
+  servicesList: Array<OfflineItemServiceInterface> = []
+  _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
+  readonly offlineDbStatus: Observable<offLineDbStatus> = this._offlineDbStatus.asObservable()
   constructor() { }
 
-  registerService(service:OfflineItemServiceInterface){
+  registerService(service: OfflineItemServiceInterface) {
     this.servicesList.push(service)
   }
 }
