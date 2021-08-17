@@ -11,11 +11,12 @@ import { ShoppingKartModel } from 'src/app/models/shoppingKartModel';
 import { values } from 'd3';
 import { ComponentsPageModule } from 'src/app/modules/item/components/components.module';
 import { DecoratorService } from 'src/app/modules/offline/services/decorator-service.service';
+import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offlineItemServiceInterface';
 // @offlineWrapper
 @Injectable({
   providedIn: 'root'
 })
-export class CategoriesService implements ItemServiceInterface, EntityWidgetServiceInterface {
+export class CategoriesService implements OfflineItemServiceInterface, EntityWidgetServiceInterface {
   public readonly key = 'categories'
   public categoriesListRef: firebase.default.database.Reference;
   _items: BehaviorSubject<Array<CategoryModel>> = new BehaviorSubject([])
@@ -48,8 +49,12 @@ export class CategoriesService implements ItemServiceInterface, EntityWidgetServ
   }
 
 
-  counterWidget: (entityKey: string, entities: ItemModelInterface[]) => number;
-  adderWidget: (entityKey: string, entities: ItemModelInterface[]) => number;
+  counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
+    return this.blowCategoriesUp(entities).filter((item: PricedCategory) => item.category.key == entityKey).map((item: PricedCategory) => 1).reduce((pv, cv) => { return pv += cv }, 0)
+  }
+  adderWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
+    return this.blowCategoriesUp(entities).filter((item: PricedCategory) => item.category.key == entityKey).map((item: PricedCategory) => item.price).reduce((pv, cv) => { return pv += cv }, 0);
+  }
   filterableField = 'purchaseDate' // we filter shoppingkart's entities by purchase date
   entityLabel = "Categoria";
 
@@ -119,15 +124,9 @@ export class CategoriesService implements ItemServiceInterface, EntityWidgetServ
   }
 
   constructor() {
-    this.instatiateItem = (args: {}) => {
-      return this.initializeCategory(args)
-    }
-    this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
-      return this.blowCategoriesUp(entities).filter((item: PricedCategory) => item.category.key == entityKey).map((item: PricedCategory) => 1).reduce((pv, cv) => { return pv += cv }, 0)
-    }
-    this.adderWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
-      return this.blowCategoriesUp(entities).filter((item: PricedCategory) => item.category.key == entityKey).map((item: PricedCategory) => item.price).reduce((pv, cv) => { return pv += cv }, 0);
-    }
+
+  
+    
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`);
@@ -150,6 +149,9 @@ export class CategoriesService implements ItemServiceInterface, EntityWidgetServ
 
 
   }
+  publish: (items: ItemModelInterface[]) => void;
+  fetchItemsFromFirebase: () => {}[];
+  initializeItems: (items: {}[]) => ItemModelInterface[];
   setFather(category: CategoryModel, categoriesList: CategoryModel[]) {
     if (category && category.fatherKey) {
       const father = this.setFather(categoriesList.filter((f: CategoryModel) => f.key == category.fatherKey)[0], categoriesList)
@@ -159,6 +161,8 @@ export class CategoriesService implements ItemServiceInterface, EntityWidgetServ
     return category
 
   }
-  instatiateItem: (args: {}) => ItemModelInterface;
+  instatiateItem = (args: {}) => {
+    return this.initializeCategory(args)
+  }
 
 }
