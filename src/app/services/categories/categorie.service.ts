@@ -146,15 +146,25 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
         });
       }
     });
+    this.fetchItemsFromCloud((items)=>{console.log('got',items)})
 
 
   }
   publish= (items: CategoryModel[]) => {
     this._items.next(items)
   };
-   async fetchItemsFromCloud() {
-     return []
-   };
+    fetchItemsFromCloud(callback) {
+      firebase.default.auth().onAuthStateChanged(user=>{
+        this.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
+        this.categoriesListRef.on('value',items=>{
+          const rawItems = []
+          items.forEach(snap=>{
+            rawItems.push({item:snap.val(),key:snap.key})
+          })
+          callback(rawItems)
+        })
+      })
+  }
   initializeItems: (items: {}[]) => ItemModelInterface[];
   setFather(category: CategoryModel, categoriesList: CategoryModel[]) {
     if (category && category.fatherKey) {
