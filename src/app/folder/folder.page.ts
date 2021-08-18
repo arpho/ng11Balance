@@ -39,8 +39,6 @@ export class FolderPage implements OnInit {
      public user:UsersService,
      public manager:OfflineManagerService,
      public ds:DecoratorService) {
-       console.log('folder',DecoratorService.getService('manager'))
-       console.log('manager',DecoratorService.getService('manager'))
     const oneWeekIn_ms = 60 * 60 /* sec in 1 hour */
       * 24 /**sec in one day */
       * 7 /**sec in one week */

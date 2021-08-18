@@ -9,6 +9,12 @@ export class DecoratorService {
      public constructor(service: UsersService,manager:OfflineManagerService) {
          
      }
+     public static getUserService(){
+          return UsersService
+     }
+     public static getOfflineManagerService(){
+          return OfflineManagerService
+     }
      public static getService(serviceKey:string): ItemServiceInterface|OfflineManagerService {
         /*  if(!DecoratorService.service.user) {
              throw new Error('DecoratorService not initialized');
