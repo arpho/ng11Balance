@@ -147,7 +147,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
         });
       }
     });
-    this.fetchItemsFromCloud((items)=>{console.log('got',items)})
+    this.fetchItemsFromCloud((items)=>{console.log('all done',this.initializeItems(items))})
 
 
   }
@@ -171,15 +171,11 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
   initializeItems= (items: RawItem[]) => {
     const notNestedCategories:CategoryModel[]= [];
-    this.categoriesListRef.on('value', eventCategoriesListSnapshot => {
-      this.items_list = [];
-      eventCategoriesListSnapshot.forEach(snap => {
-        notNestedCategories.push(new CategoryModel(snap.key).initialize(snap.val()).setKey(snap.key))
-      }
-      );
-    
-      })
-      return notNestedCategories
+    items.forEach(item=>{ //first step initialize flat categories
+      notNestedCategories.push(new CategoryModel().initialize(item.item).setKey(item.key))
+    })
+    const categories = notNestedCategories.map(category=>this.setFather(category,notNestedCategories))
+      return categories
     }
   setFather(category: CategoryModel, categoriesList: CategoryModel[]) {
     if (category && category.fatherKey) {
