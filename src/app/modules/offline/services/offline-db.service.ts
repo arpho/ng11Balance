@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import * as localforage from 'localforage';
+import { RawItem } from '../models/rawItem';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OfflineDbService {
 
-  constructor() { 
+  constructor() {
     localforage.config({
-      storeName:'BalanceOfflineDb'
+      storeName: 'BalanceOfflineDb'
     })
   }
 
@@ -33,11 +34,17 @@ export class OfflineDbService {
     return localforage.keys();
   }
 
-  fetchAll4Entity(entity:string){
-    const out=[]
-    localforage.iterate((value,key,iterationNumber)=>{
-      if(value){}
+  fetchAllRawItems4Entity(entityLabel: string) {/**
+   * fetch all items of label
+    @param label 
+   */
+    const out: RawItem[] = []
+    localforage.iterate((value, key, iterationNumber) => {
+      if (value["entityLabel"] === entityLabel) {
+        out.push(new RawItem({ item: value, key: key }))
+      }
     })
+    return out;
   }
 
 }
