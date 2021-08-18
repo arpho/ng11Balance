@@ -96,7 +96,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   }
 
   blowCategoriesUp = (karts: ShoppingKartModel[]) => {
-    return karts.reduce(this.ItemskartMapper2, []).map(this.itemsMapper2).map(this.blowupCategories).reduce(this.flattener,[])
+    return karts.reduce(this.ItemskartMapper2, []).map(this.itemsMapper2).map(this.blowupCategories).reduce(this.flattener, [])
   }
 
 
@@ -126,57 +126,40 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
   constructor() {
 
-  
-    
-    firebase.default.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`);
-        const notHierarchicalCategories: CategoryModel[] = [] // first load cathegories before father is loaded
-        this.categoriesListRef.on('value', eventCategoriesListSnapshot => {
-          this.items_list = [];
-          eventCategoriesListSnapshot.forEach(snap => {
-            notHierarchicalCategories.push(new CategoryModel(snap.key).initialize(snap.val()).setKey(snap.key))
-          }
-          );
-          // now we load father
-          notHierarchicalCategories.forEach(category => {
-            const Category = this.setFather(category, notHierarchicalCategories)
-            this.items_list.push(Category)
-          })
-          this._items.next(this.items_list)
-        });
-      }
-    });
-    this.fetchItemsFromCloud((items)=>{console.log('all done',this.initializeItems(items))})
+
+
+
+    this.fetchItemsFromCloud((items) => { this.publish(this.initializeItems(items)) })
 
 
   }
-  publish= (items: CategoryModel[]) => {
+  publish = (items: CategoryModel[]) => {
     this._items.next(items)
   };
-    fetchItemsFromCloud(callback) {
-      firebase.default.auth().onAuthStateChanged(user=>{
-        if(user){
+  fetchItemsFromCloud(callback) {
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
         this.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
-        this.categoriesListRef.on('value',items=>{
-          const rawItems: RawItem[]=[]
-          items.forEach(snap=>{
-            rawItems.push({item:snap.val(),key:snap.key})
+        this.categoriesListRef.on('value', items => {
+          const rawItems: RawItem[] = []
+          items.forEach(snap => {
+            rawItems.push({ item: snap.val(), key: snap.key })
           })
           callback(rawItems)
-        })}
-      })
+        })
+      }
+    })
   }
 
 
-  initializeItems= (items: RawItem[]) => {
-    const notNestedCategories:CategoryModel[]= [];
-    items.forEach(item=>{ //first step initialize flat categories
+  initializeItems = (items: RawItem[]) => {
+    const notNestedCategories: CategoryModel[] = [];
+    items.forEach(item => { //first step initialize flat categories
       notNestedCategories.push(new CategoryModel().initialize(item.item).setKey(item.key))
     })
-    const categories = notNestedCategories.map(category=>this.setFather(category,notNestedCategories))
-      return categories
-    }
+    const categories = notNestedCategories.map(category => this.setFather(category, notNestedCategories))
+    return categories
+  }
   setFather(category: CategoryModel, categoriesList: CategoryModel[]) {
     if (category && category.fatherKey) {
       const father = this.setFather(categoriesList.filter((f: CategoryModel) => f.key == category.fatherKey)[0], categoriesList)
