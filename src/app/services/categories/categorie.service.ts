@@ -13,7 +13,9 @@ import { ComponentsPageModule } from 'src/app/modules/item/components/components
 import { DecoratorService } from 'src/app/modules/offline/services/decorator-service.service';
 import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offlineItemServiceInterface';
 import { RawItem } from 'src/app/modules/offline/models/rawItem';
+import{Offline} from '../../modules/offline/models/offlineDecorator'
 // @offlineWrapper
+@Offline
 @Injectable({
   providedIn: 'root'
 })
