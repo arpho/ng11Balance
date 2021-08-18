@@ -14,5 +14,6 @@ export class OfflineManagerService {
 
   registerService(service: OfflineItemServiceInterface) {
     this.servicesList.push(service)
+    console.log('registered service',service)
   }
 }

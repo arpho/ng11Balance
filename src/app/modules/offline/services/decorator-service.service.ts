@@ -5,16 +5,16 @@ import {OfflineManagerService} from './offline-manager.service'
 
 @Injectable()
 export class DecoratorService {
-     private static service;
-     public constructor(service: UsersService) {
-         DecoratorService.service = {'user':UsersService,
-        'manager':OfflineManagerService};
-         console.log('ciao decoratorService')
+     private static services;
+     public constructor(service: UsersService,manager:OfflineManagerService) {
+         
      }
      public static getService(serviceKey:string): ItemServiceInterface|OfflineManagerService {
-         if(!DecoratorService.service) {
+        /*  if(!DecoratorService.service.user) {
              throw new Error('DecoratorService not initialized');
-         }
-         return DecoratorService.service[serviceKey];
+         } */
+         DecoratorService.services = {'user':UsersService,
+        'manager':OfflineManagerService};
+         return DecoratorService.services[serviceKey];
      }
 }
