@@ -165,7 +165,18 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
         })
       })
   }
-  initializeItems: (items: {}[]) => ItemModelInterface[];
+  initializeItems= (items: {}[]) => {
+    const notNestedCategories:CategoryModel[]= [];
+    this.categoriesListRef.on('value', eventCategoriesListSnapshot => {
+      this.items_list = [];
+      eventCategoriesListSnapshot.forEach(snap => {
+        notNestedCategories.push(new CategoryModel(snap.key).initialize(snap.val()).setKey(snap.key))
+      }
+      );
+    
+      })
+      return notNestedCategories
+    }
   setFather(category: CategoryModel, categoriesList: CategoryModel[]) {
     if (category && category.fatherKey) {
       const father = this.setFather(categoriesList.filter((f: CategoryModel) => f.key == category.fatherKey)[0], categoriesList)
