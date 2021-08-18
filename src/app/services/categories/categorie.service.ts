@@ -12,6 +12,7 @@ import { values } from 'd3';
 import { ComponentsPageModule } from 'src/app/modules/item/components/components.module';
 import { DecoratorService } from 'src/app/modules/offline/services/decorator-service.service';
 import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offlineItemServiceInterface';
+import { RawItem } from 'src/app/modules/offline/models/rawItem';
 // @offlineWrapper
 @Injectable({
   providedIn: 'root'
@@ -155,17 +156,20 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   };
     fetchItemsFromCloud(callback) {
       firebase.default.auth().onAuthStateChanged(user=>{
+        if(user){
         this.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
         this.categoriesListRef.on('value',items=>{
-          const rawItems = []
+          const rawItems: RawItem[]=[]
           items.forEach(snap=>{
             rawItems.push({item:snap.val(),key:snap.key})
           })
           callback(rawItems)
-        })
+        })}
       })
   }
-  initializeItems= (items: {}[]) => {
+
+
+  initializeItems= (items: RawItem[]) => {
     const notNestedCategories:CategoryModel[]= [];
     this.categoriesListRef.on('value', eventCategoriesListSnapshot => {
       this.items_list = [];
