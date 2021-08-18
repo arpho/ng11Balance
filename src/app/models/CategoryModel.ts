@@ -2,7 +2,7 @@
 
 // tslint:disable: semicolon
 import { FirebaseObject } from './firebaseObject';
-import { ItemModelInterface, Genere } from '../modules/item/models/itemModelInterface';
+import {  Genere } from '../modules/item/models/itemModelInterface';
 import { Value } from '../modules/item/models/value';
 import { ItemServiceInterface } from '../modules/item/models/ItemServiceInterface';
 import { ItemFilterOPtions } from '../modules/item/models/ItemFIlterOptions';
@@ -10,7 +10,8 @@ import { GeneratedFile } from '@angular/compiler';
 import { CategoriesService } from '../services/categories/categorie.service';
 import { WidgetitemInteface } from '../modules/widget/models/widgetItemIterface';
 import { QuickAction } from '../modules/item/models/QuickAction';
-export class CategoryModel implements FirebaseObject, ItemModelInterface, WidgetitemInteface {
+import { OfflineItemModelInterface } from '../modules/offline/models/offlineItemModelInterface';
+export class CategoryModel implements FirebaseObject, OfflineItemModelInterface, WidgetitemInteface {
 
     key: string;
     title: string;
@@ -25,6 +26,7 @@ export class CategoryModel implements FirebaseObject, ItemModelInterface, Widget
 
         // this.service = service
     }
+    entityLabel: string="categories"
     serialize4Offline(): {} {
         throw new Error('Method not implemented.');
     }
@@ -129,7 +131,7 @@ export class CategoryModel implements FirebaseObject, ItemModelInterface, Widget
         return value;
     }
 
-    getEditPopup(item: ItemModelInterface, service: ItemServiceInterface) {
+    getEditPopup(item: OfflineItemModelInterface, service: ItemServiceInterface) {
 
         return {
             subHeader: 'modifica categoria',
@@ -199,7 +201,7 @@ export class CategoryModel implements FirebaseObject, ItemModelInterface, Widget
                 {
                     text: 'Salva',
                     handler: data => {
-                        const filterFunction = (item: ItemModelInterface) => {
+                        const filterFunction = (item: OfflineItemModelInterface) => {
                             return this.title.toLowerCase().indexOf(data[0]) > -1;
                         };
                         next(filterFunction);
@@ -254,6 +256,7 @@ export class CategoryModel implements FirebaseObject, ItemModelInterface, Widget
         return {
             title: this.title || '',
             key: this.key || '',
+            entityLabel:this.entityLabel,
             fatherKey: this.father ? this.father.getKey() : ''
         }
     }
