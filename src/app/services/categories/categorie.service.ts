@@ -61,6 +61,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   }
   filterableField = 'purchaseDate' // we filter shoppingkart's entities by purchase date
   entityLabel = "Categoria";
+  static  entityLabel = "Categoria";
 
 
   categoriesService?: ItemServiceInterface;

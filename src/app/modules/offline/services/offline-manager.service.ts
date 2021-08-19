@@ -23,7 +23,13 @@ export class OfflineManagerService {
     if(entityStatus==offLineDbStatus.notInitialized||entityStatus==null){
       console.log(`${service.entityLabel} need  to be initialized`)
       console.log(service)
-      service.fetchItemsFromCloud((items)=>{console.log('got',items)})
+      service.fetchItemsFromCloud((items)=>{
+        items.forEach((item)=>{
+          item.item['entityLabel']= service.entityLabel
+         db.set(item.key,item.item)
+          
+        })
+      })
     }
   }
 }
