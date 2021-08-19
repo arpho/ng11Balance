@@ -138,6 +138,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
   }
+  offlineStatus: offLineDbStatus;
   static localStatus: offLineDbStatus;
   publish = (items: CategoryModel[]) => {
     this._items.next(items)

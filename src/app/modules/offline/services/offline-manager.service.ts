@@ -14,6 +14,37 @@ export class OfflineManagerService {
   readonly offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
   constructor(private localDb:OfflineDbService) { 
   }
+  static  evaluateDbStatus(){
+    const statusList = OfflineManagerService.servicesList.map((service:OfflineItemServiceInterface)=>{
+      console.log('service',service.offlineStatus)
+      return service.offlineStatus||0})
+      console.log('status list ',statusList)
+
+      const reducer = (acc:number, value:number, index, array:number[]) => {
+        let val = acc + value;
+        if (index === array.length - 1) {
+           return val / array.length;
+        };
+        return val;
+     };
+    var status = statusList.reduce(reducer,0)
+    console.log('status',status)
+    let out =0;
+    if(status==0){
+      console.log('not init')
+      out = offLineDbStatus.notInitialized
+    }
+    if(status==1){
+      console.log('up2date')
+      out= offLineDbStatus.up2Date
+    }
+    if(statusList.includes(2)){
+      console.log('syncing')
+      out = offLineDbStatus.syncing
+    }
+
+    return out
+  }
 
    static async registerService(service: any) {
     OfflineManagerService.servicesList.push(service)
@@ -24,6 +55,8 @@ export class OfflineManagerService {
       const db = new OfflineDbService()
       const res = await db.DELETE_ALL()
       console.log('deleted',res )
+      OfflineManagerService.evaluateDbStatus()
+      //this._offlineDbStatus.next()
       
      /*  service.localStatus=offLineDbStatus.syncing
       console.log(`${service.entityLabel} need  to be initialized`)
