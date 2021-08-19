@@ -15,10 +15,11 @@ import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offl
 import { RawItem } from 'src/app/modules/offline/models/rawItem';
 import{Offline} from '../../modules/offline/models/offlineDecorator'
 // @offlineWrapper
-@Offline
+
 @Injectable({
   providedIn: 'root'
 })
+@Offline
 export class CategoriesService implements OfflineItemServiceInterface, EntityWidgetServiceInterface {
   public readonly key = 'categories'
   public categoriesListRef: firebase.default.database.Reference;

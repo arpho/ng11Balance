@@ -10,7 +10,7 @@ import { GeneratedFile } from '@angular/compiler';
 import { CategoriesService } from '../services/categories/categorie.service';
 import { WidgetitemInteface } from '../modules/widget/models/widgetItemIterface';
 import { QuickAction } from '../modules/item/models/QuickAction';
-import { OfflineItemModelInterface } from '../modules/offline/models/offlineItemModelInterface';
+import {  OfflineItemModelInterface } from '../modules/offline/models/offlineItemModelInterface';
 export class CategoryModel implements FirebaseObject, OfflineItemModelInterface, WidgetitemInteface {
 
     key: string;
@@ -25,6 +25,12 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
         this.key = key
 
         // this.service = service
+    }
+    serialize4OfflineDb() {
+        
+        const out =this.serialize()
+        out.entityLabel = this.entityLabel
+        return out 
     }
     entityLabel: string="categories"
     serialize4Offline(): {} {
