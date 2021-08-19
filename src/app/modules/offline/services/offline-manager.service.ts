@@ -8,7 +8,7 @@ import { OfflineDbService } from './offline-db.service';
   providedIn: 'root'
 })
 export class OfflineManagerService {
-  static servicesList: Array<any> = []
+  static servicesList: Array<OfflineItemServiceInterface> = []
   static staticLocalDb
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
   readonly offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()

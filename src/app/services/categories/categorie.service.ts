@@ -129,6 +129,8 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     return this.categoriesListRef.child(key).remove();
   }
 
+  
+
   constructor() {
 
 
@@ -139,6 +141,12 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
   }
   offlineStatus: offLineDbStatus;
+  setOfflineStatus (value:offLineDbStatus){
+
+    /**just for testing */
+    this.offlineStatus= value
+    return this
+  }
   static localStatus: offLineDbStatus;
   publish = (items: CategoryModel[]) => {
     this._items.next(items)

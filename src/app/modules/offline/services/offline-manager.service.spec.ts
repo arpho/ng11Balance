@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { CategoriesService } from 'src/app/services/categories/categorie.service';
 import { offLineDbStatus } from '../models/offlineDbStatus';
 
 import { OfflineManagerService } from './offline-manager.service';
@@ -16,21 +17,23 @@ describe('OfflineManagerService', () => {
     expect(service).toBeTruthy();
   });
   it('status should be 0',()=>{
-    OfflineManagerService.servicesList.push({offlineStatus:0})
+    const service = new CategoriesService()
+    service.offlineStatus=0
+    OfflineManagerService.servicesList.push(service)
     expect(OfflineManagerService.evaluateDbStatus()).toEqual(0)
   })
   it('status should be 1',()=>{
     
-    OfflineManagerService.servicesList.push({offlineStatus:1})
-    OfflineManagerService.servicesList.push({offlineStatus:1})
+    OfflineManagerService.servicesList.push(new CategoriesService().setOfflineStatus(1))
+    OfflineManagerService.servicesList.push(new CategoriesService().setOfflineStatus(1))
     expect(OfflineManagerService.evaluateDbStatus()).toEqual(offLineDbStatus.up2Date)
 
   })
   it('status should be 2',()=>{
-    OfflineManagerService.servicesList.push({offlineStatus:0})
-    OfflineManagerService.servicesList.push({offlineStatus:2})
-    OfflineManagerService.servicesList.push({offlineStatus:1})
-    OfflineManagerService.servicesList.push({offLineStatus:offLineDbStatus.syncing})
+    OfflineManagerService.servicesList.push(new CategoriesService().setOfflineStatus(1))
+    OfflineManagerService.servicesList.push(new CategoriesService().setOfflineStatus(2))
+    OfflineManagerService.servicesList.push(new CategoriesService().setOfflineStatus(1))
+    OfflineManagerService.servicesList.push(new CategoriesService().setOfflineStatus(2))
     expect(OfflineManagerService.evaluateDbStatus()).toEqual(offLineDbStatus.syncing)
   })
 });
