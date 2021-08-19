@@ -10,8 +10,8 @@ import { OfflineDbService } from './offline-db.service';
 export class OfflineManagerService {
   static servicesList: Array<any> = []
   static staticLocalDb
-  _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
-  readonly offlineDbStatus: Observable<offLineDbStatus> = this._offlineDbStatus.asObservable()
+  static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
+  readonly offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
   constructor(private localDb:OfflineDbService) { 
   }
 
@@ -21,15 +21,24 @@ export class OfflineManagerService {
      const entityStatus = await db.get(`${service.labelEntity}_status_db`)
     console.log('entity is ',entityStatus) 
     if(entityStatus==offLineDbStatus.notInitialized||entityStatus==null){
+      const db = new OfflineDbService()
+      const res = await db.DELETE_ALL()
+      console.log('deleted',res )
+      
+     /*  service.localStatus=offLineDbStatus.syncing
       console.log(`${service.entityLabel} need  to be initialized`)
       console.log(service)
-      service.fetchItemsFromCloud((items)=>{
-        items.forEach((item)=>{
+      await service.fetchItemsFromCloud( async (items)=>{
+        items.forEach(async (item)=>{
           item.item['entityLabel']= service.entityLabel
-         db.set(item.key,item.item)
+        await  db.set(item.key,item.item)
           
         })
-      })
+        await db.set(`${service.labelEntity}_status_db`,offLineDbStatus.up2Date)
+        console.log('synced',service.key)
+        service.localStatus= offLineDbStatus.up2Date
+        OfflineManagerService._offlineDbStatus.next
+      }) */
     }
   }
 }

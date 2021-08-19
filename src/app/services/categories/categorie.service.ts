@@ -14,6 +14,7 @@ import { DecoratorService } from 'src/app/modules/offline/services/decorator-ser
 import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offlineItemServiceInterface';
 import { RawItem } from 'src/app/modules/offline/models/rawItem';
 import{Offline} from '../../modules/offline/models/offlineDecorator'
+import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus';
 // @offlineWrapper
 
 @Injectable({
@@ -137,6 +138,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
   }
+  static localStatus: offLineDbStatus;
   publish = (items: CategoryModel[]) => {
     this._items.next(items)
   };

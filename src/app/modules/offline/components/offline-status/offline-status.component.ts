@@ -8,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 /**subscribe to offlineStatus field in offlineManager */
 export class OfflineStatusComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+    console.log('ciao sono ')
+   }
 
   ngOnInit() {}
 

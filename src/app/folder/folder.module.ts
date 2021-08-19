@@ -8,6 +8,7 @@ import { FolderPageRoutingModule } from './folder-routing.module';
 
 import { FolderPage } from './folder.page';
 import { ItemModule } from '../modules/item/item.module';
+import { OfflineModule } from '../modules/offline/offline.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ItemModule } from '../modules/item/item.module';
     FormsModule,
     IonicModule,
     FolderPageRoutingModule,
-    ItemModule
+    ItemModule,
+    OfflineModule
   ],
   declarations: [FolderPage],
 })
