@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DecoratorService } from './services/decorator-service.service';
 import { OfflineStatusComponent } from './components/offline-status/offline-status.component';
+import { IonicModule } from '@ionic/angular';
 
 
 
@@ -10,7 +11,8 @@ import { OfflineStatusComponent } from './components/offline-status/offline-stat
   exports:[OfflineStatusComponent],
   providers:[DecoratorService],
   imports: [
-    CommonModule
+    CommonModule,
+    IonicModule.forRoot()
   ],
 
 })
