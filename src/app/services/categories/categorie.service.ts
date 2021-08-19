@@ -139,6 +139,23 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   publish = (items: CategoryModel[]) => {
     this._items.next(items)
   };
+
+  static fetchItemsFromCloud(callback) {
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        const categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
+        categoriesListRef.on('value', items => {
+          const rawItems: RawItem[] = []
+          items.forEach(snap => {
+            rawItems.push({ item: snap.val(), key: snap.key })
+          })
+          callback(rawItems)
+        })
+      }
+    })
+  }
+
+
   fetchItemsFromCloud(callback) {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {

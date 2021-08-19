@@ -20,5 +20,10 @@ export class OfflineManagerService {
     const db = new OfflineDbService()
      const entityStatus = await db.get(`${service.labelEntity}_status_db`)
     console.log('entity is ',entityStatus) 
+    if(entityStatus==offLineDbStatus.notInitialized||entityStatus==null){
+      console.log(`${service.entityLabel} need  to be initialized`)
+      console.log(service)
+      service.fetchItemsFromCloud((items)=>{console.log('got',items)})
+    }
   }
 }
