@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as localforage from 'localforage';
+import * as localforage   from 'localforage';
 import { RawItem } from '../models/rawItem';
 
 @Injectable({
