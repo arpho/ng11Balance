@@ -11,14 +11,15 @@ export class OfflineManagerService {
   static servicesList: Array<OfflineItemServiceInterface> = []
   static staticLocalDb
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
-  readonly offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
+  static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
   constructor(private localDb: OfflineDbService) {
+    OfflineManagerService.offlineDbStatus.subscribe(status=>{console.log('actual status',status)})
   }
   static evaluateDbStatus() {
     const statusList = OfflineManagerService.servicesList.map((service: OfflineItemServiceInterface) => {
       return service.offlineStatus || 0
     })
-
+    console.log('status list',statusList)
     const reducer = (acc: number, value: number, index, array: number[]) => {
       let val = acc + value;
       if (index === array.length - 1) {
@@ -46,21 +47,21 @@ export class OfflineManagerService {
   }
 
   static async registerService(service: any) {
+    
+    console.log('registering',service,service.key,service.entityLabel)
+    console.log('setting ',`${service.entityLabel}_status_db`)
     OfflineManagerService.servicesList.push(service)
     const db = new OfflineDbService()
-    await db.DELETE_ALL()
     const entityStatus = await db.get(`${service.entityLabel}_status_db`)
-    console.log('entity is ', entityStatus,service)
     if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
       const db = new OfflineDbService()
       
       service.offLineDbStatus = offLineDbStatus.syncing
-     
 
       OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
 
       
-      console.log(`${service.entityLabel} need  to be initialized`)
+      console.log(`${service.entityLabel} needs  to be initialized`)
       console.log(service)
       console.time('fetching')
       await service.fetchItemsFromCloud(async (items) => {
@@ -69,12 +70,17 @@ export class OfflineManagerService {
           await db.set(item.key, item.item)
 
         })
-        await db.set(`${service.labelEntity}_status_db`, offLineDbStatus.up2Date)
-        console.log('synced', service.key,service.labelEntity)
+        console.log('setting',`${service.entityLabel}_status_db`)
+        await db.set(`${service.entityLabel}_status_db`, offLineDbStatus.up2Date)
+        console.log('synced', service.key,service.entityLabel)
         service.localStatus = offLineDbStatus.up2Date
+        console.log('publishing new status',OfflineManagerService.evaluateDbStatus())
         OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
         console.timeEnd('fetching')
       })
+    }
+    else if(entityStatus==1){
+      console.log('db ready')
     }
   }
 }
