@@ -48,16 +48,22 @@ export class OfflineManagerService {
     return out
   }
 
-  static async registerService(service: OfflineItemServiceInterface) {
+  static async registerService(service: any) {
     
-    console.log('registering',service,service.key,service.entityLabel)
+    console.log('registering',service.entityLabel)
     console.log('setting ',`${service.entityLabel}_status_db`)
     OfflineManagerService.servicesList.push(service)
+    await OfflineManagerService.staticLocalDb.DELETE_ALL()
 
     const entityStatus = await OfflineManagerService.staticLocalDb.get(`${service.entityLabel}_status_db`)
+
     if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
-       
-      new CloneEntityFromFirebase(service,OfflineManagerService.staticLocalDb).execute()
+      OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
+     await  new CloneEntityFromFirebase(service,OfflineManagerService.staticLocalDb).execute()
+
+     console.log('publishing new status',OfflineManagerService.evaluateDbStatus())
+      OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
+
     }
     else if(entityStatus==1){
       console.log('db ready')

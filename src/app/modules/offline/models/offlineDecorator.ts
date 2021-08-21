@@ -10,6 +10,7 @@ export function Offline<OfflineItemServiceInterface extends {new (...args:any[])
       constructor(...args:any[]){
          super(...args)
          console.log('decorated')
+         console.log('args',args)
       }
       
       
