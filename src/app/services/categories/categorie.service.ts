@@ -119,7 +119,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
   getItem(prId: string): firebase.default.database.Reference {
-    return this.categoriesListRef.child(prId);
+    return this.categoriesListRef?.child(prId);
   }
 
   updateItem(item: ItemModelInterface) {
@@ -136,7 +136,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
     console.log('costruttore del service')
 
-    this.fetchItemsFromCloud((items) => { this.publish(this.initializeItems(items)) })
+    //this.fetchItemsFromCloud((items) => { this.publish(this.initializeItems(items)) })
     
 
   }

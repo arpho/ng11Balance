@@ -14,6 +14,7 @@ export class OfflineManagerService {
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
   constructor(private localDb: OfflineDbService) {
     OfflineManagerService.offlineDbStatus.subscribe(status=>{console.log('actual status',status)})
+    OfflineManagerService.staticLocalDb = new OfflineDbService()
   }
   static evaluateDbStatus() {
     const statusList = OfflineManagerService.servicesList.map((service: OfflineItemServiceInterface) => {
@@ -51,10 +52,10 @@ export class OfflineManagerService {
     console.log('registering',service,service.key,service.entityLabel)
     console.log('setting ',`${service.entityLabel}_status_db`)
     OfflineManagerService.servicesList.push(service)
-    const db = new OfflineDbService()
-    const entityStatus = await db.get(`${service.entityLabel}_status_db`)
+
+    const entityStatus = await OfflineManagerService.staticLocalDb.get(`${service.entityLabel}_status_db`)
     if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
-      const db = new OfflineDbService()
+       
       
       service.offLineDbStatus = offLineDbStatus.syncing
 
@@ -67,11 +68,11 @@ export class OfflineManagerService {
       await service.fetchItemsFromCloud(async (items) => {
         items.forEach(async (item) => {
           item.item['entityLabel'] = service.entityLabel
-          await db.set(item.key, item.item)
+          await OfflineManagerService.staticLocalDb.set(item.key, item.item)
 
         })
         console.log('setting',`${service.entityLabel}_status_db`)
-        await db.set(`${service.entityLabel}_status_db`, offLineDbStatus.up2Date)
+        await OfflineManagerService.staticLocalDb.set(`${service.entityLabel}_status_db`, offLineDbStatus.up2Date)
         console.log('synced', service.key,service.entityLabel)
         service.localStatus = offLineDbStatus.up2Date
         console.log('publishing new status',OfflineManagerService.evaluateDbStatus())
