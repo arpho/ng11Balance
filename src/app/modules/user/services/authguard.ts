@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate {
           resolve(true);
         } else {
           console.log('not authorized')
-          this.router.navigate(["/user/login"]);
+          this.router.navigate(["/users/login"]);
           resolve(false);
         }
       });

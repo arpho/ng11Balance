@@ -25,7 +25,7 @@ export class RoleGuardService implements CanActivate {
         }
         return true;
       } else {
-        this.router.navigate(["/user/login"]);
+        this.router.navigate(["/users/login"]);
       }
     });
     firebase
