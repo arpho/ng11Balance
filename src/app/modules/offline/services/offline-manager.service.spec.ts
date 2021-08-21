@@ -18,7 +18,7 @@ describe('OfflineManagerService', () => {
   });
   it('status should be 0',()=>{
     const service = new CategoriesService()
-    service.offlineStatus=0
+    service.offlineDbStatus=0
     OfflineManagerService.servicesList.push(service)
     expect(OfflineManagerService.evaluateDbStatus()).toEqual(0)
   })

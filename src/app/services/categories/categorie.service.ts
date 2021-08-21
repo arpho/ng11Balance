@@ -140,11 +140,11 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     
 
   }
-  offlineStatus: offLineDbStatus;
+  offlineDbStatus: offLineDbStatus;
   setOfflineStatus (value:offLineDbStatus){
 
     /**just for testing */
-    this.offlineStatus= value
+    this.offlineDbStatus= value
     return this
   }
   static localStatus: offLineDbStatus;
