@@ -26,7 +26,7 @@ export class OfflineDbService {
     return localforage.removeItem(key);
   }
 
-  DELETE_ALL() {
+  clear() {
     return localforage.clear();
   }
 

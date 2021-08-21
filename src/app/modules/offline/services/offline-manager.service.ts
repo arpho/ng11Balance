@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { CloneEntity } from '../business/cloneEntityFromFirebase';
 import { offLineDbStatus } from '../models/offlineDbStatus';
 import { OfflineItemServiceInterface } from '../models/offlineItemServiceInterface';
 import { OfflineDbService } from './offline-db.service';
@@ -48,10 +49,12 @@ export class OfflineManagerService {
 
   static async registerService(service: any) {
     
-    console.log('registering',service,service.key,service.entityLabel)
+    console.log('registering')
     console.log('setting ',`${service.entityLabel}_status_db`)
     OfflineManagerService.servicesList.push(service)
     const db = new OfflineDbService()
+    const clear= await db.clear()
+    console.log('db cleared',clear)
     const entityStatus = await db.get(`${service.entityLabel}_status_db`)
     if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
       const db = new OfflineDbService()
@@ -63,21 +66,10 @@ export class OfflineManagerService {
       
       console.log(`${service.entityLabel} needs  to be initialized`)
       console.log(service)
-      console.time('fetching')
-      await service.fetchItemsFromCloud(async (items) => {
-        items.forEach(async (item) => {
-          item.item['entityLabel'] = service.entityLabel
-          await db.set(item.key, item.item)
+      new CloneEntity(db,service).execute()
 
-        })
-        console.log('setting',`${service.entityLabel}_status_db`)
-        await db.set(`${service.entityLabel}_status_db`, offLineDbStatus.up2Date)
-        console.log('synced', service.key,service.entityLabel)
-        service.localStatus = offLineDbStatus.up2Date
-        console.log('publishing new status',OfflineManagerService.evaluateDbStatus())
-        OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
-        console.timeEnd('fetching')
-      })
+      console.log('publishing new status',OfflineManagerService.evaluateDbStatus())
+      OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
     }
     else if(entityStatus==1){
       console.log('db ready')
