@@ -13,14 +13,16 @@ import { ComponentsPageModule } from 'src/app/modules/item/components/components
 import { DecoratorService } from 'src/app/modules/offline/services/decorator-service.service';
 import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offlineItemServiceInterface';
 import { RawItem } from 'src/app/modules/offline/models/rawItem';
-import{Offline} from '../../modules/offline/models/offlineDecorator'
+import { Offline } from '../../modules/offline/models/offlineDecorator'
 import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus';
+import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
+import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
 // @offlineWrapper
 
 @Injectable({
   providedIn: 'root'
 })
-@Offline
+
 export class CategoriesService implements OfflineItemServiceInterface, EntityWidgetServiceInterface {
   public readonly key = 'categories'
   public categoriesListRef: firebase.default.database.Reference;
@@ -62,7 +64,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   }
   filterableField = 'purchaseDate' // we filter shoppingkart's entities by purchase date
   entityLabel = "Categoria";
-  static  entityLabel = "Categoria";
+  static entityLabel = "Categoria";
 
 
   categoriesService?: ItemServiceInterface;
@@ -129,28 +131,34 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     return this.categoriesListRef?.child(key).remove();
   }
 
-  
-
-  constructor() {
 
 
-    console.log('costruttore del service')
+  constructor(public manager: OfflineManagerService) {
 
-   // this.fetchItemsFromCloud((items) => { this.publish(this.initializeItems(items)) })
-    
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
+      }
+    }
+    )
+    this.manager.registerService(this)
+
+    // this.fetchItemsFromCloud((items) => { this.publish(this.initializeItems(items)) })
+
 
   }
   offlineDbStatus: offLineDbStatus;
-  setOfflineStatus (value:offLineDbStatus){
+  setOfflineStatus(value: offLineDbStatus) {
 
     /**just for testing */
-    this.offlineDbStatus= value
+    this.offlineDbStatus = value
     return this
   }
-  static localStatus: offLineDbStatus;
+  localStatus: offLineDbStatus;
   publish = (items: CategoryModel[]) => {
     this._items.next(items)
   };
+
 
   static fetchItemsFromCloud(callback) {
     firebase.default.auth().onAuthStateChanged(user => {
@@ -212,15 +220,15 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
   }
 
-static setFather(category: CategoryModel, categoriesList: CategoryModel[]) {
-  if (category && category.fatherKey) {
-    const father = this.setFather(categoriesList.filter((f: CategoryModel) => f.key == category.fatherKey)[0], categoriesList)
+  static setFather(category: CategoryModel, categoriesList: CategoryModel[]) {
+    if (category && category.fatherKey) {
+      const father = this.setFather(categoriesList.filter((f: CategoryModel) => f.key == category.fatherKey)[0], categoriesList)
 
-    category.father = father
+      category.father = father
+    }
+    return category
+
   }
-  return category
-
-}
 
   instatiateItem = (args: {}) => {
     return this.initializeCategory(args)

@@ -13,7 +13,7 @@ export class OfflineManagerService {
   static staticLocalDb
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
-  constructor(private localDb: OfflineDbService) {
+  constructor(public localDb: OfflineDbService) {
     OfflineManagerService.offlineDbStatus.subscribe(status=>{console.log('actual status',status)})
   }
   static evaluateDbStatus() {
@@ -46,14 +46,18 @@ export class OfflineManagerService {
 
     return out
   }
+  async getOfflineDbStatus(entityLabel:string){
 
-  static async registerService(service:any) {
+    return this.localDb.get(`${entityLabel}_status_db`) 
+  }
+
+   async registerService(service:OfflineItemServiceInterface) {
     
     console.log('registering',typeof service,service)
     console.log('setting ',`${service.entityLabel}_status_db`)
     OfflineManagerService.servicesList.push(service)
-    const db = new OfflineDbService()
-    const entityStatus = await db.get(`${service.entityLabel}_status_db`)
+  
+    const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
     if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
       const db = new OfflineDbService()
       
@@ -64,7 +68,7 @@ export class OfflineManagerService {
       
       console.log(`${service.entityLabel} needs  to be initialized`)
       console.log(service)
-      new CloneEntity(db,service).execute()
+      await new CloneEntity(db,service).execute()
 
       console.log('publishing new status',OfflineManagerService.evaluateDbStatus())
       OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
@@ -72,9 +76,8 @@ export class OfflineManagerService {
     else if(entityStatus==1){
       console.log('db ready')
       console.log('load from local')
-      const rawItems = await db.fetchAllRawItems4Entity(service.entityLabel)
-
-      const items = await service.initializeItems(rawItems)
+  
+      service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
     }
   }
 }
