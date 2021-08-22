@@ -49,7 +49,7 @@ export class OfflineManagerService {
 
   static async registerService(service:any) {
     
-    console.log('registering')
+    console.log('registering',typeof service,service)
     console.log('setting ',`${service.entityLabel}_status_db`)
     OfflineManagerService.servicesList.push(service)
     const db = new OfflineDbService()
@@ -73,9 +73,9 @@ export class OfflineManagerService {
       console.log('db ready')
       console.log('load from local')
       const rawItems = await db.fetchAllRawItems4Entity(service.entityLabel)
-      console.log('raw items',rawItems)
+      console.log('raw items',rawItems.length)
 
-      const items = service.initializeItems(rawItems)
+      const items = await service.initializeItems(rawItems)
       console.log('items',items)
     }
   }

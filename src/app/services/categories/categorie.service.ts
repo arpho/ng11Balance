@@ -184,12 +184,25 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   }
 
 
-  initializeItems = (items: RawItem[]) => {
+  initializeItems = (raw_items: RawItem[]) => {
+    console.log('raw Items in dynamic',raw_items)
     const notNestedCategories: CategoryModel[] = [];
-    items.forEach(item => { //first step initialize flat categories
+    raw_items.forEach(item => { //first step initialize flat categories
       notNestedCategories.push(new CategoryModel().initialize(item.item).setKey(item.key))
     })
     const categories = notNestedCategories.map(category => this.setFather(category, notNestedCategories))
+    return categories
+  }
+
+  static initializeItems = (raw_items: RawItem[]) => {
+    console.log('raw Items in static',raw_items.length)
+    const notNestedCategories: CategoryModel[] = [];
+    raw_items.forEach(item => { //first step initialize flat categories
+      const cat = new CategoryModel().initialize(item.item).setKey(item.key)
+      console.log('pushing',cat)
+      notNestedCategories.push(cat)
+    })
+    const categories = notNestedCategories.map(category => CategoriesService.setFather(category, notNestedCategories))
     return categories
   }
   setFather(category: CategoryModel, categoriesList: CategoryModel[]) {
@@ -201,6 +214,17 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     return category
 
   }
+
+static setFather(category: CategoryModel, categoriesList: CategoryModel[]) {
+  if (category && category.fatherKey) {
+    const father = this.setFather(categoriesList.filter((f: CategoryModel) => f.key == category.fatherKey)[0], categoriesList)
+
+    category.father = father
+  }
+  return category
+
+}
+
   instatiateItem = (args: {}) => {
     return this.initializeCategory(args)
   }
