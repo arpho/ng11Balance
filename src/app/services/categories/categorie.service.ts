@@ -185,7 +185,6 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
   initializeItems = (raw_items: RawItem[]) => {
-    console.log('raw Items in dynamic',raw_items)
     const notNestedCategories: CategoryModel[] = [];
     raw_items.forEach(item => { //first step initialize flat categories
       notNestedCategories.push(new CategoryModel().initialize(item.item).setKey(item.key))
@@ -195,7 +194,6 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   }
 
   static initializeItems = (raw_items: RawItem[]) => {
-    console.log('raw Items in static',raw_items.length)
     const notNestedCategories: CategoryModel[] = [];
     raw_items.forEach(item => { //first step initialize flat categories
       const cat = new CategoryModel().initialize(item.item).setKey(item.key)

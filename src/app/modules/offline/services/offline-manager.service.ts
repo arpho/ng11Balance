@@ -76,7 +76,6 @@ export class OfflineManagerService {
       console.log('raw items',rawItems.length)
 
       const items = await service.initializeItems(rawItems)
-      console.log('items',items)
     }
   }
 }
