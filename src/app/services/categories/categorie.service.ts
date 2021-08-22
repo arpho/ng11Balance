@@ -119,14 +119,14 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
   getItem(prId: string): firebase.default.database.Reference {
-    return this.categoriesListRef.child(prId);
+    return this.categoriesListRef?.child(prId);
   }
 
   updateItem(item: ItemModelInterface) {
-    return this.categoriesListRef.child(item.key).update(item.serialize());
+    return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
   deleteItem(key: string) {
-    return this.categoriesListRef.child(key).remove();
+    return this.categoriesListRef?.child(key).remove();
   }
 
   
@@ -197,7 +197,6 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     const notNestedCategories: CategoryModel[] = [];
     raw_items.forEach(item => { //first step initialize flat categories
       const cat = new CategoryModel().initialize(item.item).setKey(item.key)
-      console.log('pushing',cat)
       notNestedCategories.push(cat)
     })
     const categories = notNestedCategories.map(category => CategoriesService.setFather(category, notNestedCategories))

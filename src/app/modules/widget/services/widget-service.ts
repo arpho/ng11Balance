@@ -47,7 +47,7 @@ export class WidgetService {
 
     }
 
-    service && service.getItem(widget.entityKey).on('value', settingItem)
+    service && service.getItem(widget.entityKey)?.on('value', settingItem)
 
 
     this.items_list.push(widget);
@@ -86,7 +86,7 @@ export class WidgetService {
 
 
   setItem(service: EntityWidgetServiceInterface, widget: Widget) {
-    service.getItem(widget.entityKey).on('value', (item) => {
+    service.getItem(widget.entityKey)?.on('value', (item) => {
       const entity = service.instatiateItem(item.val())
       entity.key = item.key
       widget.item = entity

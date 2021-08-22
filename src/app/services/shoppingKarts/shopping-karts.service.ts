@@ -74,7 +74,7 @@ export class ShoppingKartsService implements ItemServiceInterface {
 
         if (catKey2Beinirtialized != '') {
 
-          this.categoriesService.getItem(catKey2Beinirtialized).on('value', (category) => {
+          this.categoriesService.getItem(catKey2Beinirtialized)?.on('value', (category) => {
 
             Category.initialize(category.val())
           })
@@ -89,7 +89,7 @@ export class ShoppingKartsService implements ItemServiceInterface {
 
     kart.key = snap.key
 
-    kart.items = kart.items.map(purchaseInitializer)
+    kart.items = kart.items?.map(purchaseInitializer)
 
     return kart
   }
@@ -114,7 +114,7 @@ export class ShoppingKartsService implements ItemServiceInterface {
         this.shoppingKartsListRef = firebase.default.database().ref(`/acquisti/${user.uid}/`);
         this.shoppingKartsListRef.on('value', eventSuppliersListSnapshot => {
           this.items_list = [];
-          eventSuppliersListSnapshot.forEach(snap => {
+          eventSuppliersListSnapshot?.forEach(snap => {
             const kart = this.initializeSingleKart(snap)
             this.items_list.push(kart);
           });

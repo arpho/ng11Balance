@@ -73,7 +73,6 @@ export class OfflineManagerService {
       console.log('db ready')
       console.log('load from local')
       const rawItems = await db.fetchAllRawItems4Entity(service.entityLabel)
-      console.log('raw items',rawItems.length)
 
       const items = await service.initializeItems(rawItems)
     }
