@@ -16,6 +16,7 @@ export class UserModel implements ItemModelInterface {
   lastName: string;
   title: string;
   key: string;
+  offlineEnabled=true // for the moment true for default
   uid: string;
   level: number;
   quickActions: Array<QuickAction>;
@@ -27,6 +28,10 @@ export class UserModel implements ItemModelInterface {
     this.key = key;
     this.uid = key
     this.load(item)
+  }
+
+  isOfflineEnabled(){
+    return this.offlineEnabled
   }
   initialize(user: any) {
     Object.assign(this, user)

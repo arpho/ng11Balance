@@ -23,8 +23,9 @@ export class AuthGuard implements CanActivate {
       firebase.default.auth().onAuthStateChanged((user: firebase.default.User) => {
         if (user) {
           console.log("user from auth", user);
-          this.users.setLoggedUser(user.uid);
+          this.users.setLoggedUser(user);
           console.log(this.users.getLoggedUser(), "logged user");
+          
           resolve(true);
         } else {
           console.log("User is not logged in");

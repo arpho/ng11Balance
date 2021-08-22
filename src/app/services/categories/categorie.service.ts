@@ -17,6 +17,7 @@ import { Offline } from '../../modules/offline/models/offlineDecorator'
 import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus';
 import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
 import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
+import { UsersService } from 'src/app/modules/user/services/users.service';
 // @offlineWrapper
 
 @Injectable({
@@ -133,7 +134,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
 
-  constructor(public manager: OfflineManagerService) {
+  constructor(public manager: OfflineManagerService,public users:UsersService) {
 
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
@@ -141,9 +142,13 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
       }
     }
     )
+    if(this.users.getLoggedUser().isOfflineEnabled()){
+      console.log('users is offline enabled')
     this.manager.registerService(this)
-
-    // this.fetchItemsFromCloud((items) => { this.publish(this.initializeItems(items)) })
+}
+else {
+     this.fetchItemsFromCloud((items) => { this.publish(this.initializeItems(items)) })
+  }
 
 
   }
