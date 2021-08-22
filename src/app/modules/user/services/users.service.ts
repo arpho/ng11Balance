@@ -10,12 +10,12 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: "root"
 })
-export class UsersService implements ItemServiceInterface,OnInit {
+export class UsersService implements ItemServiceInterface, OnInit {
   public usersRef: firebase.default.database.Reference;
   items_list: Array<UserModel> = []
   _items: BehaviorSubject<Array<UserModel>> = new BehaviorSubject([])
- _loggedUser: BehaviorSubject<UserModel> = new BehaviorSubject(new UserModel)
- loggedUser: Observable<UserModel>= this._loggedUser.asObservable()
+  _loggedUser: BehaviorSubject<UserModel> = new BehaviorSubject(new UserModel)
+  loggedUser: Observable<UserModel> = this._loggedUser.asObservable()
 
 
   readonly items: Observable<Array<UserModel>> = this._items.asObservable()
@@ -23,7 +23,7 @@ export class UsersService implements ItemServiceInterface,OnInit {
   constructor() {
     this.usersRef = firebase.default.database().ref("/userProfile");
     this.loadItems()
-    
+
   }
   populateItems = (UsersListSnapshot) => {
     this.items_list = [];
@@ -43,7 +43,7 @@ export class UsersService implements ItemServiceInterface,OnInit {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.usersRef = firebase.default.database().ref(`/userProfile/`);
-        this.usersRef.on('value', this.populateItems );
+        this.usersRef.on('value', this.populateItems);
       }
     });
   }
@@ -58,9 +58,9 @@ export class UsersService implements ItemServiceInterface,OnInit {
     return this.loggedUser;
   }
 
-  setLoggedUser(user:{}) {
-    console.log('setting user',user)
-    this._loggedUser.next( new UserModel(user, user['key']));
+  setLoggedUser(user: {}) {
+    console.log('setting user', user)
+    this._loggedUser.next(new UserModel(user, user['uid']));
     return this.loggedUser;
   }
 

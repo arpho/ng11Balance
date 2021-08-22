@@ -134,7 +134,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
 
-  constructor(public manager: OfflineManagerService,public users:UsersService) {
+  constructor(public manager: OfflineManagerService, public users: UsersService) {
 
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
@@ -143,15 +143,15 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     }
     )
 
-    this.users.loggedUser.subscribe(user=>{
-      console.log('user',user)
-      if(user.uid&&user.isOfflineEnabled){
+    this.users.loggedUser.subscribe(user => {
+      console.log('user', user, user.uid)
+      if (user.uid && user.isOfflineEnabled) {
         console.log('users is offline enabled')
         this.manager.registerService(this)
       }
       else {
         this.fetchItemsFromCloud((items) => { this.publish(this.initializeItems(items)) })
-     }
+      }
     })
 
 

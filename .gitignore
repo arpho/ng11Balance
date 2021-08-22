@@ -39,3 +39,5 @@ functions/src/index.old.ts
 package-lock.json
 
 src/app/modules/offline/services/mockers/localForageMocker.ts
+
+src/app/modules/offline/models/offlineDecorator.ts

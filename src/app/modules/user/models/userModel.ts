@@ -16,7 +16,7 @@ export class UserModel implements ItemModelInterface {
   lastName: string;
   title: string;
   key: string;
-  offlineEnabled=true // for the moment true for default
+  offlineEnabled = true // for the moment true for default
   uid: string;
   level: number;
   quickActions: Array<QuickAction>;
@@ -24,13 +24,15 @@ export class UserModel implements ItemModelInterface {
   role: RoleModel;
   service: ItemServiceInterface;
 
-  constructor(item?: {}, key?: string, ) {
-    this.key = key;
-    this.uid = key
-    this.load(item)
+  constructor(user?: {}, key?: string,) {
+    Object.assign(this,)
+    if (key) {
+      this.key = key
+      this.uid = key
+    }
   }
 
-  isOfflineEnabled(){
+  isOfflineEnabled() {
     return this.offlineEnabled
   }
   initialize(user: any) {
@@ -78,7 +80,7 @@ export class UserModel implements ItemModelInterface {
   serialize() {
     return {
       key: this.key,
-      uid: this.uid||this.key,
+      uid: this.uid || this.key,
       birthDate: this.birthDate.serialize(),
       email: this.email,
       firstName: this.firstName,

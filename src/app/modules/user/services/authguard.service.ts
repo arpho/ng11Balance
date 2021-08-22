@@ -13,7 +13,7 @@ import { UsersService } from "./users.service";
   providedIn: "root"
 })
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router, private users: UsersService) {}
+  constructor(private router: Router, private users: UsersService) { }
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
           console.log("user from auth", user);
           this.users.setLoggedUser(user);
           console.log(this.users.getLoggedUser(), "logged user");
-          
+
           resolve(true);
         } else {
           console.log("User is not logged in");
