@@ -136,15 +136,15 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
     console.log('costruttore del service')
 
-    this.fetchItemsFromCloud((items) => { this.publish(this.initializeItems(items)) })
+   // this.fetchItemsFromCloud((items) => { this.publish(this.initializeItems(items)) })
     
 
   }
-  offlineStatus: offLineDbStatus;
+  offlineDbStatus: offLineDbStatus;
   setOfflineStatus (value:offLineDbStatus){
 
     /**just for testing */
-    this.offlineStatus= value
+    this.offlineDbStatus= value
     return this
   }
   static localStatus: offLineDbStatus;

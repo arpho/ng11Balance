@@ -1,16 +1,20 @@
-import {DecoratorService} from '../services/decorator-service.service'
 import { OfflineManagerService } from '../services/offline-manager.service'
 import { OfflineItemModelInterface } from './offlineItemModelInterface'
 import { OfflineItemServiceInterface } from './offlineItemServiceInterface'
-export function Offline<OfflineItemServiceInterface extends {new (...constructorArgs:any[])}>(constructorFunction:OfflineItemServiceInterface){
+
+
+type Constructor<T = {}> = new (...args: any[]) => T;
+export function Offline<OfflineItemServiceInterface extends Constructor>(constr:OfflineItemServiceInterface){
   
-   OfflineManagerService.registerService(constructorFunction)
+   OfflineManagerService.registerService(constr)
    console.log("-- decorator function invoked --");
-   return class extends constructorFunction{
-      test= true;
-        
+   return class extends constr{
+      constructor(...args:any[]){
+         super(...args)
+         console.log('decorated')
+      }
+   }
+}
       
       
      
-   }
-}

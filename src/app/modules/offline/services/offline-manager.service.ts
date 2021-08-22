@@ -18,7 +18,7 @@ export class OfflineManagerService {
   }
   static evaluateDbStatus() {
     const statusList = OfflineManagerService.servicesList.map((service: OfflineItemServiceInterface) => {
-      return service.offlineStatus || 0
+      return service.offlineDbStatus || 0
     })
     console.log('status list',statusList)
     const reducer = (acc: number, value: number, index, array: number[]) => {
@@ -47,19 +47,17 @@ export class OfflineManagerService {
     return out
   }
 
-  static async registerService(service: any) {
+  static async registerService(service:any) {
     
     console.log('registering')
     console.log('setting ',`${service.entityLabel}_status_db`)
     OfflineManagerService.servicesList.push(service)
     const db = new OfflineDbService()
-    const clear= await db.clear()
-    console.log('db cleared',clear)
     const entityStatus = await db.get(`${service.entityLabel}_status_db`)
     if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
       const db = new OfflineDbService()
       
-      service.offLineDbStatus = offLineDbStatus.syncing
+      service.offlineDbStatus = offLineDbStatus.syncing
 
       OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
 
@@ -73,6 +71,12 @@ export class OfflineManagerService {
     }
     else if(entityStatus==1){
       console.log('db ready')
+      console.log('load from local')
+      const rawItems = await db.fetchAllRawItems4Entity(service.entityLabel)
+      console.log('raw items',rawItems)
+
+      const items = service.initializeItems(rawItems)
+      console.log('items',items)
     }
   }
 }
