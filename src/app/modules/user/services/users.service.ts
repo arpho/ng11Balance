@@ -12,9 +12,12 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class UsersService implements ItemServiceInterface,OnInit {
   public usersRef: firebase.default.database.Reference;
-  private loggedUser: UserModel;
   items_list: Array<UserModel> = []
   _items: BehaviorSubject<Array<UserModel>> = new BehaviorSubject([])
+ _loggedUser: BehaviorSubject<UserModel> = new BehaviorSubject(new UserModel)
+ loggedUser: Observable<UserModel>= this._loggedUser.asObservable()
+
+
   readonly items: Observable<Array<UserModel>> = this._items.asObservable()
 
   constructor() {
@@ -56,7 +59,8 @@ export class UsersService implements ItemServiceInterface,OnInit {
   }
 
   setLoggedUser(user:{}) {
-    this.loggedUser = new UserModel(undefined, user['key']);
+    console.log('setting user',user)
+    this._loggedUser.next( new UserModel(user, user['key']));
     return this.loggedUser;
   }
 
