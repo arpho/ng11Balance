@@ -121,6 +121,8 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
   }
 
+ 
+
 
   getItem(prId: string): firebase.default.database.Reference {
     return this.categoriesListRef?.child(prId);
@@ -151,6 +153,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
         this.manager.registerService(this)
       }
       else {
+        console.log('user is not offline enabled, loading from cloud')
         this.fetchItemsFromCloud((items) => { this.publish(this.initializeItems(items)) })
       }
     })
@@ -168,6 +171,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   }
   localStatus: offLineDbStatus;
   publish = (items: CategoryModel[]) => {
+    console.log('pubish cat')
     this._items.next(items)
   };
 
@@ -178,6 +182,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
   fetchItemsFromCloud(callback) {
+    console.log('fetching from fire')
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
