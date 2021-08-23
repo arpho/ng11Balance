@@ -12,5 +12,10 @@ export function  offline(operation:operationKey):any{
       console.log('decorated target ',target)
       console.log('property key',propertyKey)
       console.log('descriptor',descriptor)
+      console.log('descriptor value',descriptor.value)
+      descriptor.value =async (...args: any[])=> {
+         console.log('args',args)
+         return descriptor
+      }
    }
 }
