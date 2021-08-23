@@ -10,16 +10,20 @@ import { PurchaseModel } from 'src/app/models/purchasesModel';
 import { ShoppingKartModel } from 'src/app/models/shoppingKartModel';
 import { values } from 'd3';
 import { ComponentsPageModule } from 'src/app/modules/item/components/components.module';
-import { DecoratorService } from 'src/app/modules/offline/services/decorator-service.service';
 import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offlineItemServiceInterface';
 import { RawItem } from 'src/app/modules/offline/models/rawItem';
-import { offline} from '../../modules/offline/models/offlineDecorator'
 import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus';
 import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
 import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
 import { UsersService } from 'src/app/modules/user/services/users.service';
 import { operationKey } from 'src/app/modules/offline/models/operationKey';
-// @offlineWrapper
+import { DecoratorFactoryService } from 'src/app/modules/offline/services/decorator-factory.service';
+import { offline } from 'src/app/modules/offline/models/offlineDecorator';
+
+
+
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +35,9 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   _items: BehaviorSubject<Array<CategoryModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<CategoryModel>> = this._items.asObservable()
   items_list: Array<CategoryModel> = []
+
+
+  
   initializeCategory(cat) {
 
 
@@ -129,6 +136,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   }
   @offline(operationKey.update)
   updateItem(item: ItemModelInterface) {
+    console.log('updating',item.serialize())
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
   deleteItem(key: string) {
@@ -155,7 +163,9 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
       }
       else {
         console.log('user is not offline enabled, loading from cloud')
-        this.fetchItemsFromCloud((items) => { this.publish(this.initializeItems(items)) })
+        this.fetchItemsFromCloud((items) => { 
+          console.log('got from firebase')
+          this.publish(this.initializeItems(items)) })
       }
     })
 
@@ -187,7 +197,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
-        this.categoriesListRef.on('value', items => {
+        this.categoriesListRef.once('value', items => {
           const rawItems: RawItem[] = []
           items.forEach(snap => {
             rawItems.push({ item: snap.val(), key: snap.key })
