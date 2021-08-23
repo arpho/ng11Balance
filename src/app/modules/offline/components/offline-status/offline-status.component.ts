@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Offline } from '../../models/offlineDecorator';
 import { OfflineManagerService } from '../../services/offline-manager.service';
 
 @Component({

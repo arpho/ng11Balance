@@ -13,11 +13,12 @@ import { ComponentsPageModule } from 'src/app/modules/item/components/components
 import { DecoratorService } from 'src/app/modules/offline/services/decorator-service.service';
 import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offlineItemServiceInterface';
 import { RawItem } from 'src/app/modules/offline/models/rawItem';
-import { Offline } from '../../modules/offline/models/offlineDecorator'
+import { offline} from '../../modules/offline/models/offlineDecorator'
 import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus';
 import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
 import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
 import { UsersService } from 'src/app/modules/user/services/users.service';
+import { operationKey } from 'src/app/modules/offline/models/operationKey';
 // @offlineWrapper
 
 @Injectable({
@@ -124,7 +125,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   getItem(prId: string): firebase.default.database.Reference {
     return this.categoriesListRef?.child(prId);
   }
-
+  @offline(operationKey.update)
   updateItem(item: ItemModelInterface) {
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
@@ -171,20 +172,9 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   };
 
 
-  static fetchItemsFromCloud(callback) {
-    firebase.default.auth().onAuthStateChanged(user => {
-      if (user) {
-        const categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
-        categoriesListRef.on('value', items => {
-          const rawItems: RawItem[] = []
-          items.forEach(snap => {
-            rawItems.push({ item: snap.val(), key: snap.key })
-          })
-          callback(rawItems)
-        })
-      }
-    })
-  }
+ getManager(){
+   return this.manager
+ }
 
 
   fetchItemsFromCloud(callback) {
