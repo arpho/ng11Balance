@@ -148,6 +148,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
     this.users.loggedUser.subscribe(user => {
       console.log('user', user, user.uid)
+      console.log('logged user')
       if (user.uid && user.isOfflineEnabled) {
         console.log('users is offline enabled')
         this.manager.registerService(this)
