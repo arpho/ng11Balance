@@ -6,7 +6,7 @@ import { OfflineItemServiceInterface } from './offlineItemServiceInterface'
 import { operationKey } from './operationKey';
 
 export function  offline(operation:operationKey):any{
-   console.log('decorating')
+   console.log('decorating',operation)
    return (target: Object, 
       propertyKey: string, 
       descriptor: TypedPropertyDescriptor<any>)=>{
