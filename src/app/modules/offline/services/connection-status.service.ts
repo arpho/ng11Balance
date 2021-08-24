@@ -51,7 +51,7 @@ export class ConnectionStatusService {
     console.log('store*', this.store)
 
   }
-  subscribeConnectionStatus(callback) {
+  monitor(callback) {
 
     return this.store.subscribe(callback(navigator.onLine))
   }
