@@ -3,7 +3,7 @@ import { Router } from '@angular/router'
 import { configs } from './configs/credentials';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-// import * as firebase from '@ionic-native/firebase';
+import { OnlineStatusService, OnlineStatusType } from 'ngx-online-status';
 
 import firebase from "firebase/app";
 import { DecoratorService } from './modules/offline/services/decorator-service.service';
@@ -61,13 +61,16 @@ export class AppComponent {
     },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+  status
   constructor(
     private platform: Platform,
     //private splashScreen: SplashScreen,
     //private statusBar: StatusBar,
     //private info: InfoService,
     // dS:DecoratorService
+    private onlineStatusService: OnlineStatusService
     ) {
+      
       if (firebase.apps.length === 0) {
         firebase.initializeApp(configs.firebase);
     }

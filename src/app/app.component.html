@@ -10,6 +10,7 @@
             <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
+              <ion-label>{{status}}</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>

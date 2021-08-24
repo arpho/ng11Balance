@@ -4,6 +4,7 @@ import { DecoratorService } from './services/decorator-service.service';
 import { OfflineStatusComponent } from './components/offline-status/offline-status.component';
 import { IonicModule } from '@ionic/angular';
 import { DecoratorFactoryService } from './services/decorator-factory.service';
+import { OnlineStatusModule } from 'ngx-online-status';
 
 
 
@@ -13,7 +14,8 @@ import { DecoratorFactoryService } from './services/decorator-factory.service';
   providers:[DecoratorService,DecoratorFactoryService],
   imports: [
     CommonModule,
-    IonicModule.forRoot()
+    IonicModule.forRoot(),
+    OnlineStatusModule
   ],
 
 })
