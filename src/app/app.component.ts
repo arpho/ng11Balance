@@ -3,7 +3,6 @@ import { Router } from '@angular/router'
 import { configs } from './configs/credentials';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { OnlineStatusService, OnlineStatusType } from 'ngx-online-status';
 
 import firebase from "firebase/app";
 import { DecoratorService } from './modules/offline/services/decorator-service.service';
@@ -68,7 +67,6 @@ export class AppComponent {
     //private statusBar: StatusBar,
     //private info: InfoService,
     // dS:DecoratorService
-    private onlineStatusService: OnlineStatusService
     ) {
       
       if (firebase.apps.length === 0) {

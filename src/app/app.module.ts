@@ -31,12 +31,11 @@ import { CategoriesViewerComponent } from './components/categories-viewer/catego
 import { DynamicFormModule } from './modules/dynamic-form/dynamic-form.module';
 import { WidgetModule } from './modules/widget/widget.module';
 import { DecoratorService } from './modules/offline/services/decorator-service.service';
-import { OnlineStatusService } from 'ngx-online-status';
 
 @NgModule({
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ItemModule,UserModule,DynamicFormModule,WidgetModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },DecoratorService,OnlineStatusService],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },DecoratorService,],
   bootstrap: [AppComponent,
     ],
     declarations: [
