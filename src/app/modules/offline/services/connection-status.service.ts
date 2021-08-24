@@ -37,7 +37,7 @@ export class ConnectionStatusService {
       switch (action.type) {
         case "connection/online":
           console.log('status switch', navigator.onLine)
-          return { ...state, value: true }
+          return { ...state, value: navigator.onLine }
         case "connection/offline":
           console.log('status switch', false)
           return { ...state, value: navigator.onLine }
