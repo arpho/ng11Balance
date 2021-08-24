@@ -36,9 +36,9 @@ export class ConnectionStatusService {
       switch (action.type) {
         case "connection/online":
           console.log('status switch',navigator.onLine)
-          return { ...state, value: navigator.onLine }
+          return { ...state, value: true}
         case "connection/offline":
-          console.log('status switch',navigator.onLine)
+          console.log('status switch',false)
           return { ...state, value: navigator.onLine }
         default:
           return state
@@ -51,6 +51,7 @@ export class ConnectionStatusService {
 
   }
   subscribeConnectionStatus(callback) {
-    return this.store.subscribe(callback)
+
+    return this.store.subscribe(callback(navigator.onLine))
   }
 }
