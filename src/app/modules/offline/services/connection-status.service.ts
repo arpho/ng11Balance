@@ -55,4 +55,7 @@ export class ConnectionStatusService {
 
     return this.store.subscribe(callback(navigator.onLine))
   }
+  getStatus() {
+    return navigator.onLine
+  }
 }
