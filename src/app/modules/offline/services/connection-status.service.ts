@@ -5,5 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class ConnectionStatusService {
 
-  constructor() { }
+  constructor() { 
+
+    //we create the listener
+    window.addEventListener("isOnline", e => { console.log(navigator.onLine); });
+  }
 }
