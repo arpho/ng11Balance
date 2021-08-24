@@ -34,19 +34,19 @@ export class FolderPage implements OnInit {
       const dateB = b.purchaseDate.getFullDate()
       return this.compareDate(dateA, dateB)
     }
-    status
+  status
   constructor(private activatedRoute: ActivatedRoute,
-     public service: ShoppingKartsService,
-     public user:UsersService,
-     public manager:OfflineManagerService,
-     public ds:DecoratorService,
-     public connectionStatus:ConnectionStatusService
-     ) {
-       this.connectionStatus.subscribeConnectionStatus(value=>{
-         console.log('status online*',value)
-       })
-     
-       
+    public service: ShoppingKartsService,
+    public user: UsersService,
+    public manager: OfflineManagerService,
+    public ds: DecoratorService,
+    public connectionStatus: ConnectionStatusService
+  ) {
+    this.connectionStatus.subscribeConnectionStatus(value => {
+      console.log('status online*', value)
+    })
+
+
     const oneWeekIn_ms = 60 * 60 /* sec in 1 hour */
       * 24 /**sec in one day */
       * 7 /**sec in one week */

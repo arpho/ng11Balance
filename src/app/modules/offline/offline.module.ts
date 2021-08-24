@@ -10,12 +10,12 @@ import { ConnectionStatusService } from './services/connection-status.service';
 
 @NgModule({
   declarations: [OfflineStatusComponent],
-  exports:[OfflineStatusComponent],
-  providers:[DecoratorService,DecoratorFactoryService,ConnectionStatusService],
+  exports: [OfflineStatusComponent],
+  providers: [DecoratorService, DecoratorFactoryService, ConnectionStatusService],
   imports: [
     CommonModule,
     IonicModule.forRoot(),
-    
+
   ],
 
 })
