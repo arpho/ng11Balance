@@ -40,6 +40,7 @@
     "firebase-functions": "^3.14.1",
     "localforage": "^1.9.0",
     "ng-connection-service": "^1.0.4",
+    "ngx-online-status": "^1.0.1",
     "phonegap-plugin-barcodescanner": "^8.1.0",
     "quagga": "^0.12.1",
     "rxjs": "~6.6.0",
