@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ShoppingKartModel } from '../models/shoppingKartModel';
 import { ItemModelInterface } from '../modules/item/models/itemModelInterface';
+import { ConnectionStatusService } from '../modules/offline/services/connection-status.service';
 import { DecoratorService } from '../modules/offline/services/decorator-service.service';
 import { OfflineManagerService } from '../modules/offline/services/offline-manager.service';
 import { UsersService } from '../modules/user/services/users.service';
@@ -39,7 +40,11 @@ export class FolderPage implements OnInit {
      public user:UsersService,
      public manager:OfflineManagerService,
      public ds:DecoratorService,
+     public connectionStatus:ConnectionStatusService
      ) {
+       this.connectionStatus.subscribeConnectionStatus(value=>{
+         console.log('status online*',value)
+       })
      
        
     const oneWeekIn_ms = 60 * 60 /* sec in 1 hour */
