@@ -40,9 +40,7 @@ export class FolderPage implements OnInit {
      public manager:OfflineManagerService,
      public ds:DecoratorService,
      ) {
-
-
- 
+     
        
     const oneWeekIn_ms = 60 * 60 /* sec in 1 hour */
       * 24 /**sec in one day */

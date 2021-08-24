@@ -10,6 +10,11 @@ export function  offline(operation:operationKey):any{
    return (target: Object, 
       propertyKey: string, 
       descriptor: TypedPropertyDescriptor<any>)=>{
+         if (navigator.onLine) {
+            console.log('online');
+          } else {
+            console.log('offline');
+          }
       console.log('decorated target ',target)
       console.log('property key',propertyKey)
       console.log('descriptor',descriptor)

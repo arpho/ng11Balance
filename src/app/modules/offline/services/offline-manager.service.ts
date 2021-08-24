@@ -14,6 +14,9 @@ export class OfflineManagerService {
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
   constructor(public localDb: OfflineDbService) {
+
+
+   
     OfflineManagerService.offlineDbStatus.subscribe(status => { console.log('actual status', status) })
   }
   static evaluateDbStatus() {
