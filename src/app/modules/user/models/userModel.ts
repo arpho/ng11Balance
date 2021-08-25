@@ -25,7 +25,7 @@ export class UserModel implements ItemModelInterface {
   service: ItemServiceInterface;
 
   constructor(user?: {}, key?: string,) {
-    Object.assign(this,)
+    Object.assign(this,user)
     if (key) {
       this.key = key
       this.uid = key

@@ -9,6 +9,7 @@ import { Observable } from "rxjs";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import { UsersService } from "./users.service";
+import { UserModel } from "../models/userModel";
 @Injectable({
   providedIn: "root"
 })
@@ -23,13 +24,12 @@ export class AuthGuard implements CanActivate {
       firebase.default.auth().onAuthStateChanged((user: firebase.default.User) => {
         if (user) {
           console.log("user from auth", user);
-          this.users.setLoggedUser(user);
-          console.log(this.users.getLoggedUser(), "logged user");
+          this.users.setLoggedUser(new UserModel(user,user.uid));
 
           resolve(true);
         } else {
           console.log("User is not logged in");
-          this.router.navigate(["/user/login"]);
+          this.router.navigate(["/users/login"]);
           console.log("routing to the login");
           resolve(false);
         }

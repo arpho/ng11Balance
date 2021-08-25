@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { UsersService } from '../../user/services/users.service';
 import { CloneEntity } from '../business/cloneEntityFromFirebase';
 import { offLineDbStatus } from '../models/offlineDbStatus';
 import { OfflineItemServiceInterface } from '../models/offlineItemServiceInterface';
@@ -13,9 +14,43 @@ export class OfflineManagerService {
   static staticLocalDb
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
-  constructor(public localDb: OfflineDbService) {
+
+
+  constructor(public localDb: OfflineDbService,public users:UsersService) {
+    var signature
+    this.getSignature(sign=>{console.log('signature',sign)
+  signature = sign})
+    console.log('signature', signature)
     OfflineManagerService.offlineDbStatus.subscribe(status => { console.log('actual status', status) })
   }
+
+   getSignature(next){
+    
+    this.users.loggedUser.subscribe(user=>{console.log('got user ',user)
+  if(user.uid){
+  next( `${user.uid}_${navigator.platform}_${this.getBrowserName()}`)}
+  })
+
+   
+  }
+
+   getBrowserName() { 
+    if((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1 ) {
+        return 'Opera';
+    } else if(navigator.userAgent.indexOf("Chrome") != -1 ) {
+        return 'Chrome';
+    } else if(navigator.userAgent.indexOf("Safari") != -1) {
+        return 'Safari';
+    } else if(navigator.userAgent.indexOf("Firefox") != -1 ){
+        return 'Firefox';
+    } else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.DOCUMENT_NODE == true )) {
+        return 'Internet Explorer';
+    } else {
+        return 'Not sure!';
+    }
+}
+
+
   static evaluateDbStatus() {
     const statusList = OfflineManagerService.servicesList.map((service: OfflineItemServiceInterface) => {
       return service.offlineDbStatus || 0
