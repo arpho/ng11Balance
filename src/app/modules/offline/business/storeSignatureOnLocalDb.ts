@@ -11,7 +11,7 @@ export class StoreSignature{
 
     async execute(){
        const signaturesList = await  this.db.fetchAllRawItems4Entity('signatures')
-           this.db.set(`signature_${signaturesList.length}`,{signature:this.signature,entityLabel:'signatures'})
+           this.db.set(`signature_${signaturesList.length}`,{signature:this.signature,entityLabel:'signatures'})//@TODO if the signature is already present I set this as last used
        
       
     }
