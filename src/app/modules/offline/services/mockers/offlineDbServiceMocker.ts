@@ -17,11 +17,13 @@ export class LocalForageMocker extends OfflineDbService{
 
     iterate(callback:(value:unknown,key:string)=>void){
         for( const[key,value]of Object.entries(this.db)){
+  
             callback(value,key)
         }
     }
 
     async fetchAllRawItems4Entity(entityLabel:string){
+
         const  out = []
         this.iterate((value:unknown,key:string)=>{
             if(value['entityLabel']== entityLabel){
