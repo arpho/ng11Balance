@@ -52,8 +52,8 @@ export class ConnectionStatusService {
 
   }
   monitor(callback) {
-
-    return this.store.subscribe(callback(navigator.onLine))
+    const out =  this.store.subscribe(()=>{return callback(navigator.onLine)})
+    return out
   }
   getStatus() {
     return navigator.onLine

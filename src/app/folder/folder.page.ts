@@ -42,6 +42,7 @@ export class FolderPage implements OnInit {
     public ds: DecoratorService,
     public connectionStatus: ConnectionStatusService
   ) {
+   
     this.connectionStatus.monitor(value => {
       console.log('status online*', value)
     })
