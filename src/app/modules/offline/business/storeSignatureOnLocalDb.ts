@@ -1,3 +1,4 @@
+import { RawItem } from "../models/rawItem";
 import { OfflineDbService } from "../services/offline-db.service";
 
 export class StoreSignature{
@@ -11,14 +12,22 @@ export class StoreSignature{
 
     async execute(){
         const signaturesList = await  this.db.fetchAllRawItems4Entity('signatures')
+       console.log('signaturesList@',signaturesList)
+       // setto lastUsed falso a tutte le firme
+       signaturesList.forEach(async (item:RawItem)=>{
+           await this.db.set(item.key,{...item.item,lastUsed:false})
+       })
+       console.log
        
-       if(signaturesList.map(sign=>sign['item']['signature']).includes(this.signature)){
+       if(signaturesList.map(sign=>sign['item']['signature']).includes(this.signature)){// la firma è presente setto lastUsed a True 
            const item = signaturesList.filter(item=>item.item['signature']==this.signature)[0]
-           this.db.set(item.key,{ key:item.key,signature:item.item['signature'],lastUsed:true})
+
+         await   this.db.set(item.key,{ key:item.key,signature:item.item['signature'],lastUsed:true})
        }
-     else{
-           this.db.set(`signature_${signaturesList.length}`,{signature:this.signature,entityLabel:'signatures'})
+     else{// la firma non è presente la creo e setto lastUsed a true
+          await  this.db.set(`signature_${signaturesList.length}`,{signature:this.signature,entityLabel:'signatures',lastUsed:true})
      }
+
       
     }
 }
