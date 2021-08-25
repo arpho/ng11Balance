@@ -21,7 +21,7 @@ export class OfflineManagerService {
 
     this.makeSignature(async sign=>{console.log('signature',sign)
 
-  // await new StoreSignature(this.localDb,sign).execute()  
+   await new StoreSignature(this.localDb,sign).execute()  
 })
   
     OfflineManagerService.offlineDbStatus.subscribe(status => { console.log('actual status', status) })

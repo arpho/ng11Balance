@@ -12,13 +12,12 @@ export class StoreSignature{
 
     async execute(){
         const signaturesList = await  this.db.fetchAllRawItems4Entity('signatures')
-       console.log('signaturesList@',signaturesList)
        // setto lastUsed falso a tutte le firme
        signaturesList.forEach(async (item:RawItem)=>{
            await this.db.set(item.key,{...item.item,lastUsed:false})
        })
-       console.log
-       
+     
+
        if(signaturesList.map(sign=>sign['item']['signature']).includes(this.signature)){// la firma è presente setto lastUsed a True 
            const item = signaturesList.filter(item=>item.item['signature']==this.signature)[0]
 
