@@ -18,9 +18,9 @@ export class OfflineManagerService {
 
 
   constructor(public localDb: OfflineDbService,public users:UsersService) {
-    var signature
+
     this.makeSignature(async sign=>{console.log('signature',sign)
-  signature = sign
+
   await new StoreSignature(this.localDb,sign).execute()  
 })
   
