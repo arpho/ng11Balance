@@ -11,9 +11,8 @@ export class StoreSignature{
 
     async execute(){
        const signaturesList = await  this.db.fetchAllRawItems4Entity('signatures')
-       if(!signaturesList.map(item=>item['signature']).includes(this.signature)){
            this.db.set(`signature_${signaturesList.length}`,{signature:this.signature,entityLabel:'signatures'})
-       }
+       
       
     }
 }
