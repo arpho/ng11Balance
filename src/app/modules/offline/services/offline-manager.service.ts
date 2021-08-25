@@ -20,13 +20,13 @@ export class OfflineManagerService {
     var signature
     this.getSignature(sign=>{console.log('signature',sign)
   signature = sign})
-    console.log('signature', signature)
+  
     OfflineManagerService.offlineDbStatus.subscribe(status => { console.log('actual status', status) })
   }
 
    getSignature(next){
     
-    this.users.loggedUser.subscribe(user=>{console.log('got user ',user)
+    this.users.loggedUser.subscribe(user=>{
   if(user.uid){
   next( `${user.uid}_${navigator.platform}_${this.getBrowserName()}`)}
   })

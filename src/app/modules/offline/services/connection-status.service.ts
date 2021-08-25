@@ -33,7 +33,6 @@ export class ConnectionStatusService {
     const store = createStore(reducer)
     this.store = store
     function reducer(state = initialState, action) {
-      console.log('reducer', state, action)
       switch (action.type) {
         case "connection/online":
           console.log('status switch', navigator.onLine)
@@ -48,7 +47,6 @@ export class ConnectionStatusService {
 
 
     }
-    console.log('store*', this.store)
 
   }
   monitor(callback) {

@@ -155,9 +155,8 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     )
 
     this.users.loggedUser.subscribe(user => {
-      console.log('user', user, user.key)
-      console.log('logged user',user)
-      if (user.key && user.isOfflineEnabled()) {
+
+      if ( user.isOfflineEnabled()) {
         console.log('users is offline enabled')
         this.manager.registerService(this)
       }
@@ -182,7 +181,6 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   }
   localStatus: offLineDbStatus;
   publish = (items: CategoryModel[]) => {
-    console.log('pubish cat')
     this._items.next(items)
   };
 
