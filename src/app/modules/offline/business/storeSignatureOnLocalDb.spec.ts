@@ -22,11 +22,7 @@ describe('storing signature',()=>{
         await db.set("signature_1",{signature:'qwertygggggggggggggggggggggc_Linux x86_64_Chrome',entityLabel:'signatures',lastUsed:true})// setto una firma precedente con  firma diversa ma lastused vero
         const store= new StoreSignature(db,'Qfe9bcGcUxTIKmL9ccn76z12gzE2_Linux x86_64_Chrome')
         await store.execute()
-        console.log('db#',db)
         const signaturesList = await  db.fetchAllRawItems4Entity('signatures')
-        console.log('#signaturesList',signaturesList)
-        console.log('signs #',signaturesList.map(sign=>sign['item']['signature']))
-        console.log('# already there',signaturesList.map(sign=>sign['item']['signature']).includes(signature))
         const signs = await db.fetchAllRawItems4Entity('signatures')
         expect(signs.length).toEqual(1)
         const sign0 = await db.get('signature_0')
