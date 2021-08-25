@@ -18,13 +18,13 @@ export class OfflineManagerService {
 
   constructor(public localDb: OfflineDbService,public users:UsersService) {
     var signature
-    this.getSignature(sign=>{console.log('signature',sign)
+    this.makeSignature(sign=>{console.log('signature',sign)
   signature = sign})
   
     OfflineManagerService.offlineDbStatus.subscribe(status => { console.log('actual status', status) })
   }
 
-   getSignature(next){
+   makeSignature(next){
     
     this.users.loggedUser.subscribe(user=>{
   if(user.uid){
