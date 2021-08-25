@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UsersService } from '../../user/services/users.service';
 import { CloneEntity } from '../business/cloneEntityFromFirebase';
+import { StoreSignature } from '../business/storeSignatureOnLocalDb';
 import { offLineDbStatus } from '../models/offlineDbStatus';
 import { OfflineItemServiceInterface } from '../models/offlineItemServiceInterface';
 import { OfflineDbService } from './offline-db.service';
@@ -18,8 +19,10 @@ export class OfflineManagerService {
 
   constructor(public localDb: OfflineDbService,public users:UsersService) {
     var signature
-    this.makeSignature(sign=>{console.log('signature',sign)
-  signature = sign})
+    this.makeSignature(async sign=>{console.log('signature',sign)
+  signature = sign
+  await new StoreSignature(this.localDb,sign).execute()  
+})
   
     OfflineManagerService.offlineDbStatus.subscribe(status => { console.log('actual status', status) })
   }
