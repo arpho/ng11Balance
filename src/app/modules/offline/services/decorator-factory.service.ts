@@ -21,7 +21,7 @@ export class DecoratorFactoryService {
          const childFunction = descriptor.value;
          descriptor.value =async (...args: any[])=> {
             console.log('args',args)
-            childFunction.apply(target.constructor, args);
+            await childFunction.apply(target.constructor, args);
             return descriptor
          }
       }

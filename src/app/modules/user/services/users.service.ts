@@ -19,7 +19,7 @@ export class UsersService implements ItemServiceInterface, OnInit {
 
 
   readonly items: Observable<Array<UserModel>> = this._items.asObservable()
-
+static loggedUser:UserModel
   constructor() {
     this.usersRef = firebase.default.database().ref("/userProfile");
     this.loadItems()
@@ -61,6 +61,7 @@ export class UsersService implements ItemServiceInterface, OnInit {
   setLoggedUser(user: UserModel) {
     console.log('setting user', user)
     this._loggedUser.next(new UserModel(user, user['uid']));
+    UsersService.loggedUser=user
     return this.loggedUser;
   }
 
