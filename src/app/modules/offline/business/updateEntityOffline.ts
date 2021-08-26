@@ -17,7 +17,7 @@ export class UpdateEntityOffline {
         }
         else{
             // registro la modifica che sarà riportata onLine appena possibile
-            this.db.set(new Date().getTime+'',{entityLabel:'update','entity':this.entity.serialize4OfflineDb()})
+            await this.db.set(new Date().getTime+'',{entityLabel:'update','entity':this.entity.serialize4OfflineDb()})
         }
     }
 }
