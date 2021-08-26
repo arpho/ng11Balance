@@ -24,7 +24,7 @@ export class LocalForageMocker extends OfflineDbService{
 
     async fetchAllRawItems4Entity(entityLabel:string){
 
-        const  out = []
+        const  out: RawItem[]= []
         this.iterate((value:unknown,key:string)=>{
             if(value['entityLabel']== entityLabel){
                 out.push(new RawItem({item:value,key:key}))
