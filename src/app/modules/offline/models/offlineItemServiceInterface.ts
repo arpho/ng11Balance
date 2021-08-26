@@ -7,6 +7,7 @@ export interface OfflineItemServiceInterface extends ItemServiceInterface {
     publish: (items: Array<ItemModelInterface>) => void // publish the items fetched by offlineManager
     fetchItemsFromCloud: (callback:(items:{}[])=>void) => void//recupera la lista di oggetti da firebase che deve essere convertita   in lista di item
     initializeItems: (items: Array<{}>) => Array<ItemModelInterface>
+    loadItemFromLocalDb(): Promise<ItemModelInterface[]>
     offlineDbStatus:offLineDbStatus
 
 }

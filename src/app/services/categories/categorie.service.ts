@@ -145,7 +145,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
 
-  constructor(public manager: OfflineManagerService, public users: UsersService) {
+  constructor(public manager: OfflineManagerService, public users: UsersService,public localDb:OfflineDbService) {
 
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
@@ -171,6 +171,9 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
 
+  }
+  async loadItemFromLocalDb() {
+    return this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel))
   }
   offlineDbStatus: offLineDbStatus;
   setOfflineStatus(value: offLineDbStatus) {
