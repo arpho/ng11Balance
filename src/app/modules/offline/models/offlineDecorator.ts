@@ -3,9 +3,9 @@ import { OfflineDbService } from '../services/offline-db.service';
 import { OfflineManagerService } from '../services/offline-manager.service'
 import { OfflineItemModelInterface } from './offlineItemModelInterface'
 import { OfflineItemServiceInterface } from './offlineItemServiceInterface'
-import { operationKey } from './operationKey';
+import { OperationKey } from './operationKey';
 
-export function offline(operation: operationKey): any {
+export function offline(operation: OperationKey): any {
    console.log('decorating', operation)
    return (target: Object,
       propertyKey: string,

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UsersService } from '../../user/services/users.service';
-import { operationKey } from '../models/operationKey';
+import { OperationKey } from '../models/operationKey';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ export class DecoratorFactoryService {
 
   constructor(Users:UsersService) { }
   offline(){
-    return function  offline(operation:operationKey):any{
+    return function  offline(operation:OperationKey):any{
       console.log('decorating')
       return (target: Object, 
          propertyKey: string, 

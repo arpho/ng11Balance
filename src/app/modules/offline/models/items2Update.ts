@@ -1,15 +1,15 @@
 import { appInitialize } from "@ionic/angular/app-initialize";
 import { ItemModelInterface } from "../../item/models/itemModelInterface";
 import { DateModel } from "../../user/models/birthDateModel";
-import { operationKey } from "./operationKey";
+import { OperationKey } from "./operationKey";
 
 export class items2Update {
     item: {};
     key: string
     entityLabel2Update: string
-    operationKey: operationKey;
+    operationKey: OperationKey;
     date: DateModel
-    constructor(item: ItemModelInterface, entityLabel, operationKey: operationKey) {
+    constructor(item: ItemModelInterface, entityLabel, operationKey: OperationKey) {
         this.entityLabel2Update = entityLabel
         this.item = item.serialize()
         this.operationKey = operationKey

@@ -16,7 +16,7 @@ import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus'
 import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
 import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
 import { UsersService } from 'src/app/modules/user/services/users.service';
-import { operationKey } from 'src/app/modules/offline/models/operationKey';
+import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 import { DecoratorFactoryService } from 'src/app/modules/offline/services/decorator-factory.service';
 import { offline } from 'src/app/modules/offline/models/offlineDecorator';
 
@@ -134,7 +134,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   getItem(prId: string): firebase.default.database.Reference {
     return this.categoriesListRef?.child(prId);
   }
-  @offline(operationKey.update)
+  @offline(OperationKey.update)
   updateItem(item: ItemModelInterface) {
     console.log('updating',item.serialize())
     return this.categoriesListRef?.child(item.key).update(item.serialize());
