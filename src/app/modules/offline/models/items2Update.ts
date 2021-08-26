@@ -9,7 +9,7 @@ export class Items2Update {
     entityLabel2Update: string
     operationKey: OperationKey;
     date: DateModel
-    constructor(item: ItemModelInterface, entityLabel, operationKey: OperationKey) {
+    constructor(item?: ItemModelInterface, entityLabel?, operationKey?: OperationKey) {
         this.entityLabel2Update = entityLabel
         this.item = item.serialize()
         this.operationKey = operationKey
@@ -19,6 +19,10 @@ export class Items2Update {
 
     initialize(args:{}){
         Object.assign(this,args)
+        return this
+    }
+    setKey(key:string ){
+        this.key= key
         return this
     }
 
