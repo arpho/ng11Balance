@@ -12,19 +12,19 @@ export class StoreSignature{
 
     async execute(){
         const signaturesList = await  this.db.fetchAllRawItems4Entity('signatures')
-       // setto lastUsed falso a tutte le firme
+       // setto lastLogged falso a tutte le firme
        signaturesList.forEach(async (item:RawItem)=>{
-           await this.db.set(item.key,{...item.item,lastUsed:false})
+           await this.db.set(item.key,{...item.item,lastLogged:false})
        })
      
 
-       if(signaturesList.map(sign=>sign['item']['signature']).includes(this.signature)){// la firma è presente setto lastUsed a True 
+       if(signaturesList.map(sign=>sign['item']['signature']).includes(this.signature)){// la firma è presente setto lastLogged a True 
            const item = signaturesList.filter(item=>item.item['signature']==this.signature)[0]
 
-         await   this.db.set(item.key,{ key:item.key,signature:item.item['signature'],lastUsed:true})
+         await   this.db.set(item.key,{ key:item.key,signature:item.item['signature'],lastLogged:true})
        }
-     else{// la firma non è presente la creo e setto lastUsed a true
-          await  this.db.set(`signature_${signaturesList.length}`,{signature:this.signature,entityLabel:'signatures',lastUsed:true})
+     else{// la firma non è presente la creo e setto lastLogged a true
+          await  this.db.set(`signature_${signaturesList.length}`,{signature:this.signature,entityLabel:'signatures',lastLogged:true})
      }
 
       
