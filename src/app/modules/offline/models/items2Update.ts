@@ -3,7 +3,7 @@ import { ItemModelInterface } from "../../item/models/itemModelInterface";
 import { DateModel } from "../../user/models/birthDateModel";
 import { OperationKey } from "./operationKey";
 
-export class items2Update {
+export class Items2Update {
     item: {};
     key: string
     entityLabel2Update: string
