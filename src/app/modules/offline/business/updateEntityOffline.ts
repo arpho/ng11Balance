@@ -10,14 +10,14 @@ export class UpdateEntityOffline {
         this.entity = entity
     }
 
-    async execute(isOnline:boolean){
-        await this.db.set(this.entity.key,{...this.entity.serialize4OfflineDb()}) 
-        if(isOnline){// se online non serve registrare la modifica
+    async execute(isOnline: boolean) {
+        await this.db.set(this.entity.key, { ...this.entity.serialize4OfflineDb() })
+        if (isOnline) {// se online non serve registrare la modifica
 
         }
-        else{
+        else {
             // registro la modifica che sarà riportata onLine appena possibile
-            await this.db.set(new Date().getTime+'',{entityLabel:'update','entity':this.entity.serialize4OfflineDb()})
+            await this.db.set(new Date().getTime + '', { entityLabel: 'update', 'entity': this.entity.serialize4OfflineDb() })
         }
     }
 }
