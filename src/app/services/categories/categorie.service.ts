@@ -17,7 +17,6 @@ import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.se
 import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
 import { UsersService } from 'src/app/modules/user/services/users.service';
 import { OperationKey } from 'src/app/modules/offline/models/operationKey';
-import { DecoratorFactoryService } from 'src/app/modules/offline/services/decorator-factory.service';
 import { offline } from 'src/app/modules/offline/models/offlineDecorator';
 
 
@@ -37,7 +36,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   items_list: Array<CategoryModel> = []
 
 
-  
+
   initializeCategory(cat) {
 
 
@@ -128,7 +127,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
   }
 
- 
+
 
 
   getItem(prId: string): firebase.default.database.Reference {
@@ -136,7 +135,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   }
   @offline(OperationKey.update)
   updateItem(item: ItemModelInterface) {
-    console.log('updating',item.serialize())
+    console.log('updating', item.serialize())
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
   deleteItem(key: string) {
@@ -145,7 +144,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
 
-  constructor(public manager: OfflineManagerService, public users: UsersService,public localDb:OfflineDbService) {
+  constructor(public manager: OfflineManagerService, public users: UsersService, public localDb: OfflineDbService) {
 
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
@@ -156,15 +155,16 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
     this.users.loggedUser.subscribe(user => {
 
-      if ( user.isOfflineEnabled()) {
+      if (user.isOfflineEnabled()) {
         console.log('users is offline enabled')
         this.manager.registerService(this)
       }
       else {
         console.log('user is not offline enabled, loading from cloud')
-        this.fetchItemsFromCloud((items) => { 
+        this.fetchItemsFromCloud((items) => {
           console.log('got from firebase')
-          this.publish(this.initializeItems(items)) })
+          this.publish(this.initializeItems(items))
+        })
       }
     })
 
@@ -189,9 +189,9 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   };
 
 
- getManager(){
-   return this.manager
- }
+  getManager() {
+    return this.manager
+  }
 
 
   fetchItemsFromCloud(callback) {

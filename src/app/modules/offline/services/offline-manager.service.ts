@@ -17,41 +17,43 @@ export class OfflineManagerService {
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
 
 
-  constructor(public localDb: OfflineDbService,public users:UsersService) {
+  constructor(public localDb: OfflineDbService, public users: UsersService) {
 
-    this.makeSignature(async sign=>{console.log('signature',sign)
+    this.makeSignature(async sign => {
+      console.log('signature', sign)
 
-   await new StoreSignature(this.localDb,sign).execute()  
-})
-  
+      await new StoreSignature(this.localDb, sign).execute()
+    })
+
     OfflineManagerService.offlineDbStatus.subscribe(status => { console.log('actual status', status) })
   }
 
-   makeSignature(next){
-    
-    this.users.loggedUser.subscribe(user=>{
-  if(user.uid){
-  next( `${user.uid}_${navigator.platform}_${this.getBrowserName()}`)}
-  })
+  makeSignature(next) {
 
-   
+    this.users.loggedUser.subscribe(user => {
+      if (user.uid) {
+        next(`${user.uid}_${navigator.platform}_${this.getBrowserName()}`)
+      }
+    })
+
+
   }
 
-   getBrowserName() { 
-    if((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1 ) {
-        return 'Opera';
-    } else if(navigator.userAgent.indexOf("Chrome") != -1 ) {
-        return 'Chrome';
-    } else if(navigator.userAgent.indexOf("Safari") != -1) {
-        return 'Safari';
-    } else if(navigator.userAgent.indexOf("Firefox") != -1 ){
-        return 'Firefox';
-    } else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.DOCUMENT_NODE == true )) {
-        return 'Internet Explorer';
+  getBrowserName() {
+    if ((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1) {
+      return 'Opera';
+    } else if (navigator.userAgent.indexOf("Chrome") != -1) {
+      return 'Chrome';
+    } else if (navigator.userAgent.indexOf("Safari") != -1) {
+      return 'Safari';
+    } else if (navigator.userAgent.indexOf("Firefox") != -1) {
+      return 'Firefox';
+    } else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.DOCUMENT_NODE == true)) {
+      return 'Internet Explorer';
     } else {
-        return 'Not sure!';
+      return 'Not sure!';
     }
-}
+  }
 
 
   static evaluateDbStatus() {
@@ -89,12 +91,12 @@ export class OfflineManagerService {
     return this.localDb.get(`${entityLabel}_status_db`)
   }
 
-  static async publishEntity(entity:string){
-    console.log('refresh ',entity)
-    const service =OfflineManagerService.servicesList.filter((service:OfflineItemServiceInterface)=>service.entityLabel==entity)[0]
+  static async publishEntity(entity: string) {
+    console.log('refresh ', entity)
+    const service = OfflineManagerService.servicesList.filter((service: OfflineItemServiceInterface) => service.entityLabel == entity)[0]
     service.publish(await service.loadItemFromLocalDb())
 
-    
+
 
   }
 
