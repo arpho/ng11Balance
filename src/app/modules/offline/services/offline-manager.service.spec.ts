@@ -19,23 +19,23 @@ describe('OfflineManagerService', () => {
     expect(service).toBeTruthy();
   });
   it('status should be 0', () => {
-    const service = new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService())
+    const service = new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService(),new OfflineDbService())
     service.offlineDbStatus = 0
     OfflineManagerService.servicesList.push(service)
     expect(OfflineManagerService.evaluateDbStatus()).toEqual(0)
   })
   it('status should be 1', () => {
 
-    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService()).setOfflineStatus(1))
-    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService()).setOfflineStatus(1))
+    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService(),new OfflineDbService()).setOfflineStatus(1))
+    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService(),new OfflineDbService()).setOfflineStatus(1))
     expect(OfflineManagerService.evaluateDbStatus()).toEqual(offLineDbStatus.up2Date)
 
   })
   it('status should be 2', () => {
-    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService()).setOfflineStatus(1))
-    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService()).setOfflineStatus(2))
-    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService()).setOfflineStatus(1))
-    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService()).setOfflineStatus(2))
+    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService(),new OfflineDbService()).setOfflineStatus(1))
+    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService(),new OfflineDbService()).setOfflineStatus(2))
+    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService(),new OfflineDbService()).setOfflineStatus(1))
+    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService()), new UsersService(),new OfflineDbService()).setOfflineStatus(2))
     expect(OfflineManagerService.evaluateDbStatus()).toEqual(offLineDbStatus.syncing)
   })
 });
