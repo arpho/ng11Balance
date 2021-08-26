@@ -21,7 +21,7 @@ export const decoratedUpdate = (target: Object,
         console.log('descriptor', descriptor)
         console.log('status', navigator.onLine)
         console.log('offlineEnabled', UsersService.loggedUser.isOfflineEnabled())
-        await new UpdateEntityOffline(args[0], new OfflineDbService()).execute(navigator.onLine)
+        //await new UpdateEntityOffline(args[0], new OfflineDbService()).execute(navigator.onLine)
         childFunction.apply(target.constructor, args);
         return descriptor
     }

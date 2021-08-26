@@ -89,6 +89,13 @@ export class OfflineManagerService {
     return this.localDb.get(`${entityLabel}_status_db`)
   }
 
+  static publishEntity(entity:string){
+    OfflineManagerService.servicesList.filter((service:OfflineItemServiceInterface)=>service.entityLabel==entity)[0].loadItemFromLocalDb()
+
+    
+
+  }
+
   async registerService(service: OfflineItemServiceInterface) {
 
 
