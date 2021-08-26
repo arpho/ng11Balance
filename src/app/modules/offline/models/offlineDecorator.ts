@@ -8,5 +8,9 @@ import { OperationKey } from './operationKey';
 
 export function offline(operation: OperationKey): any {
    console.log('decorating', operation)
-   return decoratedUpdate
+   var out:(target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => void
+   if(operation==OperationKey.update){
+      out = decoratedUpdate
+   }
+   return out
 }
