@@ -1,5 +1,6 @@
 import { ItemModelInterface } from "../../item/models/itemModelInterface";
 import { OfflineItemModelInterface } from "../models/offlineItemModelInterface";
+import { OperationKey } from "../models/operationKey";
 import { OfflineDbService } from "../services/offline-db.service";
 import { OfflineManagerService } from "../services/offline-manager.service";
 
@@ -18,7 +19,7 @@ export class UpdateEntityOffline {
         }
         else {
             // registro la modifica che sarà riportata onLine appena possibile
-            await this.db.set(new Date().getTime + '', { entityLabel: 'update', 'entity': this.entity.serialize4OfflineDb() })
+            await this.db.set(new Date().getTime() + '', { entityLabel: 'update',operation:OperationKey.update, 'entity': this.entity.serialize4OfflineDb() })
         }
         OfflineManagerService.publishEntity(this.entity.entityLabel)
     }
