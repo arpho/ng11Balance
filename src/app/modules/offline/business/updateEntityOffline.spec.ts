@@ -46,7 +46,6 @@ describe("we should update an entity offline and when needed  add an update item
         const updated = await db.fetchAllRawItems4Entity('update')
         expect(updated.length).toEqual(1)
         expect(updated[0].key).toBeTruthy()
-        console.log('*',updated)
         expect(updated[0].item['entity']['key']).toEqual(categoryTest.key)
         expect(updated[0].item['entity']['title']).toEqual('test')
         expect(updated[0].item['entity']['entityLabel']).toEqual(categoryTest.entityLabel)
