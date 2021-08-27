@@ -103,20 +103,7 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
 
 
 
-        /*     if (this.service) {
-                this.service.getItem(this.key).on('value', cat => {
-                    if (cat.val()) {
-                        this.title = cat.val().title;
-                        this.fatherKey = cat.val().fatherKey
-                        if (this.fatherKey) {
-                            // this.father = new CategoryModel(this.fatherKey)
-                            // this.father.initialize()
-                        }
-                    } else {
-                        this.title = 'deleted'
-                    }
-                });
-            } */
+      
         return this
     }
     getCountingText() { return ' categorie'; }
@@ -263,7 +250,7 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
             title: this.title || '',
             key: this.key || '',
             entityLabel:this.entityLabel,
-            fatherKey: this.father ? this.father.getKey() : ''
+            fatherKey: this.fatherKey ? this.father.getKey() : ''
         }
     }
     addCategory() {
