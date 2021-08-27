@@ -10,21 +10,21 @@ export class Items2Update {
     entityLabel2Update: string
     operationKey: OperationKey;
     date: DateModel
-    constructor(item?: OfflineItemModelInterface,  operationKey?: OperationKey) {
+    constructor(item?: OfflineItemModelInterface, operationKey?: OperationKey) {
         this.entityLabel2Update = item.entityLabel
         this.item = item.serialize()
-        console.log('* serialize',this.item)
+        console.log('* serialize', this.item)
         this.operationKey = operationKey
         this.date = new DateModel(new Date())
         this.key = new Date().getTime() + '' // +'' cast to a string
     }
 
-    initialize(args:{}){
-        Object.assign(this,args)
+    initialize(args: {}) {
+        Object.assign(this, args)
         return this
     }
-    setKey(key:string ){
-        this.key= key
+    setKey(key: string) {
+        this.key = key
         return this
     }
 
@@ -36,5 +36,5 @@ export class Items2Update {
             'date': this.date.formatFullDate(),
             'entity': this.entityLabel2Update
         }
-}
+    }
 }

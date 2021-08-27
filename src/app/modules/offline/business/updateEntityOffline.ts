@@ -17,12 +17,12 @@ export class UpdateEntityOffline {
     async execute(isOnline: boolean) {
         await this.db.set(this.entity.key, { ...this.entity.serialize4OfflineDb() })
         if (isOnline) {// se online non serve registrare la modifica sul db locale
-            const Item2Update= new Items2Update(this.entity,OperationKey.update)
+            const Item2Update = new Items2Update(this.entity, OperationKey.update)
             ChangesService.createItem(Item2Update)
         }
         else {
             // registro la modifica che sarà riportata onLine appena possibile
-            await this.db.set(new Date().getTime() + '', { entityLabel: 'update',operation:OperationKey.update, 'entity': this.entity.serialize4OfflineDb() })
+            await this.db.set(new Date().getTime() + '', { entityLabel: 'update', operation: OperationKey.update, 'entity': this.entity.serialize4OfflineDb() })
         }
         OfflineManagerService.publishEntity(this.entity.entityLabel)
     }

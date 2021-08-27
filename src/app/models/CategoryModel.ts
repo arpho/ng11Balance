@@ -2,7 +2,7 @@
 
 // tslint:disable: semicolon
 import { FirebaseObject } from './firebaseObject';
-import {  Genere } from '../modules/item/models/itemModelInterface';
+import { Genere } from '../modules/item/models/itemModelInterface';
 import { Value } from '../modules/item/models/value';
 import { ItemServiceInterface } from '../modules/item/models/ItemServiceInterface';
 import { ItemFilterOPtions } from '../modules/item/models/ItemFIlterOptions';
@@ -10,7 +10,7 @@ import { GeneratedFile } from '@angular/compiler';
 import { CategoriesService } from '../services/categories/categorie.service';
 import { WidgetitemInteface } from '../modules/widget/models/widgetItemIterface';
 import { QuickAction } from '../modules/item/models/QuickAction';
-import {  OfflineItemModelInterface } from '../modules/offline/models/offlineItemModelInterface';
+import { OfflineItemModelInterface } from '../modules/offline/models/offlineItemModelInterface';
 export class CategoryModel implements FirebaseObject, OfflineItemModelInterface, WidgetitemInteface {
 
     key: string;
@@ -27,12 +27,12 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
         // this.service = service
     }
     serialize4OfflineDb() {
-        
-        const out =this.serialize()
+
+        const out = this.serialize()
         out.entityLabel = this.entityLabel
-        return out 
+        return out
     }
-    entityLabel: string="categories"
+    entityLabel: string = "categories"
     serialize4Offline(): {} {
         throw new Error('Method not implemented.');
     }
@@ -103,7 +103,7 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
 
 
 
-      
+
         return this
     }
     getCountingText() { return ' categorie'; }
@@ -246,12 +246,12 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
     }
 
     serialize() {
-        console.log('category*',this)
+        console.log('category*', this)
         return {
             title: this.title || '',
             key: this.key || '',
-            entityLabel:this.entityLabel,
-            fatherKey: this.fatherKey ||  this.father?.getKey() || ''
+            entityLabel: this.entityLabel,
+            fatherKey: this.fatherKey || this.father?.getKey() || ''
         }
     }
     addCategory() {
