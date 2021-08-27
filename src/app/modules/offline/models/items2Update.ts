@@ -1,6 +1,7 @@
 import { appInitialize } from "@ionic/angular/app-initialize";
 import { ItemModelInterface } from "../../item/models/itemModelInterface";
 import { DateModel } from "../../user/models/birthDateModel";
+import { OfflineItemModelInterface } from "./offlineItemModelInterface";
 import { OperationKey } from "./operationKey";
 
 export class Items2Update {
@@ -9,8 +10,8 @@ export class Items2Update {
     entityLabel2Update: string
     operationKey: OperationKey;
     date: DateModel
-    constructor(item?: ItemModelInterface, entityLabel?, operationKey?: OperationKey) {
-        this.entityLabel2Update = entityLabel
+    constructor(item?: OfflineItemModelInterface,  operationKey?: OperationKey) {
+        this.entityLabel2Update = item.entityLabel
         this.item = item.serialize()
         this.operationKey = operationKey
         this.date = new DateModel(new Date())
