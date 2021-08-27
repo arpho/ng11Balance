@@ -12,6 +12,7 @@ export class CreateEntityOffline {
     constructor(entity: OfflineItemModelInterface, db: OfflineDbService) {
         this.db = db
         this.entity = entity
+        this.entity.key = `${entity.entityLabel}_${new Date().getTime()}`
     }
 
     async execute(isOnline: boolean) {
