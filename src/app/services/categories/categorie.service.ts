@@ -118,9 +118,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   async createItem(item: CategoryModel) {
     var Category
     const category = await this.categoriesListRef.push(item.serialize()).on('value', (cat) => {
-      console.log('created', cat.key, cat.val())
       Category = this.initializeCategory(cat.val())
-      console.log('initialized', Category)
       Category.key = cat.key
     })
     return Category;
