@@ -6,9 +6,8 @@ import { OfflineItemModelInterface } from './offlineItemModelInterface'
 import { OfflineItemServiceInterface } from './offlineItemServiceInterface'
 import { OperationKey } from './operationKey';
 
-export function offline(operation: OperationKey): any {
+export function offline(operation: OperationKey): (target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => void {
    console.log('decorating', operation)
-   //  var out:(target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => void
    const out = {}
    out[OperationKey.update] = decoratedUpdate
    out[OperationKey.create] = decoratedCreate
