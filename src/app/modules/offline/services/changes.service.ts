@@ -10,6 +10,7 @@ import { ItemModelInterface } from '../../item/models/itemModelInterface';
 })
 export class ChangesService {
   public changesListRef: firebase.default.database.Reference;
+  static changesListRef: firebase.default.database.Reference;
 
   _items: BehaviorSubject<Array<Items2Update>> = new BehaviorSubject([])
   readonly items: Observable<Array<Items2Update>> = this._items.asObservable()
@@ -20,6 +21,7 @@ export class ChangesService {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
+        ChangesService.changesListRef =  firebase.default.database().ref(`/changes/${user.uid}/`)
       }
     }
     )
@@ -34,7 +36,7 @@ export class ChangesService {
     return this.changesListRef?.child(key).remove();
   }
 
-  async createItem(item: Items2Update) {
+  static async createItem(item: Items2Update) {
   return   this.changesListRef.push(item.serialize()).on('value', (cat) => {
 
     })
@@ -59,8 +61,8 @@ export class ChangesService {
     })
   }
 
-  updateItem(item: ItemModelInterface) {
-    return this.changesListRef?.child(item.key).update(item.serialize());
+ static  updateItem(item: ItemModelInterface) {
+    return ChangesService.changesListRef?.child(item.key).update(item.serialize());
   }
 
   initializeItems = (raw_items: RawItem[]) => {
