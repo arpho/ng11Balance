@@ -26,6 +26,7 @@ export const decoratedCreate = (target: Object,
     descriptor.value = async (...args: any[]) => {
 
         if (UsersService.loggedUser.isOfflineEnabled()) {
+            args[0].key = `${args[0].entityLabel}_${new Date().getTime()}`
             await new CreateEntityOffline(args[0], new OfflineDbService()).execute(navigator.onLine)
         }
         childFunction.apply(target.constructor, args);
