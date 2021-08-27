@@ -49,7 +49,7 @@ export class ChangesService {
     console.log('fetching from fire')
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
-        this.changesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
+        this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
         this.changesListRef.once('value', items => {
           const rawItems: RawItem[] = []
           items.forEach(snap => {
@@ -61,7 +61,7 @@ export class ChangesService {
     })
   }
 
- static  updateItem(item: ItemModelInterface) {
+ static  updateItem(item: Items2Update) {
     return ChangesService.changesListRef?.child(item.key).update(item.serialize());
   }
 
