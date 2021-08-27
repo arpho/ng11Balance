@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Items2Update } from '../models/items2Update';
 import * as firebase from 'firebase/app';
 import { RawItem } from '../models/rawItem';
+import { ItemModelInterface } from '../../item/models/itemModelInterface';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,14 @@ export class ChangesService {
     return this.changesListRef?.child(key).remove();
   }
 
+  async createItem(item: Items2Update) {
+  return   this.changesListRef.push(item.serialize()).on('value', (cat) => {
+
+    })
+    
+
+  }
+
 
    fetchItemsFromCloud(callback) {
     console.log('fetching from fire')
@@ -48,6 +57,10 @@ export class ChangesService {
         })
       }
     })
+  }
+
+  updateItem(item: ItemModelInterface) {
+    return this.changesListRef?.child(item.key).update(item.serialize());
   }
 
   initializeItems = (raw_items: RawItem[]) => {
