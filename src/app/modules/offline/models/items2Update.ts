@@ -13,6 +13,7 @@ export class Items2Update {
     constructor(item?: OfflineItemModelInterface,  operationKey?: OperationKey) {
         this.entityLabel2Update = item.entityLabel
         this.item = item.serialize()
+        console.log('* serialize',this.item)
         this.operationKey = operationKey
         this.date = new DateModel(new Date())
         this.key = new Date().getTime() + '' // +'' cast to a string

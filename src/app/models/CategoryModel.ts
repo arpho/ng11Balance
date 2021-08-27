@@ -246,11 +246,12 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
     }
 
     serialize() {
+        console.log('category*',this)
         return {
             title: this.title || '',
             key: this.key || '',
             entityLabel:this.entityLabel,
-            fatherKey: this.fatherKey ? this.father.getKey() : ''
+            fatherKey: this.fatherKey ||  this.father?.getKey() || ''
         }
     }
     addCategory() {
