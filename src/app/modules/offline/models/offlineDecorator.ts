@@ -1,5 +1,5 @@
 import { UsersService } from '../../user/services/users.service';
-import { decoratedUpdate } from '../business/decoratedUpdate';
+import { decoratedCreate, decoratedUpdate } from '../business/decoratedOperations';
 import { OfflineDbService } from '../services/offline-db.service';
 import { OfflineManagerService } from '../services/offline-manager.service'
 import { OfflineItemModelInterface } from './offlineItemModelInterface'
@@ -11,6 +11,7 @@ export function offline(operation: OperationKey): any {
    //  var out:(target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => void
    const out = {}
    out[OperationKey.update] = decoratedUpdate
+   out[OperationKey.create] = decoratedCreate
 
    return out[operation]
 }

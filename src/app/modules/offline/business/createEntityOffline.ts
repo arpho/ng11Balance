@@ -6,7 +6,7 @@ import { ChangesService } from "../services/changes.service";
 import { OfflineDbService } from "../services/offline-db.service";
 import { OfflineManagerService } from "../services/offline-manager.service";
 
-export class UpdateEntityOffline {
+export class CreateEntityOffline {
     entity: OfflineItemModelInterface
     db: OfflineDbService
     constructor(entity: OfflineItemModelInterface, db: OfflineDbService) {
