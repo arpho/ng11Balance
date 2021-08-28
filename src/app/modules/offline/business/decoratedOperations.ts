@@ -1,6 +1,7 @@
 import { UsersService } from "../../user/services/users.service";
 import { OfflineDbService } from "../services/offline-db.service";
 import { CreateEntityOffline } from "./createEntityOffline";
+import { DeleteEntityOffline } from "./deleteEntityOffline";
 import { UpdateEntityOffline } from "./updateEntityOffline";
 
 export const decoratedUpdate = (target: Object,
@@ -35,5 +36,27 @@ export const decoratedCreate = (target: Object,
         console.log('target.constructor',target.constructor)
         childFunction.apply(target.constructor, args);
         return descriptor
+    }
+}
+
+export const decoratedDelete =(entityLabel:string)=>{
+    return (target: Object,
+        propertyKey: string,
+        descriptor: TypedPropertyDescriptor<any>) => {
+    
+        const childFunction = descriptor.value;
+        descriptor.value = async (...args: any[]) => {
+      
+    
+            if (UsersService.loggedUser.isOfflineEnabled()) {
+               
+                console.log('key',args)
+                await new DeleteEntityOffline(args[0], new OfflineDbService(),entityLabel).execute(navigator.onLine)
+            }
+            console.log('applying child on',args)
+            console.log('target.constructor',target.constructor)
+            childFunction.apply(target.constructor, args);
+            return descriptor
+        }
     }
 }

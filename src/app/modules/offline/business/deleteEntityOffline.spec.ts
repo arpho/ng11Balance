@@ -17,7 +17,7 @@ describe("we should update an entity offline and when needed  add an update item
             title: "gnosis"
         })
         db.set(categoryTest.key, categoryTest.serialize4OfflineDb())
-        new DeleteEntityOffline(categoryTest.key,db,categoryTest).execute(true)
+        new DeleteEntityOffline(categoryTest.key,db,categoryTest.entityLabel).execute(true)
         const deleted= await db.get(categoryTest.key)
         expect(deleted.item).toBeFalsy()
     })

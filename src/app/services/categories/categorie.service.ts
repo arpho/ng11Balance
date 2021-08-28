@@ -142,6 +142,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   updateItem(item: ItemModelInterface) {
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
+  @offline(OperationKey.delete,new CategoryModel().entityLabel)
   deleteItem(key: string) {
     return this.categoriesListRef?.child(key).remove();
   }
