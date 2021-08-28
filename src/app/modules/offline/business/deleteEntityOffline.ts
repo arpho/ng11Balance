@@ -17,7 +17,6 @@ export class DeleteEntityOffline {
     }
 
     async execute(isOnline: boolean) {
-        console.log('db prima*',this.db)
         await this.db.remove(this.key)
         if (isOnline) {// se online non serve registrare la modifica sul db locale
             const Item2Update = new Items2Update(this.entity, OperationKey.delete)

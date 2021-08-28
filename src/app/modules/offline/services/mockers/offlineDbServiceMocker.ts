@@ -8,7 +8,6 @@ export class LocalForageMocker extends OfflineDbService {
         this.db = {}
     }
     async set(key: string, value: unknown) {
-        console.log('* setting',key,value)
         this.db[key] = value
     }
 
