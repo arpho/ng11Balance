@@ -21,7 +21,6 @@ export class OfflineManagerService {
   constructor(public localDb: OfflineDbService, public users: UsersService) {
 
     this.makeSignature(async sign => {
-      console.log('signature', sign)
 
       await new StoreSignature(this.localDb, sign).execute()
     })
@@ -93,9 +92,7 @@ export class OfflineManagerService {
   }
 
   static async publishEntity(entity: string) {
-    console.log('refresh ', entity)
     const service = OfflineManagerService.servicesList.filter((service: OfflineItemServiceInterface) => service.entityLabel == entity)[0]
-    console.log('publish to ',service)
     service.publish(await service.loadItemFromLocalDb())
 
 
@@ -104,7 +101,6 @@ export class OfflineManagerService {
 
   async registerService(service: OfflineItemServiceInterface) {
 
-    console.log('registering service',service)
     OfflineManagerService.servicesList.push(service)
     service.setHref()
 

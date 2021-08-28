@@ -29,11 +29,8 @@ export const decoratedCreate = (target: Object,
 
         if (UsersService.loggedUser.isOfflineEnabled()) {
             args[0].key = `${args[0].entityLabel}_${new Date().getTime()}`
-            console.log('key',args)
             await new CreateEntityOffline(args[0], new OfflineDbService()).execute(navigator.onLine)
         }
-        console.log('applying child on',args)
-        console.log('target.constructor',target.constructor)
         childFunction.apply(target.constructor, args);
         return descriptor
     }
@@ -50,11 +47,10 @@ export const decoratedDelete =(entityLabel:string)=>{
     
             if (UsersService.loggedUser.isOfflineEnabled()) {
                
-                console.log('key',args)
+                
                 await new DeleteEntityOffline(args[0], new OfflineDbService(),entityLabel).execute(navigator.onLine)
             }
-            console.log('applying child on',args)
-            console.log('target.constructor',target.constructor)
+
             childFunction.apply(target.constructor, args);
             return descriptor
         }

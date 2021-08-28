@@ -7,26 +7,25 @@ import { OfflineDbService } from "../services/offline-db.service";
 import { OfflineManagerService } from "../services/offline-manager.service";
 
 export class DeleteEntityOffline {
-    key:string
+    key: string
     db: OfflineDbService
-   entityLabel:string
-    constructor(key:string, db: OfflineDbService,entityLabel) {
+    entityLabel: string
+    constructor(key: string, db: OfflineDbService, entityLabel) {
         this.db = db
-        this.key= key
-        this.entityLabel= entityLabel
+        this.key = key
+        this.entityLabel = entityLabel
     }
 
     async execute(isOnline: boolean) {
-        console.log('deleting offline',this.key)
         await this.db.remove(this.key)
         if (isOnline) {// se online non serve registrare la modifica sul db locale
             const Item2Update = new Items2Update(null, OperationKey.delete)
-          //  new ChangesService().createItem(Item2Update)
+            //  new ChangesService().createItem(Item2Update)
         }
         else {
             // registro la modifica che sarà riportata onLine appena possibile
-            await this.db.set(new Date().getTime() + '', { entityLabel: 'update', operation: OperationKey.delete, 'Key':this.key,'table':this?.entityLabel})
+            await this.db.set(new Date().getTime() + '', { entityLabel: 'update', operation: OperationKey.delete, 'Key': this.key, 'table': this?.entityLabel })
         }
         OfflineManagerService.publishEntity(this.entityLabel)
-    }entity: OfflineItemModelInterface
+    } entity: OfflineItemModelInterface
 }
