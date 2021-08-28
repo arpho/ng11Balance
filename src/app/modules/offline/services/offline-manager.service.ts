@@ -25,7 +25,7 @@ export class OfflineManagerService {
       await new StoreSignature(this.localDb, sign).execute()
     })
 
-    OfflineManagerService.offlineDbStatus.subscribe(status => { console.log('actual status', status) })
+    OfflineManagerService.offlineDbStatus.subscribe(status => {  })
   }
 
   makeSignature(next) {
@@ -60,7 +60,6 @@ export class OfflineManagerService {
     const statusList = OfflineManagerService.servicesList.map((service: OfflineItemServiceInterface) => {
       return service.offlineDbStatus || 0
     })
-    console.log('status list', statusList)
     const reducer = (acc: number, value: number, index, array: number[]) => {
       let val = acc + value;
       if (index === array.length - 1) {
@@ -114,7 +113,6 @@ export class OfflineManagerService {
       OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
 
 
-      console.log(`${service.entityLabel} needs  to be initialized`)
       await new CloneEntity(db, service).execute()
       OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
     }

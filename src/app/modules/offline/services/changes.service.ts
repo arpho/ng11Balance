@@ -46,7 +46,6 @@ export class ChangesService {
 
 
    fetchItemsFromCloud(callback) {
-    console.log('fetching from fire')
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)

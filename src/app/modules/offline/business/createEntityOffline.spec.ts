@@ -1,3 +1,4 @@
+
 import { waitForAsync } from "@angular/core/testing"
 import { CategoryModel } from "src/app/models/CategoryModel"
 import { OperationKey } from "../models/operationKey"
@@ -42,5 +43,4 @@ describe('creating an offline items ',()=>{
             
 
         })
-    }))
-})
+    }))})

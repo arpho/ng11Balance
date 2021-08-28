@@ -192,7 +192,6 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
   fetchItemsFromCloud(callback) {
-    console.log('fetching from fire')
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)

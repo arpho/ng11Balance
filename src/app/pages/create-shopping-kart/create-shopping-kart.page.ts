@@ -82,7 +82,7 @@ export class CreateShoppingKartPage implements OnInit {
   }
 
   setFormFields(kart: ShoppingKartModel, ItemsFilterFunction: (item: ItemModelInterface) => boolean, sorterFunction?) {
-    console.log('setting kart', kart)
+
     return [
       new TextboxQuestion({
         key: 'title',

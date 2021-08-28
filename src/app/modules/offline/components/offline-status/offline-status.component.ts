@@ -11,8 +11,7 @@ export class OfflineStatusComponent implements OnInit {
   status = OfflineManagerService.offlineDbStatus
 
   constructor() {
-    console.log('ciao sono ',status)
-    OfflineManagerService._offlineDbStatus.subscribe(status=>{console.log('status db',status)})
+    OfflineManagerService._offlineDbStatus.subscribe(status=>{})
    }
 
   ngOnInit() {}
