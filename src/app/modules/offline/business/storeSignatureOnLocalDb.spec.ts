@@ -15,7 +15,7 @@ describe('storing signature',()=>{
         const sign0 = await db.get('signature_0')
         
         
-        expect (sign0.signature).toEqual(signature)
+        expect (sign0.item['signature']).toEqual(signature)
     })
     it('previous signatures',async ()=>{
         await db.set("signature_0",{signature:'Qfe9bcGcUxTIKmL9ccn76z12gzE2_Linux x86_64_Chrome',entityLabel:'signatures',lastLogged:false})// setto una firma precedente con uguale firma e lastused falso
@@ -27,12 +27,13 @@ describe('storing signature',()=>{
         const signs = await db.fetchAllRawItems4Entity('signatures')
         expect(signs.length).toEqual(1)
         const sign0 = await db.get('signature_0')
-        expect(sign0.signature).toEqual(signature)
-        expect(sign0.lastLogged).toBeTrue()
+        console.log('@sign0',sign0)
+        expect(sign0.item['signature']).toEqual(signature)
+        expect(sign0.item['lastLogged']).toBeTrue()
 
         const sign1 = await db.get('signature_1')
         console.log('sign1 @',sign1)
-        expect(sign1.lastLogged).toBeFalse()
+        expect(sign1.item['lastLogged']).toBeFalse()
 
 
     })

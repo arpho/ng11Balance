@@ -23,9 +23,9 @@ describe("we should update an entity offline and when needed  add an update item
         categoryTest.title = 'test'
         await new UpdateEntityOffline(categoryTest, db).execute(true)
         const rawCategory = await db.get(categoryTest.key)
-        console.log('raw updated cat', rawCategory)
-        const updatedCategory = new CategoryModel().initialize(rawCategory)
-        expect(rawCategory.entityLabel).toEqual(categoryTest.entityLabel)
+        const updatedCategory = new CategoryModel().initialize(rawCategory.item)
+        console.log('@ updatedCategory',updatedCategory)
+        expect(rawCategory.item['entityLabel']).toEqual(categoryTest.entityLabel)
         expect(updatedCategory.title).toEqual('test')
         const updated = await db.fetchAllRawItems4Entity('update')
         expect(updated.length).toEqual(0)
@@ -43,9 +43,8 @@ describe("we should update an entity offline and when needed  add an update item
         categoryTest.title = 'test'
         await new UpdateEntityOffline(categoryTest, db).execute(false)
         const rawCategory = await db.get(categoryTest.key)
-        console.log('raw updated cat', rawCategory)
-        const updatedCategory = new CategoryModel().initialize(rawCategory)
-        expect(rawCategory.entityLabel).toEqual(categoryTest.entityLabel)
+        const updatedCategory = new CategoryModel().initialize(rawCategory.item)
+        expect(rawCategory.item['entityLabel']).toEqual(categoryTest.entityLabel)
         expect(updatedCategory.title).toEqual('test')
         const updated = await db.fetchAllRawItems4Entity('update')
         expect(updated.length).toEqual(1)
@@ -55,7 +54,6 @@ describe("we should update an entity offline and when needed  add an update item
         expect(updated[0].item['entity']['entityLabel']).toEqual(categoryTest.entityLabel)
         console.log('operation @',updated[0])
         expect(updated[0].item['operation']).toEqual(OperationKey.update)
-        expect
 
     })
 
