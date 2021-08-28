@@ -114,7 +114,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     return karts.reduce(this.ItemskartMapper2, []).map(this.itemsMapper2).map(this.blowupCategories).reduce(this.flattener, [])
   }
 
-
+  @offline(OperationKey.create)
   async createItem(item: CategoryModel) {
     var Category
     const category = await this.categoriesListRef.push(item.serialize()).on('value', (cat) => {
