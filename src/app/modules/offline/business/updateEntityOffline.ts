@@ -18,7 +18,7 @@ export class UpdateEntityOffline {
         await this.db.set(this.entity.key, { ...this.entity.serialize4OfflineDb() })
         if (isOnline) {// se online non serve registrare la modifica sul db locale
             const Item2Update = new Items2Update(this.entity, OperationKey.update)
-            ChangesService.createItem(Item2Update)
+           new  ChangesService().createItem(Item2Update)
         }
         else {
             // registro la modifica che sarà riportata onLine appena possibile

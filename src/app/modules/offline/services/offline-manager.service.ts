@@ -5,6 +5,7 @@ import { CloneEntity } from '../business/cloneEntityFromFirebase';
 import { StoreSignature } from '../business/storeSignatureOnLocalDb';
 import { offLineDbStatus } from '../models/offlineDbStatus';
 import { OfflineItemServiceInterface } from '../models/offlineItemServiceInterface';
+import { ChangesService } from './changes.service';
 import { OfflineDbService } from './offline-db.service';
 
 @Injectable({
@@ -24,9 +25,10 @@ export class OfflineManagerService {
 
       await new StoreSignature(this.localDb, sign).execute()
     })
+    
 
-    OfflineManagerService.offlineDbStatus.subscribe(status => {  })
   }
+
 
   makeSignature(next) {
 
@@ -93,6 +95,7 @@ export class OfflineManagerService {
   static async publishEntity(entity: string) {
     console.log('refresh ', entity)
     const service = OfflineManagerService.servicesList.filter((service: OfflineItemServiceInterface) => service.entityLabel == entity)[0]
+    console.log('publish to ',service)
     service.publish(await service.loadItemFromLocalDb())
 
 
@@ -101,8 +104,9 @@ export class OfflineManagerService {
 
   async registerService(service: OfflineItemServiceInterface) {
 
-
+    console.log('registering service',service)
     OfflineManagerService.servicesList.push(service)
+    service.setHref()
 
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
     if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {

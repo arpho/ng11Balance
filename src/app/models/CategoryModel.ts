@@ -32,7 +32,7 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
         out.entityLabel = this.entityLabel
         return out
     }
-    entityLabel: string = "categories"
+    entityLabel: string = "Categoria"
     serialize4Offline(): {} {
         throw new Error('Method not implemented.');
     }
@@ -246,7 +246,6 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
     }
 
     serialize() {
-        console.log('category*', this)
         return {
             title: this.title || '',
             key: this.key || '',

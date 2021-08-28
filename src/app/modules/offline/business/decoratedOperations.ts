@@ -24,11 +24,15 @@ export const decoratedCreate = (target: Object,
 
     const childFunction = descriptor.value;
     descriptor.value = async (...args: any[]) => {
+        args[0].key = new Date().getTime()+ ''
 
         if (UsersService.loggedUser.isOfflineEnabled()) {
             args[0].key = `${args[0].entityLabel}_${new Date().getTime()}`
+            console.log('key',args)
             await new CreateEntityOffline(args[0], new OfflineDbService()).execute(navigator.onLine)
         }
+        console.log('applying child on',args)
+        console.log('target.constructor',target.constructor)
         childFunction.apply(target.constructor, args);
         return descriptor
     }

@@ -9,5 +9,6 @@ export interface OfflineItemServiceInterface extends ItemServiceInterface {
     initializeItems: (items: Array<{}>) => Array<ItemModelInterface>
     loadItemFromLocalDb(): Promise<ItemModelInterface[]>
     offlineDbStatus:offLineDbStatus
+    setHref()
 
 }

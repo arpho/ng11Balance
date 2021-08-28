@@ -46,7 +46,6 @@ export class FolderPage implements OnInit {
   ) {
 
     this.connectionStatus.monitor(value => {
-      console.log('status online*', value)
     })
 
 

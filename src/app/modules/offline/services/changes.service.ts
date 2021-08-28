@@ -36,9 +36,10 @@ export class ChangesService {
     return this.changesListRef?.child(key).remove();
   }
 
-  static async createItem(item: Items2Update) {
-  return   this.changesListRef.push(item.serialize()).on('value', (cat) => {
-
+   async createItem(item: Items2Update) {
+    console.log('creating change',item)
+  return   ChangesService.changesListRef.push(item.serialize()).on('value', (cat) => {
+    console.log('created',cat.val())
     })
     
 

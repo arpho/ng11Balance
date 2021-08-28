@@ -18,6 +18,8 @@ import { OfflineManagerService } from 'src/app/modules/offline/services/offline-
 import { UsersService } from 'src/app/modules/user/services/users.service';
 import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 import { offline } from 'src/app/modules/offline/models/offlineDecorator';
+import { ChangesService } from 'src/app/modules/offline/services/changes.service';
+import { Items2Update } from 'src/app/modules/offline/models/items2Update';
 
 
 
@@ -31,6 +33,7 @@ import { offline } from 'src/app/modules/offline/models/offlineDecorator';
 export class CategoriesService implements OfflineItemServiceInterface, EntityWidgetServiceInterface {
   public readonly key = 'categories'
   public categoriesListRef: firebase.default.database.Reference;
+  static categoriesListRef: firebase.default.database.Reference;
   _items: BehaviorSubject<Array<CategoryModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<CategoryModel>> = this._items.asObservable()
   items_list: Array<CategoryModel> = []
@@ -80,6 +83,19 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   paymentsService?: ItemServiceInterface;
   suppliersListRef?: any;
 
+  setHref(){
+
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
+        CategoriesService.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
+        console.log('set href',this.categoriesListRef)
+      }
+    }
+    )
+    
+  }
+
 
   getDummyItem() {
 
@@ -114,16 +130,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     return karts.reduce(this.ItemskartMapper2, []).map(this.itemsMapper2).map(this.blowupCategories).reduce(this.flattener, [])
   }
 
-  @offline(OperationKey.create)
-  async createItem(item: CategoryModel) {
-    var Category
-    const category = await this.categoriesListRef.push(item.serialize()).on('value', (cat) => {
-      Category = this.initializeCategory(cat.val())
-      Category.key = cat.key
-    })
-    return Category;
-
-  }
+  
 
 
 
@@ -141,7 +148,8 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
 
-  constructor(public manager: OfflineManagerService, public users: UsersService, public localDb: OfflineDbService) {
+  constructor(public manager: OfflineManagerService, public users: UsersService, public localDb: OfflineDbService,) {
+    this.setHref()
 
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
@@ -169,6 +177,21 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
   }
+
+  @offline(OperationKey.create)
+  async createItem(item: CategoryModel) {
+   // this.changes.createItem(new Items2Update(item, OperationKey.create))
+    var Category
+    console.log('cat ref',this.categoriesListRef)
+    const category = await CategoriesService.categoriesListRef.push(item.serialize()).on('value', (cat) => {
+      console.log('created cat',cat.val())
+      Category = this.initializeCategory(cat.val())
+      Category.key = cat.key
+    })
+    return Category;
+
+  }
+
   async loadItemFromLocalDb() {
     console.log('loading item from local')
     return this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel))
