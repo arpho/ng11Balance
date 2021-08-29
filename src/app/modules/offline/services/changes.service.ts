@@ -21,7 +21,6 @@ export class ChangesService {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
-        ChangesService.changesListRef =  firebase.default.database().ref(`/changes/${user.uid}/`)
       }
     }
     )
@@ -38,7 +37,15 @@ export class ChangesService {
 
    async createItem(item: Items2Update) {
     console.log('creating change',item)
-  return   this.changesListRef.push(item.serialize()).catch(err=>{console.log('errore',err)})
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
+        this.changesListRef.push(item.serialize())
+      }
+    }
+    )
+    
+  return   
 
   }
 

@@ -21,6 +21,8 @@ import { offline } from 'src/app/modules/offline/models/offlineDecorator';
 import { ChangesService } from 'src/app/modules/offline/services/changes.service';
 import { Items2Update } from 'src/app/modules/offline/models/items2Update';
 import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
+import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
+import { OfflineItemModelInterface } from 'src/app/modules/offline/models/offlineItemModelInterface';
 
 
 
@@ -140,7 +142,8 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     return this.categoriesListRef?.child(prId);
   }
 
-  updateItem(item: ItemModelInterface) {
+  updateItem(item: OfflineItemModelInterface) {
+    new UpdateEntityOffline(item,this.localDb).execute(navigator.onLine)
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
   deleteItem(key: string) {

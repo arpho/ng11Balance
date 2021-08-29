@@ -88,6 +88,7 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
                         // this.father.initialize()
                     }
                 } else {
+                    this.father = undefined
                     this.title = 'deleted'
                 }
             });
@@ -246,11 +247,18 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
     }
 
     serialize() {
+        var fatherKey = ''
+        if(this.fatherKey){
+            fatherKey=  this.fatherKey
+        }
+        if(this.father){
+            fatherKey= this.father.getKey()
+        }
         return {
             title: this.title || '',
             key: this.key || '',
             entityLabel: this.entityLabel,
-            fatherKey: this.fatherKey || this.father?.getKey() || ''
+            fatherKey: fatherKey
         }
     }
     addCategory() {
