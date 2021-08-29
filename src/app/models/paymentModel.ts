@@ -6,7 +6,8 @@ import { Value } from '../modules/item/models/value';
 import { ItemFilterOPtions } from '../modules/item/models/ItemFIlterOptions';
 import { QuickAction } from '../modules/item/models/QuickAction';
 import { WidgetitemInteface } from '../modules/widget/models/widgetItemIterface';
-export class PaymentsModel implements ItemModelInterface, WidgetitemInteface {
+import { OfflineItemModelInterface, offlineSerializer } from '../modules/offline/models/offlineItemModelInterface';
+export class PaymentsModel implements OfflineItemModelInterface, WidgetitemInteface {
     nome: string; // retro compatibilità
     title: string;
     note: string;
@@ -33,7 +34,28 @@ export class PaymentsModel implements ItemModelInterface, WidgetitemInteface {
 
 
     }
+    entityLabel="Pagamento"
+    serialize4OfflineDb(): offlineSerializer<{ entityLabel: string; }> {
+        const out = this.serialize()
+        out['entityLabel']= this.entityLabel
+        return out 
+    }
+    service?: ItemServiceInterface;
+    isArchived?(): boolean {
+        throw new Error('Method not implemented.');return this.archived
+    }
+    archiveItem?(b: boolean) {
+        throw new Error('Method not implemented.');
+    }
+    isArchivable?(): boolean {
+        return false
+    }
     widgetText = `..`
+
+    setKey(key:string){
+        this.key= key
+        return this
+    }
 
     build(item) {
         this.key = item.key

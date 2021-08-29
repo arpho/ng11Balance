@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ItemServiceInterface } from '../../modules/item/models/ItemServiceInterface';
 import { ItemModelInterface } from '../../modules/item/models/itemModelInterface';
 import { PaymentsModel } from 'src/app/models/paymentModel';
 import * as firebase from 'firebase';
@@ -7,11 +6,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { EntityWidgetServiceInterface } from 'src/app/modules/widget/models/EntityWidgetServiceInterface';
 import { ShoppingKartModel } from 'src/app/models/shoppingKartModel';
+import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offlineItemServiceInterface';
+import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus';
+import { ItemServiceInterface } from 'src/app/modules/item/models/ItemServiceInterface';
+import { RawItem } from 'src/app/modules/offline/models/rawItem';
+import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PaymentsService implements ItemServiceInterface, EntityWidgetServiceInterface {
+export class PaymentsService implements OfflineItemServiceInterface, EntityWidgetServiceInterface {
 
   public paymentsListRef: firebase.default.database.Reference;
   _items: BehaviorSubject<Array<PaymentsModel>> = new BehaviorSubject([])
@@ -22,7 +26,7 @@ export class PaymentsService implements ItemServiceInterface, EntityWidgetServic
 
   }
 
-  constructor() {
+  constructor(public localDb:OfflineDbService) {
     this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
       return entities.filter((item: ShoppingKartModel) => {
         return item.pagamentoId == entityKey
@@ -55,6 +59,30 @@ export class PaymentsService implements ItemServiceInterface, EntityWidgetServic
         });
       }
     });
+  }
+  publish: (items: ItemModelInterface[]) => void;
+  fetchItemsFromCloud: (callback: (items: {}[]) => void) => void;
+  initializeItems =   (raw_items: RawItem[]) =>{
+    const payments: PaymentsModel[] = [];
+    raw_items.forEach(item => { //first step initialize flat categories
+      payments.push(new PaymentsModel().initialize(item.item).setKey(item.key))
+    })
+    
+    return payments
+  }
+  async loadItemFromLocalDb(): Promise<ItemModelInterface[]> {
+    return this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel))
+
+  }
+  offlineDbStatus: offLineDbStatus;
+  setHref() {
+
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.paymentsListRef = firebase.default.database().ref(`/pagamenti/${user.uid}/`);
+      }
+    })
+   
   }
   instatiateItem: (args: {}) => any;
 
