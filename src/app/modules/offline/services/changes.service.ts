@@ -24,18 +24,18 @@ export class ChangesService {
       }
     }
     )
-   }
+  }
 
 
-   getItem(prId: string): firebase.default.database.Reference {
+  getItem(prId: string): firebase.default.database.Reference {
     return this.changesListRef?.child(prId);
   }
- 
+
   deleteItem(key: string) {
     return this.changesListRef?.child(key).remove();
   }
 
-   async createItem(item: Items2Update) {
+  async createItem(item: Items2Update) {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
@@ -43,13 +43,13 @@ export class ChangesService {
       }
     }
     )
-    
-  return   
+
+    return
 
   }
 
 
-   fetchItemsFromCloud(callback) {
+  fetchItemsFromCloud(callback) {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
@@ -65,16 +65,16 @@ export class ChangesService {
     })
   }
 
- static  updateItem(item: Items2Update) {
+  static updateItem(item: Items2Update) {
     return ChangesService.changesListRef?.child(item.key).update(item.serialize());
   }
 
   initializeItems = (raw_items: RawItem[]) => {
-    var items:Items2Update[]
-    this.changesListRef.on('value',(changes)=>{
-      items= []
-      changes.forEach(item=>{
-        
+    var items: Items2Update[]
+    this.changesListRef.on('value', (changes) => {
+      items = []
+      changes.forEach(item => {
+
         items.push(new Items2Update().initialize(item.val()).setKey(item.key))
       })
     })

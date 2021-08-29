@@ -78,9 +78,9 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     return this.blowCategoriesUp(entities).filter((item: PricedCategory) => item.category.key == entityKey).map((item: PricedCategory) => item.price).reduce((pv, cv) => { return pv += cv }, 0);
   }
   filterableField = 'purchaseDate' // we filter shoppingkart's entities by purchase date
-  get entityLabel(){
+  get entityLabel() {
     return this.getDummyItem().entityLabel
-  } 
+  }
 
 
   categoriesService?: ItemServiceInterface;
@@ -88,17 +88,17 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   paymentsService?: ItemServiceInterface;
   suppliersListRef?: any;
 
-  setHref(){
+  setHref() {
 
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
         CategoriesService.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
-        console.log('set href',this.categoriesListRef)
+        console.log('set href', this.categoriesListRef)
       }
     }
     )
-    
+
   }
 
 
@@ -135,7 +135,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     return karts.reduce(this.ItemskartMapper2, []).map(this.itemsMapper2).map(this.blowupCategories).reduce(this.flattener, [])
   }
 
-  
+
 
 
 
@@ -145,18 +145,18 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   }
 
   updateItem(item: OfflineItemModelInterface) {
-    new UpdateEntityOffline(item,this.localDb).execute(navigator.onLine)
+    new UpdateEntityOffline(item, this.localDb).execute(navigator.onLine)
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
   async deleteItem(key: string) {
-    await new DeleteEntityOffline(key,this.localDb,this.entityLabel).execute(navigator.onLine)
-    await this.changes.createItem(new Items2Update(new CategoryModel().setKey(key),OperationKey.delete))
+    await new DeleteEntityOffline(key, this.localDb, this.entityLabel).execute(navigator.onLine)
+    await this.changes.createItem(new Items2Update(new CategoryModel().setKey(key), OperationKey.delete))
     return this.categoriesListRef?.child(key).remove();
   }
 
 
 
-  constructor(public manager: OfflineManagerService, public users: UsersService, public localDb: OfflineDbService,public changes:ChangesService) {
+  constructor(public manager: OfflineManagerService, public users: UsersService, public localDb: OfflineDbService, public changes: ChangesService) {
     this.setHref()
 
     firebase.default.auth().onAuthStateChanged(user => {
@@ -186,19 +186,19 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
   }
 
- 
+
   async createItem(item: CategoryModel) {
-    item.key= `${this.entityLabel}_${new Date().getTime()}`
-    
+    item.key = `${this.entityLabel}_${new Date().getTime()}`
+
     var Category
-    console.log('cat ref',this.categoriesListRef)
-    const category = await CategoriesService.categoriesListRef.push(item.serialize()).then(res=>{
-      console.log('result',res.key,res,item)
+    console.log('cat ref', this.categoriesListRef)
+    const category = await CategoriesService.categoriesListRef.push(item.serialize()).then(res => {
+      console.log('result', res.key, res, item)
       this.changes.createItem(new Items2Update(item, OperationKey.create))
       Category = new CategoryModel().initialize(item)
-      console.log('created',Category)
+      console.log('created', Category)
     })
-    await new CreateEntityOffline(item,this.localDb).execute(navigator.onLine)
+    await new CreateEntityOffline(item, this.localDb).execute(navigator.onLine)
     return Category;
 
   }
