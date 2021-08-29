@@ -9,11 +9,13 @@ export class Items2Update {
     key: string
     entityLabel2Update: string
     operationKey: OperationKey;
+    creatorSignature:string
     date: DateModel
-    constructor(item?: OfflineItemModelInterface, operationKey?: OperationKey) {
+    constructor(item?: OfflineItemModelInterface, operationKey?: OperationKey,creatorSignature?:string) {// jolly operator to initialize dummy items
         this.entityLabel2Update = item?.entityLabel
         this.item = item ? item.serialize() : undefined
         this.operationKey = operationKey
+        this.creatorSignature= creatorSignature
         this.date = new DateModel(new Date())
         this.key = new Date().getTime() + '' // +'' cast to a string
     }

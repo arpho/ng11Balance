@@ -29,14 +29,14 @@ export class OfflineManagerService {
   }
 
 
-  makeSignature(next) {
+   makeSignature(next) {
 
     this.users.loggedUser.subscribe(user => {
       if (user.uid) {
         next(`${user.uid}_${navigator.platform}_${this.getBrowserName()}`)
       }
     })
-
+    
 
   }
 

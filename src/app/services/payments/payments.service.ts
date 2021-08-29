@@ -12,6 +12,10 @@ import { ItemServiceInterface } from 'src/app/modules/item/models/ItemServiceInt
 import { RawItem } from 'src/app/modules/offline/models/rawItem';
 import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
 import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
+import { ChangesService } from 'src/app/modules/offline/services/changes.service';
+import { Items2Update } from 'src/app/modules/offline/models/items2Update';
+import { OperationKey } from 'src/app/modules/offline/models/operationKey';
+import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +31,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
 
   }
 
-  constructor(public localDb:OfflineDbService,public manager:OfflineManagerService) {
+  constructor(public localDb:OfflineDbService,public manager:OfflineManagerService,public changes:ChangesService) {
     this.setHref()
     this.manager.registerService(this)
     this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
@@ -133,18 +137,18 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   }
 
   async createItem(item: ItemModelInterface) {
-
     var Payment
-
-    const payment= await this.paymentsListRef.push(item.serialize());
-    payment.on('value',pay=>{
-      Payment = new PaymentsModel().initialize(pay.val())
-
-      Payment.key  = pay.key
-
-      this.updateItem(Payment)
+    item.key= `${this.entityLabel}_${new Date().getTime()}`
+     await this.paymentsListRef.push(item.serialize()).then(res=>{ // creates item on firebase
+      Payment = new PaymentsModel().initialize(item)
+      this.manager.makeSignature(signature=>{
+        this.changes.createItem(new Items2Update(Payment, OperationKey.create,signature))
+      }) // register update
 
     })
+    await new CreateEntityOffline(Payment, this.localDb).execute(navigator.onLine)
+
+
     return Payment
 
 
