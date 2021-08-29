@@ -33,7 +33,7 @@ describe("we should update an entity offline and when needed  add an update item
         db.set(categoryTest.key, categoryTest.serialize4OfflineDb()) 
         new DeleteEntityOffline(categoryTest.key,db,categoryTest.entityLabel).execute(false)
         const update = (await db.fetchAllRawItems4Entity('update'))[0]
-        console.log('update *',await db.fetchAllRawItems4Entity('update'),(await db.fetchAllRawItems4Entity('update'))[0])
+        //console.log('update *',await db.fetchAllRawItems4Entity('update'),(await db.fetchAllRawItems4Entity('update'))[0])
         expect((await db.fetchAllRawItems4Entity('update'))[0].item['operation']).toEqual(OperationKey.delete)
         expect((await db.fetchAllRawItems4Entity('update'))[0].item['itemKey']).toEqual(categoryTest.key)
         expect((await db.fetchAllRawItems4Entity('update'))[0].item['table']).toEqual(categoryTest.entityLabel)

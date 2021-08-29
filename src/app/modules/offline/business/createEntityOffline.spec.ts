@@ -22,7 +22,7 @@ describe('creating an offline items ',()=>{
             expect(newCat.item['enityLabel']).toEqual(categoryTest.entityLabel)
             expect(newCat.item['fatherKEY']).toEqual(categoryTest.fatherKey)
         })
-        it('create a new category offline',async ()=>{
+        it('create a new category offline in online mode',async ()=>{
             const categoryTest = new CategoryModel().initialize({
                 entityLabel: "Categoria",
                 fatherKey: "-LMTmZbBd6roqklYDflZ",
@@ -42,5 +42,20 @@ describe('creating an offline items ',()=>{
             expect(update.item.entity.fatherKey).toEqual(categoryTest.fatherKey)
             
 
+        })
+        it('create  new category offline in online mode',async ()=>{
+            const categoryTest = new CategoryModel().initialize({
+                entityLabel: "Categoria",
+                fatherKey: "-LMTmZbBd6roqklYDflZ",
+                key: "-Ks0UdZGtzunNoCmGGJd",
+                title: "gnosis"
+            })
+            db.set(categoryTest.key,categoryTest.serialize4OfflineDb())
+            await new CreateEntityOffline(categoryTest,db).execute(false)  
+            const update = (await db.fetchAllRawItems4Entity('update'))[0]
+            expect((await db.fetchAllRawItems4Entity('update'))[0].item['operation']).toEqual(OperationKey.create)
+            expect((await db.fetchAllRawItems4Entity('update'))[0].item['entity']['fatherKey']).toEqual(categoryTest.fatherKey)
+            expect((await db.fetchAllRawItems4Entity('update'))[0].item['entity']['key']).toEqual(categoryTest.key)
+            expect((await db.fetchAllRawItems4Entity('update'))[0].item['entity']['title']).toEqual(categoryTest.title)
         })
     }))})
