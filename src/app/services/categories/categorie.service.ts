@@ -23,6 +23,7 @@ import { Items2Update } from 'src/app/modules/offline/models/items2Update';
 import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
 import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
 import { OfflineItemModelInterface } from 'src/app/modules/offline/models/offlineItemModelInterface';
+import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEntityOffline';
 
 
 
@@ -77,8 +78,9 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     return this.blowCategoriesUp(entities).filter((item: PricedCategory) => item.category.key == entityKey).map((item: PricedCategory) => item.price).reduce((pv, cv) => { return pv += cv }, 0);
   }
   filterableField = 'purchaseDate' // we filter shoppingkart's entities by purchase date
-  entityLabel = "Categoria";
-  static entityLabel = "Categoria";
+  get entityLabel(){
+    return this.getDummyItem().entityLabel
+  } 
 
 
   categoriesService?: ItemServiceInterface;
@@ -146,7 +148,8 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     new UpdateEntityOffline(item,this.localDb).execute(navigator.onLine)
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
-  deleteItem(key: string) {
+  async deleteItem(key: string) {
+    new DeleteEntityOffline(key,this.localDb,this.entityLabel).execute(navigator.onLine)
     return this.categoriesListRef?.child(key).remove();
   }
 
