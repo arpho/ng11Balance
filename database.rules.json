@@ -39,6 +39,12 @@
         ".read": "$uid===auth.uid",
         ".write": "$uid===auth.uid"
       }
+    },
+    "changes":{
+      "$uid":{
+        ".read":"$uid===auth.uid",
+        ".write":"$uid===auth.uid"
+      }
     }
   }
 }
