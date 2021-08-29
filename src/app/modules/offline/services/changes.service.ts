@@ -36,7 +36,6 @@ export class ChangesService {
   }
 
    async createItem(item: Items2Update) {
-    console.log('creating change',item)
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
