@@ -24,7 +24,8 @@ export class DeleteEntityOffline {
         }
         else {
             // registro la modifica che sarà riportata onLine appena possibile
-            await this.db.set(new Date().getTime() + '', { entityLabel: 'update', operation: OperationKey.delete, 'Key': this.key, 'table': this?.entityLabel })
+            await this.db.set(new Date().getTime() + '', { entityLabel: 'update', operation: OperationKey.delete, 'itemKey': this.key, 'table': this?.entityLabel })
+            console.log('* db',this.db)
         }
         OfflineManagerService.publishEntity(this.entityLabel)
     } entity: OfflineItemModelInterface
