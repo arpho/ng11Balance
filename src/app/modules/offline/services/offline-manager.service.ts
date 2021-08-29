@@ -117,6 +117,7 @@ export class OfflineManagerService {
       OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
     }
     else if (entityStatus == 1) {
+      console.log('service',service)
       console.log('db ready')
       console.log('load from local')
 

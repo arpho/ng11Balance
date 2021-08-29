@@ -11,6 +11,7 @@ import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus'
 import { ItemServiceInterface } from 'src/app/modules/item/models/ItemServiceInterface';
 import { RawItem } from 'src/app/modules/offline/models/rawItem';
 import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
+import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,9 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
 
   }
 
-  constructor(public localDb:OfflineDbService) {
+  constructor(public localDb:OfflineDbService,public manager:OfflineManagerService) {
+    this.setHref()
+    this.manager.registerService(this)
     this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
       return entities.filter((item: ShoppingKartModel) => {
         return item.pagamentoId == entityKey
@@ -60,8 +63,30 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
       }
     });
   }
-  publish: (items: ItemModelInterface[]) => void;
-  fetchItemsFromCloud: (callback: (items: {}[]) => void) => void;
+  publish = (items: PaymentsModel[]) => {
+    this._items.next(items)
+  };
+
+  getManager() {
+    return this.manager
+  }
+
+
+  fetchItemsFromCloud(callback) {
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.paymentsListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
+        this.paymentsListRef.once('value', items => {
+          const rawItems: RawItem[] = []
+          items.forEach(snap => {
+            rawItems.push({ item: snap.val(), key: snap.key })
+          })
+          callback(rawItems)
+        })
+      }
+    })
+  }
+
   initializeItems =   (raw_items: RawItem[]) =>{
     const payments: PaymentsModel[] = [];
     raw_items.forEach(item => { //first step initialize flat categories
@@ -91,7 +116,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
 
   ItemModelInterface: any;
   key = 'payments';
-  entityLabel = 'Pagamenti'
+  entityLabel = this.getDummyItem().entityLabel
   filterableField: string;
   instantiateItem: (args: {}) => ItemModelInterface
   counterWidget: (entityKey: string, entities: ItemModelInterface[]) => number;
