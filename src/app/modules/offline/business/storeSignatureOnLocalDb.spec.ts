@@ -27,12 +27,10 @@ describe('storing signature',()=>{
         const signs = await db.fetchAllRawItems4Entity('signatures')
         expect(signs.length).toEqual(1)
         const sign0 = await db.get('signature_0')
-        console.log('@sign0',sign0)
         expect(sign0.item['signature']).toEqual(signature)
         expect(sign0.item['lastLogged']).toBeTrue()
 
         const sign1 = await db.get('signature_1')
-        console.log('sign1 @',sign1)
         expect(sign1.item['lastLogged']).toBeFalse()
 
 
