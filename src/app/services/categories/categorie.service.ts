@@ -20,6 +20,7 @@ import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 import { offline } from 'src/app/modules/offline/models/offlineDecorator';
 import { ChangesService } from 'src/app/modules/offline/services/changes.service';
 import { Items2Update } from 'src/app/modules/offline/models/items2Update';
+import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
 
 
 
@@ -138,18 +139,17 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   getItem(prId: string): firebase.default.database.Reference {
     return this.categoriesListRef?.child(prId);
   }
-  @offline(OperationKey.update)
+
   updateItem(item: ItemModelInterface) {
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
-  @offline(OperationKey.delete,new CategoryModel().entityLabel)
   deleteItem(key: string) {
     return this.categoriesListRef?.child(key).remove();
   }
 
 
 
-  constructor(public manager: OfflineManagerService, public users: UsersService, public localDb: OfflineDbService,) {
+  constructor(public manager: OfflineManagerService, public users: UsersService, public localDb: OfflineDbService,public changes:ChangesService) {
     this.setHref()
 
     firebase.default.auth().onAuthStateChanged(user => {
@@ -179,16 +179,19 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
   }
 
-  @offline(OperationKey.create)
+ 
   async createItem(item: CategoryModel) {
-   // this.changes.createItem(new Items2Update(item, OperationKey.create))
+    item.key= `${this.entityLabel}_${new Date().getTime()}`
+    
     var Category
     console.log('cat ref',this.categoriesListRef)
-    const category = await CategoriesService.categoriesListRef.push(item.serialize()).on('value', (cat) => {
-      console.log('created cat',cat.val())
-      Category = this.initializeCategory(cat.val())
-      Category.key = cat.key
+    const category = await CategoriesService.categoriesListRef.push(item.serialize()).then(res=>{
+      console.log('result',res.key,res,item)
+      this.changes.createItem(new Items2Update(item, OperationKey.create))
+      Category = new CategoryModel().initialize(item)
+      console.log('created',Category)
     })
+    await new CreateEntityOffline(item,this.localDb).execute(navigator.onLine)
     return Category;
 
   }

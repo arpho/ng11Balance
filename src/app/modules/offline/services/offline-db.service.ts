@@ -41,7 +41,6 @@ export class OfflineDbService {
     const out: RawItem[] = []
    await  localforage.iterate((value, key, iterationNumber) => {
       const rawitem = new RawItem({ item: value, key: key })
-      console.log('fetching *',rawitem)
       if (value["entityLabel"] === entityLabel) {
         out.push(rawitem)
       }
