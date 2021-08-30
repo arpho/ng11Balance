@@ -31,7 +31,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
 
   }
 
-  constructor(public localDb:OfflineDbService,public manager:OfflineManagerService,public changes:ChangesService) {
+  constructor(public localDb: OfflineDbService, public manager: OfflineManagerService, public changes: ChangesService) {
     this.manager.registerService(this)
     this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
       return entities.filter((item: ShoppingKartModel) => {
@@ -52,7 +52,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
 
       return new PaymentsModel().initialize(args)
     }
-    
+
   }
   publish = (items: PaymentsModel[]) => {
     this._items.next(items)
@@ -73,12 +73,12 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   }
 
 
-  initializeItems =   (raw_items: RawItem[]) =>{
+  initializeItems = (raw_items: RawItem[]) => {
     const payments: PaymentsModel[] = [];
     raw_items.forEach(item => { //first step initialize flat categories
       payments.push(new PaymentsModel().initialize(item.item).setKey(item.key))
     })
-    
+
     return payments
   }
   async loadItemFromLocalDb(): Promise<ItemModelInterface[]> {
@@ -93,7 +93,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
         this.paymentsListRef = firebase.default.database().ref(`/pagamenti/${user.uid}/`);
       }
     })
-   
+
   }
   instatiateItem: (args: {}) => any;
 
@@ -102,7 +102,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
 
   ItemModelInterface: any;
   key = 'payments';
-  get entityLabel (){return this.getDummyItem().entityLabel}
+  get entityLabel() { return this.getDummyItem().entityLabel }
   filterableField: string;
   instantiateItem: (args: {}) => ItemModelInterface
   counterWidget: (entityKey: string, entities: ItemModelInterface[]) => number;
@@ -122,11 +122,11 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
     item.key = `${this.entityLabel}_${new Date().getTime()}`
     var Payment
 
-    const payment= await this.paymentsListRef.push(item.serialize());
-   Payment= new PaymentsModel().initialize(item)
-   const update = new Items2Update(Payment,OperationKey.create)
-   await this.changes.createItem(update)
-   await new CreateEntityOffline(Payment, this.localDb).execute(navigator.onLine)
+    await this.paymentsListRef.push(item.serialize());
+    Payment = new PaymentsModel().initialize(item)
+    const update = new Items2Update(Payment, OperationKey.create)
+    await this.changes.createItem(update)
+    await new CreateEntityOffline(Payment, this.localDb).execute(navigator.onLine)
     return Payment
 
 
@@ -135,7 +135,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   updateItem(item: ItemModelInterface) {
     return this.paymentsListRef.child(item.key).update(item.serialize());
   }
-  
+
   deleteItem(key: string) {
     return this.paymentsListRef.child(key).remove();
   }
