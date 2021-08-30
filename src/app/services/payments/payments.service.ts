@@ -17,6 +17,7 @@ import { ChangesService } from 'src/app/modules/offline/services/changes.service
 import { Items2Update } from 'src/app/modules/offline/models/items2Update';
 import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
+import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEntityOffline';
 
 @Injectable({
   providedIn: 'root'
@@ -141,7 +142,9 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
     return this.paymentsListRef.child(item.key).update(item.serialize());
   }
 
-  deleteItem(key: string) {
+  async deleteItem(key: string) {
+    await new DeleteEntityOffline(key, this.localDb, this.entityLabel).execute(navigator.onLine)
+    await this.changes.createItem(new Items2Update(new PaymentsModel().setKey(key), OperationKey.delete))
     return this.paymentsListRef.child(key).remove();
   }
 }
