@@ -146,7 +146,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
   async updateItem(item: OfflineItemModelInterface) {
     await new UpdateEntityOffline(item, this.localDb).execute(navigator.onLine)
-    const updatedCategory = new Items2Update(item,OperationKey.update)
+    const updatedCategory = new Items2Update(item, OperationKey.update)
     this.changes.createItem(updatedCategory)
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }

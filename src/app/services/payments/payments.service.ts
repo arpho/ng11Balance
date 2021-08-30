@@ -135,10 +135,8 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   }
 
   async updateItem(item: ItemModelInterface) {
-    const Item = new PaymentsModel().initialize(item)
-    await new UpdateEntityOffline(Item, this.localDb).execute(navigator.onLine)
-    const updatedItem = new Items2Update(Item,OperationKey.update)
-    this.changes.createItem(updatedItem)
+    await new UpdateEntityOffline(new PaymentsModel().initialize(item), this.localDb).execute(navigator.onLine)
+    this.changes.createItem(new Items2Update(new PaymentsModel().initialize(item), OperationKey.update))
     return this.paymentsListRef.child(item.key).update(item.serialize());
   }
 
