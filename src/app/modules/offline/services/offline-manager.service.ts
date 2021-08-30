@@ -19,7 +19,7 @@ export class OfflineManagerService {
 
 
   constructor(public localDb: OfflineDbService, public users: UsersService) {
-
+    this.localDb.clear()
     this.makeSignature(async sign => {
 
       await new StoreSignature(this.localDb, sign).execute()
@@ -101,11 +101,14 @@ export class OfflineManagerService {
 
   async registerService(service: OfflineItemServiceInterface) {
     if(!OfflineManagerService.servicesList.map(service=>service.entityLabel).includes(service.entityLabel)){
-    OfflineManagerService.servicesList.push(service)
-    service.setHref()
-
+      console.log('registering',service.entityLabel)
+      OfflineManagerService.servicesList.push(service)
+      
+      service.setHref()
+    }
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
     if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
+      console.log(`initializing ${service.entityLabel}`)
       const db = new OfflineDbService()
 
       service.offlineDbStatus = offLineDbStatus.syncing
@@ -115,13 +118,17 @@ export class OfflineManagerService {
 
       await new CloneEntity(db, service).execute()
       OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
+
+      service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
     }
     else if (entityStatus == 1) {
       console.log('db ready')
       console.log('load from local')
-
       service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
+
     }
+  
+
   }
-  }
+
 }
