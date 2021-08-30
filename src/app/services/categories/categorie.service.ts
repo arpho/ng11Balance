@@ -94,7 +94,6 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
       if (user) {
         this.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
         CategoriesService.categoriesListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
-        console.log('set href', this.categoriesListRef)
       }
     }
     )

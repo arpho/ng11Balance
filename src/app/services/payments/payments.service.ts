@@ -17,6 +17,7 @@ import { Items2Update } from 'src/app/modules/offline/models/items2Update';
 import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
 import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
+import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEntityOffline';
 
 @Injectable({
   providedIn: 'root'
@@ -54,21 +55,9 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
 
       return new PaymentsModel().initialize(args)
     }
-    firebase.default.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.paymentsListRef = firebase.default.database().ref(`/pagamenti/${user.uid}/`);
-        this.paymentsListRef.on('value', eventCategoriesListSnapshot => {
-          this.items_list = [];
-          eventCategoriesListSnapshot.forEach(snap => {
-            const payment = new PaymentsModel().initialize(snap.val())
-            this.items_list.push(payment);
-          });
-          this._items.next(this.items_list)
-        });
-      }
-    });
   }
   publish = (items: PaymentsModel[]) => {
+    console.log('publishing',items.length,items)
     this._items.next(items)
   };
 
@@ -160,7 +149,12 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
     return this.paymentsListRef.child(item.key).update(item.serialize());
   }
   
-  deleteItem(key: string) {
+  async deleteItem(key: string) {
+    console.log('deleting',key)
+    await new DeleteEntityOffline(key, this.localDb, this.entityLabel).execute(navigator.onLine)
+    this.manager.makeSignature(signature=>{
+      this.changes.createItem(new Items2Update(new PaymentsModel().setKey(key), OperationKey.delete,signature))
+    })
     return this.paymentsListRef.child(key).remove();
   }
 }

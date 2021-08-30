@@ -7,6 +7,7 @@ import { offLineDbStatus } from '../models/offlineDbStatus';
 import { OfflineItemServiceInterface } from '../models/offlineItemServiceInterface';
 import { ChangesService } from './changes.service';
 import { OfflineDbService } from './offline-db.service';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,7 @@ export class OfflineManagerService {
 
 
   constructor(public localDb: OfflineDbService, public users: UsersService) {
-   
-
+    this.localDb.clear()
     this.makeSignature(async sign => {
 
       await new StoreSignature(this.localDb, sign).execute()
@@ -28,7 +28,6 @@ export class OfflineManagerService {
     
 
   }
-
 
    makeSignature(next) {
 
@@ -101,28 +100,30 @@ export class OfflineManagerService {
   }
 
   async registerService(service: OfflineItemServiceInterface) {
+    if(!OfflineManagerService.servicesList.map(service=>service.entityLabel).includes(service.entityLabel)){ //a service is added only once
+      OfflineManagerService.servicesList.push(service)
+      console.log('services *',OfflineManagerService.servicesList)
+      service.setHref()
 
-    OfflineManagerService.servicesList.push(service)
-    service.setHref()
+      const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
+      if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
+        const db = new OfflineDbService()
+        console.log('cloning entity',service.entityLabel)
+        service.offlineDbStatus = offLineDbStatus.syncing
 
-    const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
-    if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
-      const db = new OfflineDbService()
-
-      service.offlineDbStatus = offLineDbStatus.syncing
-
-      OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
+        OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
 
 
-      await new CloneEntity(db, service).execute()
-      OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
-    }
-    else if (entityStatus == 1) {
-      console.log('service',service)
-      console.log('db ready')
-      console.log('load from local')
+        await new CloneEntity(db, service).execute()
+        OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
+      }
+      else if (entityStatus == 1) {
+        console.log('service',service)
+        console.log('db ready')
+        console.log('load from local')
 
-      service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
-    }
+        service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
+      }
+  }
   }
 }
