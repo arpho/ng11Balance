@@ -69,7 +69,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   fetchItemsFromCloud(callback) {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
-        this.paymentsListRef = firebase.default.database().ref(`/categorie/${user.uid}/`)
+        this.paymentsListRef = firebase.default.database().ref(`/pagamenti/${user.uid}/`)
         this.paymentsListRef.once('value', items => {
           const rawItems: RawItem[] = []
           items.forEach(snap => {

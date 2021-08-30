@@ -16,7 +16,6 @@ export class CloneEntity {
       console.log(`fetching ${items.length} items from ${this.service.entityLabel}`)
       items.forEach(async (item: RawItem) => {
         item.item['entityLabel'] = this.service.entityLabel
-        console.log('setting',item)
         await this.db.set(item.key, item.item)
 
 
