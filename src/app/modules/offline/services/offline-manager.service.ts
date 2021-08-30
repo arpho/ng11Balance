@@ -19,6 +19,7 @@ export class OfflineManagerService {
 
 
   constructor(public localDb: OfflineDbService, public users: UsersService) {
+   
 
     this.makeSignature(async sign => {
 
