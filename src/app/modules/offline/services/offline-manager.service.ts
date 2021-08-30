@@ -100,7 +100,7 @@ export class OfflineManagerService {
   }
 
   async registerService(service: OfflineItemServiceInterface) {
-
+    if(!OfflineManagerService.servicesList.map(service=>service.entityLabel).includes(service.entityLabel)){
     OfflineManagerService.servicesList.push(service)
     service.setHref()
 
@@ -122,5 +122,6 @@ export class OfflineManagerService {
 
       service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
     }
+  }
   }
 }

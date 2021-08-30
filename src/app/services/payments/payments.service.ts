@@ -46,19 +46,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
 
       return new PaymentsModel().initialize(args)
     }
-    firebase.default.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.paymentsListRef = firebase.default.database().ref(`/pagamenti/${user.uid}/`);
-        this.paymentsListRef.on('value', eventCategoriesListSnapshot => {
-          this.items_list = [];
-          eventCategoriesListSnapshot.forEach(snap => {
-            const payment = new PaymentsModel().initialize(snap.val())
-            this.items_list.push(payment);
-          });
-          this._items.next(this.items_list)
-        });
-      }
-    });
+    
   }
   publish: (items: ItemModelInterface[]) => void;
   fetchItemsFromCloud: (callback: (items: {}[]) => void) => void;
