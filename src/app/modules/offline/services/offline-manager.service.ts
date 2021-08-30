@@ -19,7 +19,7 @@ export class OfflineManagerService {
 
 
   constructor(public localDb: OfflineDbService, public users: UsersService) {
-    this.localDb.clear()
+    //this.localDb.clear()
     this.makeSignature(async sign => {
 
       await new StoreSignature(this.localDb, sign).execute()

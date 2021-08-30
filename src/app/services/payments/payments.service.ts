@@ -12,6 +12,10 @@ import { ItemServiceInterface } from 'src/app/modules/item/models/ItemServiceInt
 import { RawItem } from 'src/app/modules/offline/models/rawItem';
 import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
 import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
+import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
+import { ChangesService } from 'src/app/modules/offline/services/changes.service';
+import { Items2Update } from 'src/app/modules/offline/models/items2Update';
+import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +31,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
 
   }
 
-  constructor(public localDb:OfflineDbService,public manager:OfflineManagerService) {
+  constructor(public localDb:OfflineDbService,public manager:OfflineManagerService,public changes:ChangesService) {
     this.manager.registerService(this)
     this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
       return entities.filter((item: ShoppingKartModel) => {
@@ -98,7 +102,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
 
   ItemModelInterface: any;
   key = 'payments';
-  entityLabel = 'Pagamenti'
+  get entityLabel (){return this.getDummyItem().entityLabel}
   filterableField: string;
   instantiateItem: (args: {}) => ItemModelInterface
   counterWidget: (entityKey: string, entities: ItemModelInterface[]) => number;
@@ -115,18 +119,14 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   }
 
   async createItem(item: ItemModelInterface) {
-
+    item.key = `${this.entityLabel}_${new Date().getTime()}`
     var Payment
 
     const payment= await this.paymentsListRef.push(item.serialize());
-    payment.on('value',pay=>{
-      Payment = new PaymentsModel().initialize(pay.val())
-
-      Payment.key  = pay.key
-
-      this.updateItem(Payment)
-
-    })
+   Payment= new PaymentsModel().initialize(item)
+   const update = new Items2Update(Payment,OperationKey.create)
+   await this.changes.createItem(update)
+   await new CreateEntityOffline(Payment, this.localDb).execute(navigator.onLine)
     return Payment
 
 
