@@ -15,7 +15,6 @@ export class OfflineManagerService {
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
   constructor(private localDb: OfflineDbService) {
     OfflineManagerService.offlineDbStatus.subscribe(status=>{console.log('actual status',status)})
-    OfflineManagerService.staticLocalDb = new OfflineDbService()
   }
   static evaluateDbStatus() {
     const statusList = OfflineManagerService.servicesList.map((service: OfflineItemServiceInterface) => {
@@ -53,9 +52,8 @@ export class OfflineManagerService {
     console.log('registering',service.entityLabel)
     console.log('setting ',`${service.entityLabel}_status_db`)
     OfflineManagerService.servicesList.push(service)
-    await OfflineManagerService.staticLocalDb.DELETE_ALL()
 
-    const entityStatus = await OfflineManagerService.staticLocalDb.get(`${service.entityLabel}_status_db`)
+    const entityStatus = await this.staticLocalDb?.get(`${service.entityLabel}_status_db`)
 
     if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
       OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
