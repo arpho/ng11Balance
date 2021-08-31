@@ -10,7 +10,9 @@ export class Items2Update {
     entityLabel2Update: string
     operationKey: OperationKey;
     date: DateModel
-    constructor(item?: OfflineItemModelInterface, operationKey?: OperationKey) {
+    owner: string
+    signatures: Set<string> = new Set([])
+    constructor(item?: OfflineItemModelInterface, operationKey?: OperationKey, owner?: string) {
         this.entityLabel2Update = item?.entityLabel
         this.item = item ? item.serialize() : undefined
         this.operationKey = operationKey
@@ -20,11 +22,22 @@ export class Items2Update {
 
     initialize(args: {}) {
         Object.assign(this, args)
+        this.signatures = new Set(this.signatures)
         return this
     }
     setKey(key: string) {
         this.key = key
         return this
+    }
+
+    sign(signature: string) {
+        if (signature != this.owner) {  //owner does not need to sign
+            this.signatures.add(signature)
+        }
+    }
+
+    isSignedBy(signature: string) {
+        return this.signatures.has(signature)
     }
 
     serialize() {
@@ -33,7 +46,9 @@ export class Items2Update {
             'operation': this.operationKey,
             item: this.item,
             'date': this.date.formatFullDate(),
-            'entity': this.entityLabel2Update
+            'entity': this.entityLabel2Update,
+            'owner': this.owner,
+            'signatures': Array.from(this.signatures)
         }
     }
 }
