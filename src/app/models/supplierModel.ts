@@ -13,7 +13,8 @@ import { QuickAction } from '../modules/item/models/QuickAction';
 import { ModalController, AlertController } from '@ionic/angular';
 import { Geolocatated } from '../modules/geo-location/models/geolocationInterface';
 import { WidgetitemInteface } from '../modules/widget/models/widgetItemIterface';
-export class SupplierModel implements ItemModelInterface,WidgetitemInteface, FirebaseObject,Geolocatated {
+import { OfflineItemModelInterface, offlineSerializer } from '../modules/offline/models/offlineItemModelInterface';
+export class SupplierModel implements OfflineItemModelInterface,WidgetitemInteface, FirebaseObject,Geolocatated {
     nome: string;
     note: string;
     indirizzo: string;
@@ -79,6 +80,22 @@ export class SupplierModel implements ItemModelInterface,WidgetitemInteface, Fir
             this.key = key
         }
 
+    }
+    entityLabel: string="fgornitore"
+    serialize4OfflineDb(): offlineSerializer<{ entityLabel: string; }> {
+        const entityLabel = this.entityLabel
+       return{... this.serialize(),entityLabel}
+    }
+    archived?: boolean;
+    service?: ItemServiceInterface;
+    isArchived?(): boolean {
+        throw new Error('Method not implemented.');
+    }
+    archiveItem?(b: boolean) {
+        throw new Error('Method not implemented.');
+    }
+    isArchivable?(): boolean {
+        throw new Error('Method not implemented.');
     }
     widgetText = `..`
     initialize(supplier) {
