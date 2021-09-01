@@ -10,7 +10,7 @@ export class DeleteEntityOffline {
     key: string
     db: OfflineDbService
     entityLabel: string
-    constructor(key: string, db: OfflineDbService, entityLabel) {
+    constructor(key: string, db: OfflineDbService, entityLabel,public owner) {
         this.db = db
         this.key = key
         this.entityLabel = entityLabel
@@ -19,7 +19,7 @@ export class DeleteEntityOffline {
     async execute(isOnline: boolean) {
         await this.db.remove(this.key)
         if (isOnline) {// se online non serve registrare la modifica sul db locale
-            const Item2Update = new Items2Update(null, OperationKey.delete)
+            const Item2Update = new Items2Update(this.owner,null, OperationKey.delete)
             //  new ChangesService().createItem(Item2Update)
         }
         else {

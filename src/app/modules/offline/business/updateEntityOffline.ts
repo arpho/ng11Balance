@@ -9,7 +9,7 @@ import { OfflineManagerService } from "../services/offline-manager.service";
 export class UpdateEntityOffline {
     entity: OfflineItemModelInterface
     db: OfflineDbService
-    constructor(entity: OfflineItemModelInterface, db: OfflineDbService) {
+    constructor(entity: OfflineItemModelInterface, db: OfflineDbService,public owner) {
         this.db = db
         this.entity = entity
     }
@@ -17,7 +17,7 @@ export class UpdateEntityOffline {
     async execute(isOnline: boolean) {
         await this.db.set(this.entity.key, { ...this.entity.serialize4OfflineDb() })
         if (isOnline) {// se online non serve registrare la modifica sul db locale
-            const Item2Update = new Items2Update(this.entity, OperationKey.update)
+            const Item2Update = new Items2Update(this.owner,this.entity, OperationKey.update)
            new  ChangesService().createItem(Item2Update)
         }
         else {
