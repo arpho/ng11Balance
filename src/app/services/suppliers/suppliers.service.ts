@@ -7,16 +7,21 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { EntityWidgetServiceInterface } from 'src/app/modules/widget/models/EntityWidgetServiceInterface';
 import { ShoppingKartModel } from 'src/app/models/shoppingKartModel';
 import { entries } from 'd3';
+import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offlineItemServiceInterface';
+import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus';
+import { RawItem } from 'src/app/modules/offline/models/rawItem';
+import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SuppliersService implements ItemServiceInterface, EntityWidgetServiceInterface {
+export class SuppliersService implements OfflineItemServiceInterface, EntityWidgetServiceInterface {
   public suppliersListRef: firebase.default.database.Reference;
   _items: BehaviorSubject<Array<SupplierModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<SupplierModel>> = this._items.asObservable()
   items_list: Array<SupplierModel> = []
-  constructor() {
+ 
+  constructor(public localDb:OfflineDbService) {
     this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
       return entities.map((item: ShoppingKartModel) => {
 
@@ -48,7 +53,42 @@ export class SuppliersService implements ItemServiceInterface, EntityWidgetServi
       }
     });
   }
-  instatiateItem: (args: {}) => ItemModelInterface;
+  publish: (items: ItemModelInterface[]) => void = (items: SupplierModel[]) => {
+    this._items.next(items)
+  };
+  fetchItemsFromCloud: (callback: (items: {}[]) => void) => void=(callback) =>{
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.suppliersListRef = firebase.default.database().ref(`/fornitori/${user.uid}/`)
+        this.suppliersListRef.once('value', items => {
+          const rawItems: RawItem[] = []
+          items.forEach(snap => {
+            rawItems.push({ item: snap.val(), key: snap.key })
+          })
+          callback(rawItems)
+        })
+      }
+    })
+  }
+  initializeItems: (items: {}[]) => ItemModelInterface[]=  (raw_items: RawItem[]) => {
+    const fornitori: SupplierModel[] = [];
+    raw_items.forEach(item => { //first step initialize flat categories
+      fornitori.push(new SupplierModel().initialize(item.item).setKey(item.key))
+    })
+    
+    return fornitori
+  }
+  async loadItemFromLocalDb() {
+    console.log('loading item from local')
+    return this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel))
+  }
+  offlineDbStatus: offLineDbStatus;
+  setHref() {
+    throw new Error('Method not implemented.');
+  }
+  instatiateItem: (args: {}) => ItemModelInterface=(item:{})=> {
+    return new SupplierModel().initialize(item)
+  }
   key = 'suppliers';
   entityLabel = 'Fornitori'
   counterWidget: (entityKey: string, entities: ItemModelInterface[]) => number;
