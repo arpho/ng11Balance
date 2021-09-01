@@ -12,7 +12,7 @@ describe('testing class Items2UPdate', () => {
 
 
     it('instantiating an items2Update  for updating', () => {
-        const update = new Items2Update(categoryTest, OperationKey.update)
+        const update = new Items2Update('key',categoryTest, OperationKey.update)
         expect(update.date).toBeTruthy()
         expect(update.operationKey).toEqual(OperationKey.update)
         expect(update.entityLabel2Update).toEqual(categoryTest.entityLabel)

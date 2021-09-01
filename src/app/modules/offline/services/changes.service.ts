@@ -65,8 +65,8 @@ export class ChangesService {
     })
   }
 
-  static updateItem(item: Items2Update) {
-    return ChangesService.changesListRef?.child(item.key).update(item.serialize());
+  static updateItem(updatedItem: Items2Update) {
+    return ChangesService.changesListRef?.child(updatedItem.key).update(updatedItem.serialize());
   }
 
   initializeItems = (raw_items: RawItem[]) => {
@@ -75,7 +75,7 @@ export class ChangesService {
       items = []
       changes.forEach(item => {
 
-        items.push(new Items2Update().initialize(item.val()).setKey(item.key))
+        items.push(new Items2Update(item.val()['owner'],item.val()))
       })
     })
     return items

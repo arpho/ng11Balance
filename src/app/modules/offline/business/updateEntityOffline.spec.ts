@@ -21,7 +21,7 @@ describe("we should update an entity offline and when needed  add an update item
         db = new LocalForageMocker()
         db.set(categoryTest.key, categoryTest.serialize4OfflineDb())
         categoryTest.title = 'test'
-        await new UpdateEntityOffline(,categoryTest, db,'key').execute(true)
+        await new UpdateEntityOffline(categoryTest, db,'key').execute(true)
         const rawCategory = await db.get(categoryTest.key)
         const updatedCategory = new CategoryModel().initialize(rawCategory.item)
         console.log('@ updatedCategory',updatedCategory)

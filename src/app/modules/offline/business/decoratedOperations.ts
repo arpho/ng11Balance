@@ -48,7 +48,7 @@ export const decoratedDelete =(entityLabel:string)=>{
             if (UsersService.loggedUser.isOfflineEnabled()) {
                
                 
-                await new DeleteEntityOffline(args[0], new OfflineDbService(),entityLabel).execute(navigator.onLine)
+                await new DeleteEntityOffline('key',args[0], new OfflineDbService(),entityLabel).execute(navigator.onLine)
             }
 
             childFunction.apply(target.constructor, args);

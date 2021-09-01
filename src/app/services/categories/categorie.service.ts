@@ -145,14 +145,14 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   }
 
   async updateItem(item: OfflineItemModelInterface) {
-    await new UpdateEntityOffline(item, this.localDb).execute(navigator.onLine)
+    await new UpdateEntityOffline(item, this.localDb,await this.manager.asyncSignature()).execute(navigator.onLine)
     const  signature = await this.manager.asyncSignature()
     const updatedCategory = new Items2Update(signature,item, OperationKey.update)
     this.changes.createItem(updatedCategory)
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
   async deleteItem(key: string) {
-    await new DeleteEntityOffline(key, this.localDb, this.entityLabel).execute(navigator.onLine)
+    await new DeleteEntityOffline(key, this.localDb, this.entityLabel,await this.manager.asyncSignature()).execute(navigator.onLine)
     const  signature = await this.manager.asyncSignature()
     await this.changes.createItem(new Items2Update(signature,new CategoryModel().setKey(key), OperationKey.delete))
     return this.categoriesListRef?.child(key).remove();
@@ -204,7 +204,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
       Category = new CategoryModel().initialize(item)
       console.log('created', Category)
     })
-    await new CreateEntityOffline(item, this.localDb).execute(navigator.onLine)
+    await new CreateEntityOffline(item, this.localDb,await this.manager.asyncSignature()).execute(navigator.onLine)
     return Category;
 
   }
