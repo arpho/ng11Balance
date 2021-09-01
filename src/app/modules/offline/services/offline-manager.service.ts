@@ -20,6 +20,8 @@ export class OfflineManagerService {
 
   constructor(public localDb: OfflineDbService, public users: UsersService) {
     //this.localDb.clear()
+
+    this.asyncSignature()
     this.makeSignature(async sign => {
 
       await new StoreSignature(this.localDb, sign).execute()
@@ -28,16 +30,24 @@ export class OfflineManagerService {
 
   }
 
+  sign(uid:string){
+    return `${uid}_${navigator.platform}_${this.getBrowserName()}`
+  }
 
   makeSignature(next) {
 
     this.users.loggedUser.subscribe(user => {
       if (user.uid) {
-        next(`${user.uid}_${navigator.platform}_${this.getBrowserName()}`)
+        next(this.sign(user.uid))
       }
     })
 
 
+  }
+
+  async asyncSignature(){
+    const user = await this.users.loggedUser.pipe(take(2)).toPromise()
+    console.log('user*',user.key,user.uid,user)
   }
 
   getBrowserName() {
