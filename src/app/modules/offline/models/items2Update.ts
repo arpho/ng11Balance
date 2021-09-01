@@ -12,7 +12,7 @@ export class Items2Update {
     date: DateModel
     owner: string
     signatures: Set<string> = new Set([])
-    constructor(item?: OfflineItemModelInterface, operationKey?: OperationKey, owner?: string) {
+    constructor(owner: string,item?: OfflineItemModelInterface, operationKey?: OperationKey, ) {
         this.entityLabel2Update = item?.entityLabel
         this.item = item ? item.serialize() : undefined
         this.operationKey = operationKey

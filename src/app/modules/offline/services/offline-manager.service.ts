@@ -7,6 +7,8 @@ import { offLineDbStatus } from '../models/offlineDbStatus';
 import { OfflineItemServiceInterface } from '../models/offlineItemServiceInterface';
 import { ChangesService } from './changes.service';
 import { OfflineDbService } from './offline-db.service';
+import { take,first } from 'rxjs/operators';
+import { of, pipe} from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +23,6 @@ export class OfflineManagerService {
   constructor(public localDb: OfflineDbService, public users: UsersService) {
     //this.localDb.clear()
 
-    this.asyncSignature()
     this.makeSignature(async sign => {
 
       await new StoreSignature(this.localDb, sign).execute()
@@ -47,7 +48,7 @@ export class OfflineManagerService {
 
   async asyncSignature(){
     const user = await this.users.loggedUser.pipe(take(2)).toPromise()
-    console.log('user*',user.key,user.uid,user)
+    return this.sign(user.uid)
   }
 
   getBrowserName() {

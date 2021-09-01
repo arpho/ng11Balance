@@ -146,13 +146,15 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
   async updateItem(item: OfflineItemModelInterface) {
     await new UpdateEntityOffline(item, this.localDb).execute(navigator.onLine)
-    const updatedCategory = new Items2Update(item, OperationKey.update)
+    const  signature = await this.manager.asyncSignature()
+    const updatedCategory = new Items2Update(signature,item, OperationKey.update)
     this.changes.createItem(updatedCategory)
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
   async deleteItem(key: string) {
     await new DeleteEntityOffline(key, this.localDb, this.entityLabel).execute(navigator.onLine)
-    await this.changes.createItem(new Items2Update(new CategoryModel().setKey(key), OperationKey.delete))
+    const  signature = await this.manager.asyncSignature()
+    await this.changes.createItem(new Items2Update(signature,new CategoryModel().setKey(key), OperationKey.delete))
     return this.categoriesListRef?.child(key).remove();
   }
 
@@ -176,7 +178,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
       }
       else {
         console.log('user is not offline enabled, loading from cloud')
-        
+
         this.fetchItemsFromCloud((items) => {
           console.log('got from firebase')
           this.publish(this.initializeItems(items))
@@ -195,9 +197,10 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
     var Category
     console.log('cat ref', this.categoriesListRef)
-    const category = await CategoriesService.categoriesListRef.push(item.serialize()).then(res => {
+    const category = await CategoriesService.categoriesListRef.push(item.serialize()).then(async res => {
       console.log('result', res.key, res, item)
-      this.changes.createItem(new Items2Update(item, OperationKey.create))
+      const  signature = await this.manager.asyncSignature()
+      this.changes.createItem(new Items2Update(signature,item, OperationKey.create))
       Category = new CategoryModel().initialize(item)
       console.log('created', Category)
     })
