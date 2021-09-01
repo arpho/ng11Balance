@@ -23,6 +23,7 @@ export class CloneEntity {
       console.log('synced', this.service.entityLabel)
       this.service.offlineDbStatus = offLineDbStatus.up2Date
       console.timeEnd('fetching')
+      this.service.fetchItemsFromCloud((items)=>{this.service.publish(this.service.initializeItems(items))})
     })
   }
 

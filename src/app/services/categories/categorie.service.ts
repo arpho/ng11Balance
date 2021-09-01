@@ -176,6 +176,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
       }
       else {
         console.log('user is not offline enabled, loading from cloud')
+        
         this.fetchItemsFromCloud((items) => {
           console.log('got from firebase')
           this.publish(this.initializeItems(items))
