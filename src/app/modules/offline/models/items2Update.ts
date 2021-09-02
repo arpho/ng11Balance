@@ -18,6 +18,7 @@ export class Items2Update {
         this.operationKey = operationKey
         this.date = new DateModel(new Date())
         this.key = new Date().getTime() + '' // +'' cast to a string
+        this.owner=owner
     }
 
     initialize(args: {}) {

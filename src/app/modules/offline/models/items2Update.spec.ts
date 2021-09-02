@@ -22,4 +22,10 @@ describe('testing class Items2UPdate', () => {
         expect(update.item['fatherKey']).toEqual(categoryTest.fatherKey)
         expect(update.owner).toEqual('key')
     })
+    it('signing works',()=>{
+        const update = new Items2Update('key',categoryTest, OperationKey.update)
+        update.sign('key')
+        expect(update.signatures.size).toEqual(0)
+
+    })
 })
