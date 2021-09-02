@@ -141,8 +141,8 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   }
 
   async deleteItem(key: string) {
-    await new DeleteEntityOffline(key, this.localDb, this.entityLabel,await this.manager.asyncSignature()).execute(navigator.onLine)
-    await this.changes.createItem(new Items2Update(await this.manager.asyncSignature(),new PaymentsModel().setKey(key), OperationKey.delete))
+    await new DeleteEntityOffline(key, this.localDb, this.entityLabel, await this.manager.asyncSignature()).execute(navigator.onLine)
+    await this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new PaymentsModel().setKey(key), OperationKey.delete))
     return this.paymentsListRef.child(key).remove();
   }
 }

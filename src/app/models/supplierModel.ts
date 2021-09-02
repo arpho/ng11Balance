@@ -219,9 +219,10 @@ export class SupplierModel implements OfflineItemModelInterface, WidgetitemIntef
 
 
     serialize() {
+        const dummyAddress = new Coordinates()
         return {
             title: this.title || '',
-            address: (this.address) ? this.address?.serialize() : '',
+            address: (this.address) ? this.address?.serialize() : dummyAddress.serialize(),
             ecommerce: Boolean(this.ecommerce),
             cliente: Boolean(this.cliente),
             personaFisica: Boolean(this.personaFisica),

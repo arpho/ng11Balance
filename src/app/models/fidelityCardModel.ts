@@ -1,8 +1,9 @@
 import { ItemModelInterface, Genere } from '../modules/item/models/itemModelInterface';
 import { ItemServiceInterface } from '../modules/item/models/ItemServiceInterface';
 import { Value } from '../modules/item/models/value';
+import { OfflineItemModelInterface, offlineSerializer } from '../modules/offline/models/offlineItemModelInterface';
 
-export class FidelityCardModel implements ItemModelInterface {
+export class FidelityCardModel implements OfflineItemModelInterface {
     title: string;
     note?: string;
     barcode: string
@@ -12,6 +13,15 @@ export class FidelityCardModel implements ItemModelInterface {
     service?: ItemServiceInterface;
     constructor(card?: {}) {
         this.load(card)
+    }
+    entityLabel: string = "fidelityCard"
+    serialize4OfflineDb(): offlineSerializer<{ entityLabel: string; }> {
+        const entityLabel = this.entityLabel
+        return { ...this.serialize(), entityLabel }
+    }
+    setKey?(key: string): ItemModelInterface {
+        this.key = key
+        return this
     }
 
 
@@ -42,13 +52,13 @@ export class FidelityCardModel implements ItemModelInterface {
     }
 
     getTitle(): Value {
-        return new Value({label:'carta',value:this.title})
+        return new Value({ label: 'carta', value: this.title })
     }
     getCountingText(): string {
         return " carte fedeltà "
     }
     getNote(): Value {
-        
+
         const value = new Value();
         value.label = 'note';
         value.value = this.note;
