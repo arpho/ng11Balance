@@ -221,7 +221,7 @@ export class SupplierModel implements OfflineItemModelInterface,WidgetitemIntefa
     serialize() {
         return {
             title: this.title || '',
-            address: this.address.serialize(),
+            address:  (this.address)? this.address?.serialize():'',
             ecommerce: Boolean(this.ecommerce),
             cliente: Boolean(this.cliente),
             personaFisica: Boolean(this.personaFisica),
