@@ -35,7 +35,7 @@ import { DecoratorService } from './modules/offline/services/decorator-service.s
 @NgModule({
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ItemModule,UserModule,DynamicFormModule,WidgetModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },DecoratorService,],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },DecoratorService],
   bootstrap: [AppComponent,
     ],
     declarations: [
