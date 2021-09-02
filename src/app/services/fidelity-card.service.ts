@@ -4,11 +4,13 @@ import { ItemServiceInterface } from '../modules/item/models/ItemServiceInterfac
 import { BehaviorSubject, Observable } from 'rxjs';
 import { FidelityCardModel } from '../models/fidelityCardModel';
 import { ItemModelInterface } from '../modules/item/models/itemModelInterface';
+import { OfflineItemServiceInterface } from '../modules/offline/models/offlineItemServiceInterface';
+import { offLineDbStatus } from '../modules/offline/models/offlineDbStatus';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FidelityCardService implements ItemServiceInterface {
+export class FidelityCardService implements OfflineItemServiceInterface {
 
   public fidelityCardsListRef: firebase.default.database.Reference;
   _items: BehaviorSubject<Array<FidelityCardModel>> = new BehaviorSubject([])
@@ -25,6 +27,22 @@ export class FidelityCardService implements ItemServiceInterface {
 
       }
     })
+  }
+  
+  publish: (items: ItemModelInterface[]) => void;
+  fetchItemsFromCloud: (callback: (items: {}[]) => void) => void;
+  initializeItems: (items: {}[]) => ItemModelInterface[];
+  loadItemFromLocalDb(): Promise<ItemModelInterface[]> {
+    throw new Error('Method not implemented.');
+  }
+
+
+ get  entityLabel(){
+    return  new FidelityCardModel().entityLabel
+  }
+  offlineDbStatus: offLineDbStatus;
+  setHref() {
+    throw new Error('Method not implemented.');
   }
   fetchItems() {
     this.fidelityCardsListRef.on('value', snapshot => {

@@ -11,10 +11,10 @@ export class FidelityCardModel implements OfflineItemModelInterface {
     quickActions?: import("../modules/item/models/QuickAction").QuickAction[];
     archived?: boolean;
     service?: ItemServiceInterface;
+    entityLabel= "fidelityCard"
     constructor(card?: {}) {
         this.load(card)
     }
-    entityLabel: string = "fidelityCard"
     serialize4OfflineDb(): offlineSerializer<{ entityLabel: string; }> {
         const entityLabel = this.entityLabel
         return { ...this.serialize(), entityLabel }
