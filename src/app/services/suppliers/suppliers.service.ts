@@ -12,6 +12,9 @@ import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus'
 import { RawItem } from 'src/app/modules/offline/models/rawItem';
 import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
 import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
+import { OperationKey } from 'src/app/modules/offline/models/operationKey';
+import { Items2Update } from 'src/app/modules/offline/models/items2Update';
+import { ChangesService } from 'src/app/modules/offline/services/changes.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +26,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   readonly items: Observable<Array<SupplierModel>> = this._items.asObservable()
   items_list: Array<SupplierModel> = []
  
-  constructor(public localDb:OfflineDbService,public manager:OfflineManagerService) {
-    console.log('registe')
+  constructor(public localDb:OfflineDbService,public manager:OfflineManagerService,public changes:ChangesService) {
     this.manager.registerService(this)
     this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
       return entities.map((item: ShoppingKartModel) => {
@@ -41,22 +43,22 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
     this.instatiateItem = (args: {}) => {
       return new SupplierModel().initialize(args)
     }
+    
+  }
+
+  setHref() {
+
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
-        this.suppliersListRef = firebase.default.database().ref(`/fornitori/${user.uid}/`);
-        this.suppliersListRef.on('value', eventSuppliersListSnapshot => {
-          this.items_list = [];
-          eventSuppliersListSnapshot.forEach(snap => {
-            const supplier = new SupplierModel(undefined, snap.key).initialize(snap.val()).setKey(snap.key)
-            this.items_list.push(supplier);
-            if (supplier.key === '') {
-            }
-          });
-          this._items.next(this.items_list)
-        });
+        this.suppliersListRef = firebase.default.database().ref(`/fornitori/${user.uid}/`)
+        SuppliersService.suppliersListRef = firebase.default.database().ref(`/fornitori/${user.uid}/`)
+        console.log('set href', this.suppliersListRef)
       }
-    });
+    }
+    )
+
   }
+
   publish: (items: ItemModelInterface[]) => void = (items: SupplierModel[]) => {
     this._items.next(items)
   };
@@ -76,7 +78,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   }
   initializeItems: (items: {}[]) => ItemModelInterface[]=  (raw_items: RawItem[]) => {
     const fornitori: SupplierModel[] = [];
-    raw_items.forEach(item => { //first step initialize flat categories
+    raw_items.forEach(item => { 
       fornitori.push(new SupplierModel().initialize(item.item).setKey(item.key))
     })
     
@@ -87,9 +89,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
     return this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel))
   }
   offlineDbStatus: offLineDbStatus;
-  setHref() {
-    throw new Error('Method not implemented.');
-  }
+
   instatiateItem: (args: {}) => ItemModelInterface=(item:{})=> {
     return new SupplierModel().initialize(item)
   }
@@ -108,18 +108,14 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   }
 
   async createItem(item: ItemModelInterface) {
-    var Supplier
-    const supplier = await this.suppliersListRef.push(item.serialize())
-
-    supplier.on('value', sup => {
-
-      Supplier = this.instatiateItem(sup.val())
-
-      Supplier.key = sup.key
-
-      this.updateItem(Supplier)
-
+    item.key =  `${this.entityLabel}_${new Date().getTime()}`
+    var Supplier = new SupplierModel().initialize(item)
+    await this.suppliersListRef.push(item.serialize()).then(async res=>{
+      const  signature = await this.manager.asyncSignature()
+      this.changes.createItem(new Items2Update(signature,Supplier, OperationKey.create))
     })
+
+   
     return Supplier
   }
 
