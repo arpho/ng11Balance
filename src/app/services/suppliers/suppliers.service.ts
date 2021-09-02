@@ -11,17 +11,21 @@ import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offl
 import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus';
 import { RawItem } from 'src/app/modules/offline/models/rawItem';
 import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
+import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SuppliersService implements OfflineItemServiceInterface, EntityWidgetServiceInterface {
-  public suppliersListRef: firebase.default.database.Reference;
+  static   suppliersListRef: firebase.default.database.Reference;
+  public   suppliersListRef: firebase.default.database.Reference;
   _items: BehaviorSubject<Array<SupplierModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<SupplierModel>> = this._items.asObservable()
   items_list: Array<SupplierModel> = []
  
-  constructor(public localDb:OfflineDbService) {
+  constructor(public localDb:OfflineDbService,public manager:OfflineManagerService) {
+    console.log('registe')
+    this.manager.registerService(this)
     this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
       return entities.map((item: ShoppingKartModel) => {
 
