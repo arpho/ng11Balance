@@ -38,7 +38,7 @@ export class Items2Update {
     }
 
     isSignedBy(signature: string) {
-        return this.signatures.has(signature)
+        return this.signatures.has(signature)|| this.owner==signature
     }
 
     serialize() {

@@ -26,6 +26,10 @@ describe('testing class Items2UPdate', () => {
         const update = new Items2Update('key',categoryTest, OperationKey.update)
         update.sign('key')
         expect(update.signatures.size).toEqual(0)
+        update.sign('key1')
+        expect(update.isSignedBy('key')).toBeTrue()
+        expect(update.isSignedBy('key1')).toBeTrue()
+        expect(update.signatures.size).toEqual(1)
 
     })
 })
