@@ -22,7 +22,7 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   items_list: Array<FidelityCardModel> = []
 
   constructor(public localDb:OfflineDbService,manager:OfflineManagerService,public changes:ChangesService) {
-
+manager.registerService(this)
 
     
   }
