@@ -13,6 +13,7 @@ import { ChangesService } from '../modules/offline/services/changes.service';
 import { Items2Update } from '../modules/offline/models/items2Update';
 import { CreateEntityOffline } from '../modules/offline/business/createEntityOffline';
 import { OperationKey } from '../modules/offline/models/operationKey';
+import { UpdateEntityOffline } from '../modules/offline/business/updateEntityOffline';
 
 @Injectable({
   providedIn: 'root'
@@ -97,7 +98,9 @@ manager.registerService(this)
   getItem(key: string): firebase.default.database.Reference {
     return this.fidelityCardsListRef.child(key)
   }
-  updateItem(item: ItemModelInterface) {
+  async updateItem(item: ItemModelInterface) {
+    await new UpdateEntityOffline(new FidelityCardModel().initialize(item), this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
+    this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new FidelityCardModel().initialize(item), OperationKey.update))
     return this.fidelityCardsListRef.child(item.key).update(item.serialize())
   }
   deleteItem(key: string) {
