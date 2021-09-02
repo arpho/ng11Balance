@@ -201,6 +201,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
       const  signature = await this.manager.asyncSignature()
       this.changes.createItem(new Items2Update(signature,item, OperationKey.create))
       Category = new CategoryModel().initialize(item)
+      new CreateEntityOffline(Category,this.localDb,signature).execute(navigator.onLine)
       console.log('created', Category)
     })
     await new CreateEntityOffline(item, this.localDb,await this.manager.asyncSignature()).execute(navigator.onLine)

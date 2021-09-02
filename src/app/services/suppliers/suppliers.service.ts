@@ -15,6 +15,7 @@ import { OfflineManagerService } from 'src/app/modules/offline/services/offline-
 import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 import { Items2Update } from 'src/app/modules/offline/models/items2Update';
 import { ChangesService } from 'src/app/modules/offline/services/changes.service';
+import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
 
 @Injectable({
   providedIn: 'root'
@@ -94,7 +95,9 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
     return new SupplierModel().initialize(item)
   }
   key = 'suppliers';
-  entityLabel = 'Fornitori'
+  get entityLabel (){
+    return this.getDummyItem().entityLabel
+  } 
   counterWidget: (entityKey: string, entities: ItemModelInterface[]) => number;
   adderWidget: (entityKey: string, entities: ItemModelInterface[]) => number;
   categoriesService?: ItemServiceInterface;
@@ -110,10 +113,12 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   async createItem(item: ItemModelInterface) {
     item.key =  `${this.entityLabel}_${new Date().getTime()}`
     var Supplier = new SupplierModel().initialize(item)
-    await this.suppliersListRef.push(item.serialize()).then(async res=>{
-      const  signature = await this.manager.asyncSignature()
-      this.changes.createItem(new Items2Update(signature,Supplier, OperationKey.create))
-    })
+    await this.suppliersListRef.push(item.serialize())
+    const update = new Items2Update(await this.manager.asyncSignature(),Supplier, OperationKey.create)
+    await this.changes.createItem(update)
+    await new CreateEntityOffline( Supplier, this.localDb,await this.manager.asyncSignature(),).execute(navigator.onLine)
+
+    
 
    
     return Supplier

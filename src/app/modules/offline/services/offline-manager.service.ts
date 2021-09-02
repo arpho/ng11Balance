@@ -47,7 +47,7 @@ export class OfflineManagerService {
   }
 
   async asyncSignature(){
-    const user = await this.users.loggedUser.pipe(take(2)).toPromise()
+    const user = await this.users.loggedUser.pipe(take(1)).toPromise()
     return this.sign(user.uid)
   }
 
