@@ -20,5 +20,6 @@ describe('testing class Items2UPdate', () => {
         expect(update.item['title']).toEqual(categoryTest.title)
         expect(update.item['key']).toEqual(categoryTest.key)
         expect(update.item['fatherKey']).toEqual(categoryTest.fatherKey)
+        expect(update.owner).toEqual('key')
     })
 })
