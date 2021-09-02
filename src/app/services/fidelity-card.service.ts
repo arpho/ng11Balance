@@ -10,6 +10,9 @@ import { RawItem } from '../modules/offline/models/rawItem';
 import { OfflineDbService } from '../modules/offline/services/offline-db.service';
 import { OfflineManagerService } from '../modules/offline/services/offline-manager.service';
 import { ChangesService } from '../modules/offline/services/changes.service';
+import { Items2Update } from '../modules/offline/models/items2Update';
+import { CreateEntityOffline } from '../modules/offline/business/createEntityOffline';
+import { OperationKey } from '../modules/offline/models/operationKey';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +24,7 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   readonly items: Observable<Array<FidelityCardModel>> = this._items.asObservable()
   items_list: Array<FidelityCardModel> = []
 
-  constructor(public localDb:OfflineDbService,manager:OfflineManagerService,public changes:ChangesService) {
+  constructor(public localDb:OfflineDbService,public manager:OfflineManagerService,public changes:ChangesService) {
 manager.registerService(this)
 
     
@@ -104,14 +107,14 @@ manager.registerService(this)
     return new FidelityCardModel()
   }
   async createItem(item: ItemModelInterface) {
-    var FidelityCard
-    const category = await this.fidelityCardsListRef.push(item.serialize())
-    category.on('value', (cat) => {
-      FidelityCard = new FidelityCardModel(cat.val())
-      FidelityCard.key = cat.key
-      this.updateItem(FidelityCard)
-    })
-    return FidelityCard;
+    item.key = `${this.entityLabel}_${new Date().getTime()}`
+    var card = new FidelityCardModel().initialize(item)
+     await this.fidelityCardsListRef.push(item.serialize())
+     const update = new Items2Update(await this.manager.asyncSignature(), card, OperationKey.create)
+    await this.changes.createItem(update)
+    await new CreateEntityOffline(card, this.localDb, await this.manager.asyncSignature()).execute(navigator.onLine)
+   
+    return card;
   }
   getEntitiesList(): firebase.default.database.Reference {
     return this.fidelityCardsListRef

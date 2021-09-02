@@ -117,7 +117,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
     await this.suppliersListRef.push(item.serialize())
     const update = new Items2Update(await this.manager.asyncSignature(), Supplier, OperationKey.create)
     await this.changes.createItem(update)
-    await new CreateEntityOffline(Supplier, this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
+    await new CreateEntityOffline(Supplier, this.localDb, await this.manager.asyncSignature()).execute(navigator.onLine)
 
 
 
