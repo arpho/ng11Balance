@@ -14,6 +14,7 @@ import { Items2Update } from '../modules/offline/models/items2Update';
 import { CreateEntityOffline } from '../modules/offline/business/createEntityOffline';
 import { OperationKey } from '../modules/offline/models/operationKey';
 import { UpdateEntityOffline } from '../modules/offline/business/updateEntityOffline';
+import { DeleteEntityOffline } from '../modules/offline/business/deleteEntityOffline';
 
 @Injectable({
   providedIn: 'root'
@@ -103,7 +104,11 @@ manager.registerService(this)
     this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new FidelityCardModel().initialize(item), OperationKey.update))
     return this.fidelityCardsListRef.child(item.key).update(item.serialize())
   }
-  deleteItem(key: string) {
+  async deleteItem(key: string) {
+    await new DeleteEntityOffline(key, this.localDb, this.entityLabel, await this.manager.asyncSignature()).execute(navigator.onLine)
+    const dummyCard = new FidelityCardModel()
+    dummyCard.setKey(key)
+    await this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), dummyCard, OperationKey.delete))
     return this.fidelityCardsListRef.child(key).remove()
   }
   getDummyItem(): ItemModelInterface {
