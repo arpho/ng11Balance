@@ -7,27 +7,24 @@ import { ItemModelInterface } from '../modules/item/models/itemModelInterface';
 import { OfflineItemServiceInterface } from '../modules/offline/models/offlineItemServiceInterface';
 import { offLineDbStatus } from '../modules/offline/models/offlineDbStatus';
 import { RawItem } from '../modules/offline/models/rawItem';
+import { OfflineDbService } from '../modules/offline/services/offline-db.service';
+import { OfflineManagerService } from '../modules/offline/services/offline-manager.service';
+import { ChangesService } from '../modules/offline/services/changes.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FidelityCardService implements OfflineItemServiceInterface {
 
-  public fidelityCardsListRef: firebase.default.database.Reference;
+  static fidelityCardsListRef: firebase.default.database.Reference;
   _items: BehaviorSubject<Array<FidelityCardModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<FidelityCardModel>> = this._items.asObservable()
   items_list: Array<FidelityCardModel> = []
 
-  constructor() {
+  constructor(public localDb:OfflineDbService,manager:OfflineManagerService,public changes:ChangesService) {
 
 
-    firebase.default.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.fidelityCardsListRef = firebase.default.database().ref(`/fidelityCards/${user.uid}/`)
-        this.fetchItems()
-
-      }
-    })
+    
   }
   
   publish: (items: ItemModelInterface[]) => void = (items: FidelityCardModel[]) => {
@@ -36,8 +33,8 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   fetchItemsFromCloud: (callback: (items: {}[]) => void) => void = (callback) => {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
-        this.suppliersListRef = firebase.default.database().ref(`/fidelityCards/${user.uid}/`)
-        this.suppliersListRef.once('value', items => {
+        this.fidelityCardsListRef = firebase.default.database().ref(`/fidelityCards/${user.uid}/`)
+        this.fidelityCardsListRef.once('value', items => {
           const rawItems: RawItem[] = []
           items.forEach(snap => {
             rawItems.push({ item: snap.val(), key: snap.key })
@@ -57,8 +54,10 @@ export class FidelityCardService implements OfflineItemServiceInterface {
 
     return fornitori
   }
-  loadItemFromLocalDb(): Promise<ItemModelInterface[]> {
-    throw new Error('Method not implemented.');
+  
+  
+  async loadItemFromLocalDb() {
+    return this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel))
   }
 
 
@@ -67,7 +66,15 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   }
   offlineDbStatus: offLineDbStatus;
   setHref() {
-    throw new Error('Method not implemented.');
+
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.fidelityCardsListRef = firebase.default.database().ref(`/fidelityCards/${user.uid}/`)
+        FidelityCardService.fidelityCardsListRef = firebase.default.database().ref(`/fidelityCards/${user.uid}/`)
+      }
+    }
+    )
+
   }
   fetchItems() {
     this.fidelityCardsListRef.on('value', snapshot => {
@@ -83,7 +90,7 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   categoriesService?: ItemServiceInterface;
   suppliersService?: ItemServiceInterface;
   paymentsService?: ItemServiceInterface;
-  suppliersListRef?: any;
+  fidelityCardsListRef?: any;
   getItem(key: string): firebase.default.database.Reference {
     return this.fidelityCardsListRef.child(key)
   }
