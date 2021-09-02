@@ -16,6 +16,7 @@ import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 import { Items2Update } from 'src/app/modules/offline/models/items2Update';
 import { ChangesService } from 'src/app/modules/offline/services/changes.service';
 import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
+import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
 
 @Injectable({
   providedIn: 'root'
@@ -129,7 +130,9 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
     return (this.suppliersListRef && prId) ? this.suppliersListRef.child(prId) : undefined;
   }
 
-  updateItem(item: SupplierModel) {
+  async updateItem(item: SupplierModel) {
+    await new UpdateEntityOffline(new SupplierModel().initialize(item), this.localDb,await this.manager.asyncSignature(),).execute(navigator.onLine)
+    this.changes.createItem(new Items2Update(await this.manager.asyncSignature(),new SupplierModel().initialize(item), OperationKey.update))
     return this.suppliersListRef.child(item.key).update(item.serialize());
   }
   deleteItem(key: string) {
