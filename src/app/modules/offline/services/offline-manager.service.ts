@@ -108,7 +108,7 @@ export class OfflineManagerService {
 
   static async publishEntity(entity: string) {
     const service = OfflineManagerService.servicesList.filter((service: OfflineItemServiceInterface) => service.entityLabel == entity)[0]
-    service.publish(await service.loadItemFromLocalDb())
+    service?.publish(await service.loadItemFromLocalDb())
 
 
 

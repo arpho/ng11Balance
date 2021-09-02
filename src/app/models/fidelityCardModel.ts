@@ -13,7 +13,7 @@ export class FidelityCardModel implements OfflineItemModelInterface {
     service?: ItemServiceInterface;
     entityLabel= "fidelityCard"
     constructor(card?: {}) {
-        this.load(card)
+        this.initialize(card)
     }
     serialize4OfflineDb(): offlineSerializer<{ entityLabel: string; }> {
         const entityLabel = this.entityLabel
@@ -21,6 +21,11 @@ export class FidelityCardModel implements OfflineItemModelInterface {
     }
     setKey?(key: string): ItemModelInterface {
         this.key = key
+        return this
+    }
+
+    initialize(item:{}){
+        Object.assign(this,item)
         return this
     }
 

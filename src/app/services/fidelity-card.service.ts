@@ -6,6 +6,7 @@ import { FidelityCardModel } from '../models/fidelityCardModel';
 import { ItemModelInterface } from '../modules/item/models/itemModelInterface';
 import { OfflineItemServiceInterface } from '../modules/offline/models/offlineItemServiceInterface';
 import { offLineDbStatus } from '../modules/offline/models/offlineDbStatus';
+import { RawItem } from '../modules/offline/models/rawItem';
 
 @Injectable({
   providedIn: 'root'
@@ -29,9 +30,33 @@ export class FidelityCardService implements OfflineItemServiceInterface {
     })
   }
   
-  publish: (items: ItemModelInterface[]) => void;
-  fetchItemsFromCloud: (callback: (items: {}[]) => void) => void;
-  initializeItems: (items: {}[]) => ItemModelInterface[];
+  publish: (items: ItemModelInterface[]) => void = (items: FidelityCardModel[]) => {
+    this._items.next(items)
+  };
+  fetchItemsFromCloud: (callback: (items: {}[]) => void) => void = (callback) => {
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.suppliersListRef = firebase.default.database().ref(`/fidelityCards/${user.uid}/`)
+        this.suppliersListRef.once('value', items => {
+          const rawItems: RawItem[] = []
+          items.forEach(snap => {
+            rawItems.push({ item: snap.val(), key: snap.key })
+          })
+          callback(rawItems)
+        })
+      }
+    })
+  }
+  initializeItems: (items: {}[]) => ItemModelInterface[] = (raw_items: RawItem[]) => {
+    const fornitori: FidelityCardModel[] = [];
+    raw_items.forEach(item => {
+      const card = new FidelityCardModel(item.item)
+      card.setKey(item.key)
+      fornitori.push(card)
+    })
+
+    return fornitori
+  }
   loadItemFromLocalDb(): Promise<ItemModelInterface[]> {
     throw new Error('Method not implemented.');
   }
