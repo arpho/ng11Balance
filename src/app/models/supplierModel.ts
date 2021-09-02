@@ -14,7 +14,7 @@ import { ModalController, AlertController } from '@ionic/angular';
 import { Geolocatated } from '../modules/geo-location/models/geolocationInterface';
 import { WidgetitemInteface } from '../modules/widget/models/widgetItemIterface';
 import { OfflineItemModelInterface, offlineSerializer } from '../modules/offline/models/offlineItemModelInterface';
-export class SupplierModel implements OfflineItemModelInterface,WidgetitemInteface, FirebaseObject,Geolocatated {
+export class SupplierModel implements OfflineItemModelInterface, WidgetitemInteface, FirebaseObject, Geolocatated {
     nome: string;
     note: string;
     indirizzo: string;
@@ -81,10 +81,10 @@ export class SupplierModel implements OfflineItemModelInterface,WidgetitemIntefa
         }
 
     }
-    entityLabel: string="fgornitore"
+    entityLabel: string = "fgornitore"
     serialize4OfflineDb(): offlineSerializer<{ entityLabel: string; }> {
         const entityLabel = this.entityLabel
-       return{... this.serialize(),entityLabel}
+        return { ... this.serialize(), entityLabel }
     }
     archived?: boolean;
     service?: ItemServiceInterface;
@@ -102,7 +102,7 @@ export class SupplierModel implements OfflineItemModelInterface,WidgetitemIntefa
         Object.assign(this, supplier)
         this.widgetText = ` comprato presso ${this.title}`
         this.title = this.title || this.nome
-        this.address = new  Coordinates(this.address)
+        this.address = new Coordinates(this.address)
         return this
     }
 
@@ -117,7 +117,7 @@ export class SupplierModel implements OfflineItemModelInterface,WidgetitemIntefa
     }
 
     load(next?: () => void) {
-        
+
         return this
     }
 
@@ -221,11 +221,11 @@ export class SupplierModel implements OfflineItemModelInterface,WidgetitemIntefa
     serialize() {
         return {
             title: this.title || '',
-            address:  (this.address)? this.address?.serialize():'',
+            address: (this.address) ? this.address?.serialize() : '',
             ecommerce: Boolean(this.ecommerce),
             cliente: Boolean(this.cliente),
             personaFisica: Boolean(this.personaFisica),
-            key:this.key||'',
+            key: this.key || '',
             fidelity_card: this.fidelity_card || '',
             note: this.note || ''
 

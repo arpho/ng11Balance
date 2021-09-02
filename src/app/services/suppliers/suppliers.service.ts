@@ -23,13 +23,13 @@ import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEnti
   providedIn: 'root'
 })
 export class SuppliersService implements OfflineItemServiceInterface, EntityWidgetServiceInterface {
-  static   suppliersListRef: firebase.default.database.Reference;
-  public   suppliersListRef: firebase.default.database.Reference;
+  static suppliersListRef: firebase.default.database.Reference;
+  public suppliersListRef: firebase.default.database.Reference;
   _items: BehaviorSubject<Array<SupplierModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<SupplierModel>> = this._items.asObservable()
   items_list: Array<SupplierModel> = []
- 
-  constructor(public localDb:OfflineDbService,public manager:OfflineManagerService,public changes:ChangesService) {
+
+  constructor(public localDb: OfflineDbService, public manager: OfflineManagerService, public changes: ChangesService) {
     this.manager.registerService(this)
     this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
       return entities.map((item: ShoppingKartModel) => {
@@ -46,7 +46,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
     this.instatiateItem = (args: {}) => {
       return new SupplierModel().initialize(args)
     }
-    
+
   }
 
   setHref() {
@@ -65,7 +65,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   publish: (items: ItemModelInterface[]) => void = (items: SupplierModel[]) => {
     this._items.next(items)
   };
-  fetchItemsFromCloud: (callback: (items: {}[]) => void) => void=(callback) =>{
+  fetchItemsFromCloud: (callback: (items: {}[]) => void) => void = (callback) => {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.suppliersListRef = firebase.default.database().ref(`/fornitori/${user.uid}/`)
@@ -79,12 +79,12 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
       }
     })
   }
-  initializeItems: (items: {}[]) => ItemModelInterface[]=  (raw_items: RawItem[]) => {
+  initializeItems: (items: {}[]) => ItemModelInterface[] = (raw_items: RawItem[]) => {
     const fornitori: SupplierModel[] = [];
-    raw_items.forEach(item => { 
+    raw_items.forEach(item => {
       fornitori.push(new SupplierModel().initialize(item.item).setKey(item.key))
     })
-    
+
     return fornitori
   }
   async loadItemFromLocalDb() {
@@ -93,13 +93,13 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   }
   offlineDbStatus: offLineDbStatus;
 
-  instatiateItem: (args: {}) => ItemModelInterface=(item:{})=> {
+  instatiateItem: (args: {}) => ItemModelInterface = (item: {}) => {
     return new SupplierModel().initialize(item)
   }
   key = 'suppliers';
-  get entityLabel (){
+  get entityLabel() {
     return this.getDummyItem().entityLabel
-  } 
+  }
   counterWidget: (entityKey: string, entities: ItemModelInterface[]) => number;
   adderWidget: (entityKey: string, entities: ItemModelInterface[]) => number;
   categoriesService?: ItemServiceInterface;
@@ -113,16 +113,16 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   }
 
   async createItem(item: ItemModelInterface) {
-    item.key =  `${this.entityLabel}_${new Date().getTime()}`
+    item.key = `${this.entityLabel}_${new Date().getTime()}`
     var Supplier = new SupplierModel().initialize(item)
     await this.suppliersListRef.push(item.serialize())
-    const update = new Items2Update(await this.manager.asyncSignature(),Supplier, OperationKey.create)
+    const update = new Items2Update(await this.manager.asyncSignature(), Supplier, OperationKey.create)
     await this.changes.createItem(update)
-    await new CreateEntityOffline( Supplier, this.localDb,await this.manager.asyncSignature(),).execute(navigator.onLine)
+    await new CreateEntityOffline(Supplier, this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
 
-    
 
-   
+
+
     return Supplier
   }
 
@@ -132,13 +132,13 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   }
 
   async updateItem(item: SupplierModel) {
-    await new UpdateEntityOffline(new SupplierModel().initialize(item), this.localDb,await this.manager.asyncSignature(),).execute(navigator.onLine)
-    this.changes.createItem(new Items2Update(await this.manager.asyncSignature(),new SupplierModel().initialize(item), OperationKey.update))
+    await new UpdateEntityOffline(new SupplierModel().initialize(item), this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
+    this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new SupplierModel().initialize(item), OperationKey.update))
     return this.suppliersListRef.child(item.key).update(item.serialize());
   }
   async deleteItem(key: string) {
-    await new DeleteEntityOffline(key, this.localDb, this.entityLabel,await this.manager.asyncSignature()).execute(navigator.onLine)
-    await this.changes.createItem(new Items2Update(await this.manager.asyncSignature(),new SupplierModel().setKey(key), OperationKey.delete))
+    await new DeleteEntityOffline(key, this.localDb, this.entityLabel, await this.manager.asyncSignature()).execute(navigator.onLine)
+    await this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new SupplierModel().setKey(key), OperationKey.delete))
 
     return (key) ? this.suppliersListRef.child(key).remove() : undefined;
   }
