@@ -124,6 +124,7 @@ export class OfflineManagerService {
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
     if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
       console.log(`initializing ${service.entityLabel}`)
+      new CloneEntity(this.localDb,service).execute()
       const db = new OfflineDbService()
 
       service.offlineDbStatus = offLineDbStatus.syncing
