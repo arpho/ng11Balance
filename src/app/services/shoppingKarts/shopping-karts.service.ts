@@ -73,8 +73,28 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   
 
   }
-  publish: (items: ItemModelInterface[]) => void;
-  fetchItemsFromCloud: (callback: (items: {}[]) => void) => void;
+  
+  
+  publish: (items: ItemModelInterface[]) => void = (items: ShoppingKartModel[]) => {
+    this._items.next(items)
+  };
+
+  fetchItemsFromCloud: (callback: (items: {}[]) => void) => void = (callback) => {
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.suppliersListRef = firebase.default.database().ref(`/acquisti/${user.uid}/`)
+        this.suppliersListRef.once('value', items => {
+          const rawItems: RawItem[] = []
+          items.forEach(snap => {
+            rawItems.push({ item: snap.val(), key: snap.key })
+          })
+          callback(rawItems)
+        })
+      }
+    })
+  }
+
+
   async loadItemFromLocalDb(): Promise<ItemModelInterface[]> {
     return this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel))
   }
