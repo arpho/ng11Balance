@@ -16,8 +16,9 @@ import { ShoppingKartsService } from '../services/shoppingKarts/shopping-karts.s
 import { OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Observable, VirtualTimeScheduler } from 'rxjs';
+import { OfflineItemModelInterface, offlineSerializer } from '../modules/offline/models/offlineItemModelInterface';
 
-export class ShoppingKartModel implements ItemModelInterface {
+export class ShoppingKartModel implements OfflineItemModelInterface {
     quickActions?: QuickAction[];
     archived: boolean;
     dataAcquisto: string
@@ -53,14 +54,23 @@ export class ShoppingKartModel implements ItemModelInterface {
 
 
     }
+    entityLabel = "Shoppingkart"
+    serialize4OfflineDb(): offlineSerializer<{ entityLabel: string; }> {
+        const entityLabel = this.entityLabel
+        return { ...this.serialize(), entityLabel }
+    }
+    service?: ItemServiceInterface;
+    aggregateAction?() {
+        throw new Error('Method not implemented.');
+    }
 
-    get totale(){
+    get totale() {
         const reducer: (acc: number, curr: PurchaseModel) => number = (acc: number, curr: PurchaseModel) => {
             return (curr && curr.prezzo) ? acc + curr.prezzo : acc
-          }
-          return this.items ? this.items.reduce<number>(reducer, 0) : 0
+        }
+        return this.items ? this.items.reduce<number>(reducer, 0) : 0
     }
-     set totale(value){} //dummy setter to let initialization of the model 
+    set totale(value) { } //dummy setter to let initialization of the model 
 
     getCategoriesKeys() {
         const reducer = (accumulator: Array<string>, cv: Array<string>) => accumulator = [...accumulator, ...cv]
