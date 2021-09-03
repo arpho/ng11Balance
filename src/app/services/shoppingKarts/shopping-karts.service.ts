@@ -19,6 +19,10 @@ import { RawItem } from 'src/app/modules/offline/models/rawItem';
 import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus';
 import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
 import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
+import { Items2Update } from 'src/app/modules/offline/models/items2Update';
+import { OperationKey } from 'src/app/modules/offline/models/operationKey';
+import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
+import { ChangesService } from 'src/app/modules/offline/services/changes.service';
 //import { ConnectionServiceModule } from 'ng-connection-service';
 // tslint:disable:semicolon
 
@@ -32,6 +36,20 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   readonly items: Observable<Array<ShoppingKartModel>> = this._items.asObservable()
   items_list: Array<ShoppingKartModel> = []
   categoriesService?: ItemServiceInterface;
+
+  constructor(categories: CategoriesService,
+     public payments: PaymentsService, 
+     public suppliers: SuppliersService,
+     public localDb:OfflineDbService,
+     public manager:OfflineManagerService,
+     public changes:ChangesService) {
+
+    this.categoriesService = categories
+    manager.registerService(this)
+
+  
+
+  }
 
   getItem(key: string): firebase.default.database.Reference {
     return this.shoppingKartsListRef.child(key);
@@ -55,23 +73,13 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     return new ShoppingKartModel()
   }
   async createItem(item: ItemModelInterface) {
-    var Kart
-    const kart = await this.shoppingKartsListRef.push(item.serialize())
-    kart.on('value', value => {
-      Kart = this.initializeSingleKart(value)
-
-      this.updateItem(Kart) // add the key to the firebase's node
-    })
+    item.key = `${this.entityLabel}_${new Date().getTime()}`
+    var Kart = new ShoppingKartModel().initialize(item).setKey(item.key)
+    await this.shoppingKartsListRef.push(item.serialize())
+    const update = new Items2Update(await this.manager.asyncSignature(), Kart, OperationKey.create)
+    await this.changes.createItem(update)
+    await new CreateEntityOffline(Kart, this.localDb, await this.manager.asyncSignature()).execute(navigator.onLine)
     return Kart;
-  }
-
-  constructor(categories: CategoriesService, public payments: PaymentsService, public suppliers: SuppliersService,public localDb:OfflineDbService,public manager:OfflineManagerService) {
-
-    this.categoriesService = categories
-    manager.registerService(this)
-
-  
-
   }
   
   
