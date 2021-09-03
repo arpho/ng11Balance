@@ -14,14 +14,20 @@ import { PaymentsModel } from 'src/app/models/paymentModel';
 import { PurchaseModel } from 'src/app/models/purchasesModel';
 import { CategoryModel } from 'src/app/models/CategoryModel';
 import { PricedCategory } from 'src/app/models/pricedCategory';
+import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offlineItemServiceInterface';
+import { RawItem } from 'src/app/modules/offline/models/rawItem';
+import { offLineDbStatus } from 'src/app/modules/offline/models/offlineDbStatus';
+import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
+import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
 //import { ConnectionServiceModule } from 'ng-connection-service';
 // tslint:disable:semicolon
 
 @Injectable({
   providedIn: 'root'
 })
-export class ShoppingKartsService implements ItemServiceInterface {
+export class ShoppingKartsService implements OfflineItemServiceInterface {
   public shoppingKartsListRef: firebase.default.database.Reference;
+  static  shoppingKartsListRef: firebase.default.database.Reference;
   _items: BehaviorSubject<Array<ShoppingKartModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<ShoppingKartModel>> = this._items.asObservable()
   items_list: Array<ShoppingKartModel> = []
@@ -29,6 +35,11 @@ export class ShoppingKartsService implements ItemServiceInterface {
 
   getItem(key: string): firebase.default.database.Reference {
     return this.shoppingKartsListRef.child(key);
+  }
+
+  get entityLabel(){
+    const dummy = new ShoppingKartModel()
+    return dummy.entityLabel
   }
 
 
@@ -40,7 +51,7 @@ export class ShoppingKartsService implements ItemServiceInterface {
   deleteItem(key: string) {
     return this.shoppingKartsListRef.child(key).remove();
   }
-  getDummyItem(): import('../../modules/item/models/itemModelInterface').ItemModelInterface {
+  getDummyItem(): ItemModelInterface {
     return new ShoppingKartModel()
   }
   async createItem(item: ItemModelInterface) {
@@ -54,13 +65,32 @@ export class ShoppingKartsService implements ItemServiceInterface {
     return Kart;
   }
 
-  constructor(categories: CategoriesService, public payments: PaymentsService, public suppliers: SuppliersService) {
+  constructor(categories: CategoriesService, public payments: PaymentsService, public suppliers: SuppliersService,public localDb:OfflineDbService,public manager:OfflineManagerService) {
 
     this.categoriesService = categories
+    manager.registerService(this)
 
-    this.initializeItems()
+  
 
   }
+  publish: (items: ItemModelInterface[]) => void;
+  fetchItemsFromCloud: (callback: (items: {}[]) => void) => void;
+  async loadItemFromLocalDb(): Promise<ItemModelInterface[]> {
+    return this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel))
+  }
+  offlineDbStatus: offLineDbStatus;
+  setHref() {
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.shoppingKartsListRef = firebase.default.database().ref(`/acquisti/${user.uid}/`)
+        ShoppingKartsService.shoppingKartsListRef = firebase.default.database().ref(`/acquisti/${user.uid}/`)
+      }
+    }
+    )
+  }
+  suppliersService?: ItemServiceInterface;
+  paymentsService?: ItemServiceInterface;
+  suppliersListRef?: any;
 
   initializeSingleKart(snap) {
 
@@ -94,13 +124,15 @@ export class ShoppingKartsService implements ItemServiceInterface {
     return kart
   }
   // initialize all the karts
-  private initializeItems() {
+   initializeItems(items: RawItem[]) {
+     const karts:Array<ShoppingKartModel>=[]
+
     const purchaseInitializer = (purchase2initialize) => {
       const Purchase = new PurchaseModel().initialize(purchase2initialize)
-      const initiateCategory = (catKey2Beinirtialized) => {
-        const Category = new CategoryModel(catKey2Beinirtialized)
-        if (catKey2Beinirtialized != '') {
-          this.categoriesService.getItem(catKey2Beinirtialized).on('value', (category) => {
+      const initiateCategory = (catKey2Beinitialized) => {
+        const Category = new CategoryModel(catKey2Beinitialized)
+        if (catKey2Beinitialized != '') {
+          this.categoriesService.getItem(catKey2Beinitialized).on('value', (category) => {
             Category.initialize(category.val())
           })
         }
@@ -109,18 +141,12 @@ export class ShoppingKartsService implements ItemServiceInterface {
       Purchase.categorie = Purchase.categorieId ? Purchase.categorieId.map(initiateCategory) : []
       return Purchase
     }
-    firebase.default.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.shoppingKartsListRef = firebase.default.database().ref(`/acquisti/${user.uid}/`);
-        this.shoppingKartsListRef.on('value', eventSuppliersListSnapshot => {
-          this.items_list = [];
-          eventSuppliersListSnapshot?.forEach(snap => {
-            const kart = this.initializeSingleKart(snap)
-            this.items_list.push(kart);
-          });
-          this._items.next(this.items_list)
-        });
-      }
-    });
+    
+
+    items.forEach(item=>{
+      const kart =this.initializeSingleKart(item.item).setKey(item.key)
+      karts.push(kart)
+    })
+    return karts
   }
 }
