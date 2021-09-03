@@ -113,6 +113,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   suppliersListRef?: any;
 
   initializeSingleKart(snap) {
+    
 
     const purchaseInitializer = (purchase2initialize) => {
 
@@ -143,6 +144,46 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
     return kart
   }
+
+
+
+  initializeSingleKartFromRawItem(item:RawItem) {
+    
+
+    const purchaseInitializer = (purchase2initialize) => {
+
+      const Purchase = new PurchaseModel().initialize(purchase2initialize)
+
+      const initiateCategory = (catKey2Beinirtialized) => {
+
+        const Category = new CategoryModel(catKey2Beinirtialized)
+
+        if (catKey2Beinirtialized != '') {
+
+          this.categoriesService.getItem(catKey2Beinirtialized)?.on('value', (category) => {
+
+            Category.initialize(category.val())
+          })
+        }
+        return Category
+      }
+      Purchase.categorie = Purchase.categorieId ? Purchase.categorieId.map(initiateCategory) : []
+
+      return Purchase
+    }
+    const kart = new ShoppingKartModel({ key: item.key }).initialize(item.item)
+
+    kart.key = item.key
+
+    kart.items = kart.items?.map(purchaseInitializer)
+
+    return kart
+  }
+
+
+
+
+
   // initialize all the karts
    initializeItems(items: RawItem[]) {
      const karts:Array<ShoppingKartModel>=[]
@@ -164,7 +205,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     
 
     items.forEach(item=>{
-      const kart =this.initializeSingleKart(item.item).setKey(item.key)
+      const kart =this.initializeSingleKartFromRawItem(item)
       karts.push(kart)
     })
     return karts
