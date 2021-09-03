@@ -47,12 +47,23 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
     this.categoriesService = categories
   this.manager.isLoggedUserOflineEnabled().then(offlineEnabled=>{
-    console.log('user offlineEnabled*',offlineEnabled)
+    if(offlineEnabled){
+      manager.registerService(this)
+    }
+    else{
+     this.loadFromFirebase() 
+    }
   })
-    manager.registerService(this)
+   
 
   
 
+  }
+
+
+  async loadFromFirebase(){
+
+    this.publish(this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel)))
   }
 
   getItem(key: string): firebase.default.database.Reference {
