@@ -23,7 +23,7 @@ import { Items2Update } from 'src/app/modules/offline/models/items2Update';
 import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
 import { ChangesService } from 'src/app/modules/offline/services/changes.service';
-//import { ConnectionServiceModule } from 'ng-connection-service';
+import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
 // tslint:disable:semicolon
 
 @Injectable({
@@ -62,8 +62,9 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
 
 
-  updateItem(item: ItemModelInterface) {
-    console.log('serialize in update',item.serialize())
+  async updateItem(item: ItemModelInterface) {
+    await new UpdateEntityOffline(new SupplierModel().initialize(item), this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
+    this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new SupplierModel().initialize(item), OperationKey.update))
     return this.shoppingKartsListRef.child(item.key).update(item.serialize());
   }
   deleteItem(key: string) {
