@@ -24,6 +24,7 @@ import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
 import { ChangesService } from 'src/app/modules/offline/services/changes.service';
 import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
+import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEntityOffline';
 // tslint:disable:semicolon
 
 @Injectable({
@@ -67,7 +68,9 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new SupplierModel().initialize(item), OperationKey.update))
     return this.shoppingKartsListRef.child(item.key).update(item.serialize());
   }
-  deleteItem(key: string) {
+   async deleteItem(key: string) {
+    await new DeleteEntityOffline(key, this.localDb, this.entityLabel, await this.manager.asyncSignature()).execute(navigator.onLine)
+    await this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new SupplierModel().setKey(key), OperationKey.delete))
     return this.shoppingKartsListRef.child(key).remove();
   }
   getDummyItem(): ItemModelInterface {
