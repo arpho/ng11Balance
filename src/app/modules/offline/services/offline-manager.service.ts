@@ -114,6 +114,11 @@ export class OfflineManagerService {
 
   }
 
+  async isLoggedUserOflineEnabled(){
+    const user  = await this.users.loggedUser.pipe(take(1)).toPromise()
+    return user.isOfflineEnabled
+  }
+
   async registerService(service: OfflineItemServiceInterface) {
     if(!OfflineManagerService.servicesList.map(service=>service.entityLabel).includes(service.entityLabel)){
       console.log('registering',service.entityLabel)
