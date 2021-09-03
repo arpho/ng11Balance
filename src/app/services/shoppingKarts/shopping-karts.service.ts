@@ -46,6 +46,9 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
      public changes:ChangesService) {
 
     this.categoriesService = categories
+  this.manager.isLoggedUserOflineEnabled().then(offlineEnabled=>{
+    console.log('user offlineEnabled*',offlineEnabled)
+  })
     manager.registerService(this)
 
   
