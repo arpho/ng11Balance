@@ -63,7 +63,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
 
   async updateItem(item: ItemModelInterface) {
-    await new UpdateEntityOffline(new SupplierModel().initialize(item), this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
+    await new UpdateEntityOffline(new ShoppingKartModel().initialize(item), this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
     this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new SupplierModel().initialize(item), OperationKey.update))
     return this.shoppingKartsListRef.child(item.key).update(item.serialize());
   }
@@ -76,6 +76,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   async createItem(item: ItemModelInterface) {
     item.key = `${this.entityLabel}_${new Date().getTime()}`
     var Kart = new ShoppingKartModel().initialize(item).setKey(item.key)
+    console.log('new kart',Kart)
     await this.shoppingKartsListRef.push(item.serialize())
     const update = new Items2Update(await this.manager.asyncSignature(), Kart, OperationKey.create)
     await this.changes.createItem(update)
