@@ -27,7 +27,15 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   items_list: Array<FidelityCardModel> = []
 
   constructor(public localDb:OfflineDbService,public manager:OfflineManagerService,public changes:ChangesService) {
-manager.registerService(this)
+    
+    this.manager.isLoggedUserOflineEnabled().then(offlineEnabled=>{
+      if(offlineEnabled){
+        manager.registerService(this)
+      }
+      else{
+       this.loadFromFirebase() 
+      }
+    })
 
     
   }
@@ -81,6 +89,13 @@ manager.registerService(this)
     )
 
   }
+
+  async loadFromFirebase(){
+
+    this.publish(this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel)))
+  }
+
+
   fetchItems() {
     this.fidelityCardsListRef.on('value', snapshot => {
       this.items_list = []
