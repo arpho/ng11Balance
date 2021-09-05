@@ -205,7 +205,6 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     const category = await CategoriesService.categoriesListRef.push(item.serialize())
     category.on('value',async cat=>{
       Category.key=cat.key
-     await  this.updateItem(Category)
     })
    }
 
