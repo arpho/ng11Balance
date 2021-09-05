@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import * as firebase from 'firebase/app';
 import { ItemServiceInterface } from '../modules/item/models/ItemServiceInterface';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { FidelityCardModel } from '../models/fidelityCardModel';
 import { ItemModelInterface } from '../modules/item/models/itemModelInterface';
 import { OfflineItemServiceInterface } from '../modules/offline/models/offlineItemServiceInterface';
@@ -15,6 +15,7 @@ import { CreateEntityOffline } from '../modules/offline/business/createEntityOff
 import { OperationKey } from '../modules/offline/models/operationKey';
 import { UpdateEntityOffline } from '../modules/offline/business/updateEntityOffline';
 import { DeleteEntityOffline } from '../modules/offline/business/deleteEntityOffline';
+import { OfflineDeleteOperation } from '../modules/offline/business/offlineDeleteOperation';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   items_list: Array<FidelityCardModel> = []
 
   constructor(public localDb:OfflineDbService,public manager:OfflineManagerService,public changes:ChangesService) {
-    
+
     this.manager.isLoggedUserOflineEnabled().then(offlineEnabled=>{
       if(offlineEnabled){
         manager.registerService(this)
@@ -120,10 +121,16 @@ export class FidelityCardService implements OfflineItemServiceInterface {
     return this.fidelityCardsListRef.child(item.key).update(item.serialize())
   }
   async deleteItem(key: string) {
-    await new DeleteEntityOffline(key, this.localDb, this.entityLabel, await this.manager.asyncSignature()).execute(navigator.onLine)
+
+
     const dummyCard = new FidelityCardModel()
     dummyCard.setKey(key)
-    await this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), dummyCard, OperationKey.delete))
+
+    const offlineEnabled= await this.manager.isLoggedUserOflineEnabled()
+    if(offlineEnabled){
+      await new OfflineDeleteOperation(await this.manager.asyncSignature(),dummyCard,this.localDb,this.changes).execute()
+    }
+ 
     return this.fidelityCardsListRef.child(key).remove()
   }
   getDummyItem(): ItemModelInterface {
