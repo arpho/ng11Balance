@@ -25,6 +25,7 @@ import { OfflineItemModelInterface } from 'src/app/modules/offline/models/offlin
 import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEntityOffline';
 import { OfflineCreateOperation } from 'src/app/modules/offline/business/offlineCreateOperation';
 import { OfflineUpdateOperation } from 'src/app/modules/offline/business/offlineUpdateOperation';
+import { OfflineDeleteOperation } from 'src/app/modules/offline/business/offlineDeleteOperation';
 
 
 
@@ -151,16 +152,16 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     if(enabled){
      await new OfflineUpdateOperation(item,this.changes,this.localDb).execute()
     }
-    else{
-
-    }
+ 
     
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
   async deleteItem(key: string) {
-    await new DeleteEntityOffline(key, this.localDb, this.entityLabel, await this.manager.asyncSignature()).execute(navigator.onLine)
-    const signature = await this.manager.asyncSignature()
-    await this.changes.createItem(new Items2Update(signature, new CategoryModel().setKey(key), OperationKey.delete))
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+
+    if(enabled){
+      new OfflineDeleteOperation(await this.manager.asyncSignature(),new CategoryModel().setKey(key),this.localDb,this.changes).execute()
+    }
     return this.categoriesListRef?.child(key).remove();
   }
 
