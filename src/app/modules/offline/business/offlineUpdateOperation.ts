@@ -3,9 +3,10 @@ import { OfflineItemModelInterface } from "../models/offlineItemModelInterface";
 import { OperationKey } from "../models/operationKey";
 import { ChangesService } from "../services/changes.service";
 import { OfflineDbService } from "../services/offline-db.service";
+import { offlineCrudOperation } from "./offlineCrudOperation";
 import { UpdateEntityOffline } from "./updateEntityOffline";
 
-export class OfflineUpdateOperation {
+export class OfflineUpdateOperation implements offlineCrudOperation{
     changes: ChangesService
     signature: string
     item: OfflineItemModelInterface
