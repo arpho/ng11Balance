@@ -47,6 +47,15 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
       return new SupplierModel().initialize(args)
     }
 
+    this.manager.isLoggedUserOflineEnabled().then(offlineEnabled=>{
+      if(offlineEnabled){
+        manager.registerService(this)
+      }
+      else{
+       this.loadFromFirebase() 
+      }
+    })
+
   }
 
   setHref() {
@@ -128,6 +137,11 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   getItem(prId: string): firebase.default.database.Reference {
 
     return (this.suppliersListRef && prId) ? this.suppliersListRef.child(prId) : undefined;
+  }
+
+  async loadFromFirebase(){
+
+    this.publish(this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel)))
   }
 
   async updateItem(item: SupplierModel) {
