@@ -17,6 +17,7 @@ import { UpdateEntityOffline } from '../modules/offline/business/updateEntityOff
 import { DeleteEntityOffline } from '../modules/offline/business/deleteEntityOffline';
 import { OfflineDeleteOperation } from '../modules/offline/business/offlineDeleteOperation';
 import { OfflineUpdateOPeration } from '../modules/offline/business/offlineUpdateOperation';
+import { OfflineCreateOperation } from '../modules/offline/business/offlineCreateOperation';
 
 @Injectable({
   providedIn: 'root'
@@ -142,12 +143,24 @@ export class FidelityCardService implements OfflineItemServiceInterface {
     return new FidelityCardModel()
   }
   async createItem(item: ItemModelInterface) {
-    item.key = `${this.entityLabel}_${new Date().getTime()}`
+
     var card = new FidelityCardModel().initialize(item)
-    await this.fidelityCardsListRef.push(item.serialize())
-    const update = new Items2Update(await this.manager.asyncSignature(), card, OperationKey.create)
-    await this.changes.createItem(update)
-    await new CreateEntityOffline(card, this.localDb, await this.manager.asyncSignature()).execute(navigator.onLine)
+    this.manager.isLoggedUserOflineEnabled().then(async enabled=>{
+      if(enabled){
+        card.key = `${this.entityLabel}_${new Date().getTime()}`
+       new OfflineCreateOperation(card,this.changes,await this.manager.asyncSignature(),this.localDb).execute()
+       await this.fidelityCardsListRef.push(item.serialize())
+      }
+      else{
+        const resp = await this.fidelityCardsListRef.push(item.serialize())
+        resp.on('value',fc=>{
+          card.setKey(fc.key)
+          this.updateItem(card)
+        })
+      }
+    })
+    
+  
 
     return card;
   }
