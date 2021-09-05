@@ -55,7 +55,22 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
       return new PaymentsModel().initialize(args)
     }
 
+    this.manager.isLoggedUserOflineEnabled().then(offlineEnabled=>{
+      if(offlineEnabled){
+        manager.registerService(this)
+      }
+      else{
+       this.loadFromFirebase() 
+      }
+    })
+
   }
+
+  async loadFromFirebase(){
+
+    this.publish(this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel)))
+  }
+
   publish = (items: PaymentsModel[]) => {
     this._items.next(items)
   };
