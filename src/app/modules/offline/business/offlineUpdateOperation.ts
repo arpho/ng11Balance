@@ -11,7 +11,7 @@ export class OfflineUpdateOPeration {
     item: OfflineItemModelInterface
     item2Update: Items2Update
     localDb: OfflineDbService
-    constructor(item: OfflineItemModelInterface, item2Update: Items2Update, changes: ChangesService, localDb: OfflineDbService) {
+    constructor(item: OfflineItemModelInterface,  changes: ChangesService, localDb: OfflineDbService) {
         this.changes = changes
         this.signature = this.signature
         this.localDb = localDb
