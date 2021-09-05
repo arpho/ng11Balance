@@ -154,7 +154,6 @@ export class FidelityCardService implements OfflineItemServiceInterface {
         const resp = await this.fidelityCardsListRef.push(item.serialize())
         resp.on('value',fc=>{
           card.setKey(fc.key)
-          this.updateItem(card)
         })
       }
     })
