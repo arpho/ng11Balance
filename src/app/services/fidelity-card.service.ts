@@ -16,6 +16,7 @@ import { OperationKey } from '../modules/offline/models/operationKey';
 import { UpdateEntityOffline } from '../modules/offline/business/updateEntityOffline';
 import { DeleteEntityOffline } from '../modules/offline/business/deleteEntityOffline';
 import { OfflineDeleteOperation } from '../modules/offline/business/offlineDeleteOperation';
+import { OfflineUpdateOPeration } from '../modules/offline/business/offlineUpdateOperation';
 
 @Injectable({
   providedIn: 'root'
@@ -27,20 +28,20 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   readonly items: Observable<Array<FidelityCardModel>> = this._items.asObservable()
   items_list: Array<FidelityCardModel> = []
 
-  constructor(public localDb:OfflineDbService,public manager:OfflineManagerService,public changes:ChangesService) {
+  constructor(public localDb: OfflineDbService, public manager: OfflineManagerService, public changes: ChangesService) {
 
-    this.manager.isLoggedUserOflineEnabled().then(offlineEnabled=>{
-      if(offlineEnabled){
+    this.manager.isLoggedUserOflineEnabled().then(offlineEnabled => {
+      if (offlineEnabled) {
         manager.registerService(this)
       }
-      else{
-       this.loadFromFirebase() 
+      else {
+        this.loadFromFirebase()
       }
     })
 
-    
+
   }
-  
+
   publish: (items: ItemModelInterface[]) => void = (items: FidelityCardModel[]) => {
     this._items.next(items)
   };
@@ -68,15 +69,15 @@ export class FidelityCardService implements OfflineItemServiceInterface {
 
     return fornitori
   }
-  
-  
+
+
   async loadItemFromLocalDb() {
     return this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel))
   }
 
 
- get  entityLabel(){
-    return  new FidelityCardModel().entityLabel
+  get entityLabel() {
+    return new FidelityCardModel().entityLabel
   }
   offlineDbStatus: offLineDbStatus;
   setHref() {
@@ -91,7 +92,7 @@ export class FidelityCardService implements OfflineItemServiceInterface {
 
   }
 
-  async loadFromFirebase(){
+  async loadFromFirebase() {
 
     this.publish(this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel)))
   }
@@ -116,8 +117,12 @@ export class FidelityCardService implements OfflineItemServiceInterface {
     return this.fidelityCardsListRef.child(key)
   }
   async updateItem(item: ItemModelInterface) {
-    await new UpdateEntityOffline(new FidelityCardModel().initialize(item), this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
-    this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new FidelityCardModel().initialize(item), OperationKey.update))
+    this.manager.isLoggedUserOflineEnabled().then(async enabled=>{
+      if (enabled){
+        const item2Update = new Items2Update(await this.manager.asyncSignature(), new FidelityCardModel().initialize(item), OperationKey.update)
+        await new OfflineUpdateOPeration(new FidelityCardModel().initialize(item),item2Update,this.changes,this.localDb).execute()
+      }
+    })
     return this.fidelityCardsListRef.child(item.key).update(item.serialize())
   }
   async deleteItem(key: string) {
@@ -126,11 +131,11 @@ export class FidelityCardService implements OfflineItemServiceInterface {
     const dummyCard = new FidelityCardModel()
     dummyCard.setKey(key)
 
-    const offlineEnabled= await this.manager.isLoggedUserOflineEnabled()
-    if(offlineEnabled){
-      await new OfflineDeleteOperation(await this.manager.asyncSignature(),dummyCard,this.localDb,this.changes).execute()
+    const offlineEnabled = await this.manager.isLoggedUserOflineEnabled()
+    if (offlineEnabled) {
+      await new OfflineDeleteOperation(await this.manager.asyncSignature(), dummyCard, this.localDb, this.changes).execute()
     }
- 
+
     return this.fidelityCardsListRef.child(key).remove()
   }
   getDummyItem(): ItemModelInterface {
@@ -139,11 +144,11 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   async createItem(item: ItemModelInterface) {
     item.key = `${this.entityLabel}_${new Date().getTime()}`
     var card = new FidelityCardModel().initialize(item)
-     await this.fidelityCardsListRef.push(item.serialize())
-     const update = new Items2Update(await this.manager.asyncSignature(), card, OperationKey.create)
+    await this.fidelityCardsListRef.push(item.serialize())
+    const update = new Items2Update(await this.manager.asyncSignature(), card, OperationKey.create)
     await this.changes.createItem(update)
     await new CreateEntityOffline(card, this.localDb, await this.manager.asyncSignature()).execute(navigator.onLine)
-   
+
     return card;
   }
   getEntitiesList(): firebase.default.database.Reference {
