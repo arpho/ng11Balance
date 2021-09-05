@@ -16,7 +16,7 @@ import { OperationKey } from '../modules/offline/models/operationKey';
 import { UpdateEntityOffline } from '../modules/offline/business/updateEntityOffline';
 import { DeleteEntityOffline } from '../modules/offline/business/deleteEntityOffline';
 import { OfflineDeleteOperation } from '../modules/offline/business/offlineDeleteOperation';
-import { OfflineUpdateOPeration } from '../modules/offline/business/offlineUpdateOperation';
+import { OfflineUpdateOperation } from '../modules/offline/business/offlineUpdateOperation';
 import { OfflineCreateOperation } from '../modules/offline/business/offlineCreateOperation';
 
 @Injectable({
@@ -121,7 +121,7 @@ export class FidelityCardService implements OfflineItemServiceInterface {
     this.manager.isLoggedUserOflineEnabled().then(async enabled=>{
       if (enabled){
         const item2Update = new Items2Update(await this.manager.asyncSignature(), new FidelityCardModel().initialize(item), OperationKey.update)
-        await new OfflineUpdateOPeration(new FidelityCardModel().initialize(item),item2Update,this.changes,this.localDb).execute()
+        await new OfflineUpdateOperation(new FidelityCardModel().initialize(item),item2Update,this.changes,this.localDb).execute()
       }
     })
     return this.fidelityCardsListRef.child(item.key).update(item.serialize())

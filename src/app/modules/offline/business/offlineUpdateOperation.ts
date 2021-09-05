@@ -5,7 +5,7 @@ import { ChangesService } from "../services/changes.service";
 import { OfflineDbService } from "../services/offline-db.service";
 import { UpdateEntityOffline } from "./updateEntityOffline";
 
-export class OfflineUpdateOPeration {
+export class OfflineUpdateOperation {
     changes: ChangesService
     signature: string
     item: OfflineItemModelInterface

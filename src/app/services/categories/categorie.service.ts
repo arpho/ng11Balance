@@ -24,7 +24,7 @@ import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEnti
 import { OfflineItemModelInterface } from 'src/app/modules/offline/models/offlineItemModelInterface';
 import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEntityOffline';
 import { OfflineCreateOperation } from 'src/app/modules/offline/business/offlineCreateOperation';
-import { OfflineUpdateOPeration } from 'src/app/modules/offline/business/offlineUpdateOperation';
+import { OfflineUpdateOperation } from 'src/app/modules/offline/business/offlineUpdateOperation';
 
 
 
@@ -149,7 +149,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     if(enabled){
-     await new OfflineUpdateOPeration(item,this.changes,this.localDb).execute()
+     await new OfflineUpdateOperation(item,this.changes,this.localDb).execute()
     }
     else{
 
