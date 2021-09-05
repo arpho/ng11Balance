@@ -18,6 +18,9 @@ import { Items2Update } from 'src/app/modules/offline/models/items2Update';
 import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
 import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEntityOffline';
+import { OfflineUpdateOperation } from 'src/app/modules/offline/business/offlineUpdateOperation';
+import { OfflineDeleteOperation } from 'src/app/modules/offline/business/offlineDeleteOperation';
+import { OfflineCreateOperation } from 'src/app/modules/offline/business/offlineCreateOperation';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +37,17 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   }
 
   constructor(public localDb: OfflineDbService, public manager: OfflineManagerService, public changes: ChangesService) {
-    this.manager.registerService(this)
+   
+    this.manager.isLoggedUserOflineEnabled().then(async enabled=>{
+      this.setHref()
+      if(enabled){
+        this.manager.registerService(this)
+      }
+      else{
+        this.loadFromFirebase()
+      }
+
+    })
     this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
       return entities.filter((item: ShoppingKartModel) => {
         return item.pagamentoId == entityKey
@@ -136,28 +149,40 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   }
 
   async createItem(item: ItemModelInterface) {
-    item.key = `${this.entityLabel}_${new Date().getTime()}`
-    var Payment
+    var Payment:PaymentsModel
+    const enabled= await this.manager.isLoggedUserOflineEnabled()
+    if(enabled){
 
-    await this.paymentsListRef.push(item.serialize());
+    item.key = `${this.entityLabel}_${new Date().getTime()}`
     Payment = new PaymentsModel().initialize(item)
-    const update = new Items2Update(await this.manager.asyncSignature(), Payment, OperationKey.create)
-    await this.changes.createItem(update)
-    await new CreateEntityOffline(Payment, this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
+    await new OfflineCreateOperation(new PaymentsModel().initialize(item),this.changes,await this.manager.asyncSignature(),this.localDb).execute()
+    await this.paymentsListRef.push(item.serialize());
+    }
+ else{
+
+  const payment = await this.paymentsListRef.push(item.serialize());
+  Payment = new PaymentsModel().initialize(item).setKey(payment.key) 
+ }
+   
+   
     return Payment
 
 
   }
 
   async updateItem(item: ItemModelInterface) {
-    await new UpdateEntityOffline(new PaymentsModel().initialize(item), this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
-    this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new PaymentsModel().initialize(item), OperationKey.update))
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    if(enabled){
+     await new OfflineUpdateOperation(new PaymentsModel().initialize(item) ,this.changes,this.localDb).execute()
+    }
     return this.paymentsListRef.child(item.key).update(item.serialize());
   }
 
   async deleteItem(key: string) {
-    await new DeleteEntityOffline(key, this.localDb, this.entityLabel, await this.manager.asyncSignature()).execute(navigator.onLine)
-    await this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new PaymentsModel().setKey(key), OperationKey.delete))
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    if(enabled){
+      await new OfflineDeleteOperation(await this.manager.asyncSignature(),new PaymentsModel().setKey(key),this.localDb,this.changes).execute()
+    }
     return this.paymentsListRef.child(key).remove();
   }
 }
