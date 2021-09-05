@@ -30,6 +30,7 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   items_list: Array<FidelityCardModel> = []
 
   constructor(public localDb: OfflineDbService, public manager: OfflineManagerService, public changes: ChangesService) {
+    this.setHref()
 
     this.manager.isLoggedUserOflineEnabled().then(offlineEnabled => {
       if (offlineEnabled) {
