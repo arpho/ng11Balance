@@ -18,6 +18,7 @@ import { ChangesService } from 'src/app/modules/offline/services/changes.service
 import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
 import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
 import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEntityOffline';
+import { OfflineCreateOperation } from 'src/app/modules/offline/business/offlineCreateOperation';
 
 @Injectable({
   providedIn: 'root'
@@ -121,12 +122,17 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   }
 
   async createItem(item: ItemModelInterface) {
-    item.key = `${this.entityLabel}_${new Date().getTime()}`
-    var Supplier = new SupplierModel().initialize(item)
-    await this.suppliersListRef.push(item.serialize())
-    const update = new Items2Update(await this.manager.asyncSignature(), Supplier, OperationKey.create)
-    await this.changes.createItem(update)
-    await new CreateEntityOffline(Supplier, this.localDb, await this.manager.asyncSignature()).execute(navigator.onLine)
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    if(enabled){
+      item.key = `${this.entityLabel}_${new Date().getTime()}`
+      var Supplier = new SupplierModel().initialize(item)
+      await new OfflineCreateOperation(Supplier,this.changes,await this.manager.asyncSignature(),this.localDb).execute()
+      
+    }
+    const fornitore = await this.suppliersListRef.push(item.serialize())
+    fornitore.on('value',result=>{
+      Supplier.setKey(result.key)
+    })
 
 
 
