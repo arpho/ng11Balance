@@ -150,7 +150,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     if(enabled){
-     await new OfflineUpdateOperation(item,this.changes,this.localDb).execute()
+     await new OfflineUpdateOperation(item,this.changes,this.localDb,await this.manager.asyncSignature()).execute()
     }
  
     
