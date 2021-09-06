@@ -25,6 +25,7 @@ import { CreateEntityOffline } from 'src/app/modules/offline/business/createEnti
 import { ChangesService } from 'src/app/modules/offline/services/changes.service';
 import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
 import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEntityOffline';
+import { OfflineUpdateOperation } from 'src/app/modules/offline/business/offlineUpdateOperation';
 // tslint:disable:semicolon
 
 @Injectable({
@@ -78,8 +79,10 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
 
   async updateItem(item: ItemModelInterface) {
-    await new UpdateEntityOffline(new ShoppingKartModel().initialize(item), this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
-    this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new SupplierModel().initialize(item), OperationKey.update))
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    if(enabled){
+      await new OfflineUpdateOperation(new ShoppingKartModel().initialize(item),this.changes,this.localDb,await this.manager.asyncSignature()).execute()
+    }
     return this.shoppingKartsListRef.child(item.key).update(item.serialize());
   }
    async deleteItem(key: string) {
