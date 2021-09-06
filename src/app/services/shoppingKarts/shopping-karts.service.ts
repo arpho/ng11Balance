@@ -26,6 +26,8 @@ import { ChangesService } from 'src/app/modules/offline/services/changes.service
 import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
 import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEntityOffline';
 import { OfflineUpdateOperation } from 'src/app/modules/offline/business/offlineUpdateOperation';
+import { OfflineDeleteOperation } from 'src/app/modules/offline/business/offlineDeleteOperation';
+import { OfflineCreateOperation } from 'src/app/modules/offline/business/offlineCreateOperation';
 // tslint:disable:semicolon
 
 @Injectable({
@@ -86,21 +88,27 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     return this.shoppingKartsListRef.child(item.key).update(item.serialize());
   }
    async deleteItem(key: string) {
-    await new DeleteEntityOffline(key, this.localDb, this.entityLabel, await this.manager.asyncSignature()).execute(navigator.onLine)
-    await this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new SupplierModel().setKey(key), OperationKey.delete))
+     const enabled = await this.manager.isLoggedUserOflineEnabled()
+     if(enabled){
+       await new OfflineDeleteOperation(await this.manager.asyncSignature(),new ShoppingKartModel().setKey(key),this.localDb,this.changes).execute()
+     }
     return this.shoppingKartsListRef.child(key).remove();
   }
   getDummyItem(): ItemModelInterface {
     return new ShoppingKartModel()
   }
   async createItem(item: ItemModelInterface) {
-    item.key = `${this.entityLabel}_${new Date().getTime()}`
-    var Kart = new ShoppingKartModel().initialize(item).setKey(item.key)
-    console.log('new kart',Kart)
-    await this.shoppingKartsListRef.push(item.serialize())
-    const update = new Items2Update(await this.manager.asyncSignature(), Kart, OperationKey.create)
-    await this.changes.createItem(update)
-    await new CreateEntityOffline(Kart, this.localDb, await this.manager.asyncSignature()).execute(navigator.onLine)
+    const enabled= await this.manager.isLoggedUserOflineEnabled()
+    if (enabled){
+      item.key = `${this.entityLabel}_${new Date().getTime()}`
+      var Kart = new ShoppingKartModel().initialize(item).setKey(item.key)
+      await new OfflineCreateOperation(Kart,this.changes,await this.manager.asyncSignature(),this.localDb).execute()
+      this.shoppingKartsListRef.push(item.serialize())
+    }
+    else {
+    const result = await this.shoppingKartsListRef.push(item.serialize())
+    Kart.setKey(result.key)
+    }
     return Kart;
   }
   
