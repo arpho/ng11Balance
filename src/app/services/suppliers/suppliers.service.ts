@@ -20,6 +20,7 @@ import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEnti
 import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEntityOffline';
 import { OfflineCreateOperation } from 'src/app/modules/offline/business/offlineCreateOperation';
 import { OfflineUpdateOperation } from 'src/app/modules/offline/business/offlineUpdateOperation';
+import { OfflineDeleteOperation } from 'src/app/modules/offline/business/offlineDeleteOperation';
 
 @Injectable({
   providedIn: 'root'
@@ -49,12 +50,12 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
       return new SupplierModel().initialize(args)
     }
 
-    this.manager.isLoggedUserOflineEnabled().then(offlineEnabled=>{
-      if(offlineEnabled){
+    this.manager.isLoggedUserOflineEnabled().then(offlineEnabled => {
+      if (offlineEnabled) {
         manager.registerService(this)
       }
-      else{
-       this.loadFromFirebase() 
+      else {
+        this.loadFromFirebase()
       }
     })
 
@@ -124,14 +125,14 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
 
   async createItem(item: ItemModelInterface) {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    if(enabled){
+    if (enabled) {
       item.key = `${this.entityLabel}_${new Date().getTime()}`
       var Supplier = new SupplierModel().initialize(item)
-      await new OfflineCreateOperation(Supplier,this.changes,await this.manager.asyncSignature(),this.localDb).execute()
-      
+      await new OfflineCreateOperation(Supplier, this.changes, await this.manager.asyncSignature(), this.localDb).execute()
+
     }
     const fornitore = await this.suppliersListRef.push(item.serialize())
-    fornitore.on('value',result=>{
+    fornitore.on('value', result => {
       Supplier.setKey(result.key)
     })
 
@@ -146,23 +147,25 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
     return (this.suppliersListRef && prId) ? this.suppliersListRef.child(prId) : undefined;
   }
 
-  async loadFromFirebase(){
+  async loadFromFirebase() {
 
     this.publish(this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel)))
   }
 
   async updateItem(item: SupplierModel) {
-    const enabled= await this.manager.isLoggedUserOflineEnabled()
-    if(enabled){
-      await new OfflineUpdateOperation(new SupplierModel().initialize(item),this.changes,this.localDb,await this.manager.asyncSignature()).execute
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    if (enabled) {
+      await new OfflineUpdateOperation(new SupplierModel().initialize(item), this.changes, this.localDb, await this.manager.asyncSignature()).execute
     }
     await new UpdateEntityOffline(new SupplierModel().initialize(item), this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
     this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new SupplierModel().initialize(item), OperationKey.update))
     return this.suppliersListRef.child(item.key).update(item.serialize());
   }
   async deleteItem(key: string) {
-    await new DeleteEntityOffline(key, this.localDb, this.entityLabel, await this.manager.asyncSignature()).execute(navigator.onLine)
-    await this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new SupplierModel().setKey(key), OperationKey.delete))
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    if (enabled) {
+      await new OfflineDeleteOperation(await this.manager.asyncSignature(), new SupplierModel().setKey(key), this.localDb, this.changes)
+    }
 
     return (key) ? this.suppliersListRef.child(key).remove() : undefined;
   }
