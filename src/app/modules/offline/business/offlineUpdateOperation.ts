@@ -12,9 +12,9 @@ export class OfflineUpdateOperation implements offlineCrudOperation{
     item: OfflineItemModelInterface
     item2Update: Items2Update
     localDb: OfflineDbService
-    constructor(item: OfflineItemModelInterface,  changes: ChangesService, localDb: OfflineDbService) {
+    constructor(item: OfflineItemModelInterface,  changes: ChangesService, localDb: OfflineDbService,signature:string) {
         this.changes = changes
-        this.signature = this.signature
+        this.signature = signature
         this.localDb = localDb
         this.item = item
         this.item2Update = new Items2Update(this.signature, this.item, OperationKey.update)

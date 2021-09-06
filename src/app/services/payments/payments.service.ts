@@ -173,7 +173,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   async updateItem(item: ItemModelInterface) {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     if(enabled){
-     await new OfflineUpdateOperation(new PaymentsModel().initialize(item) ,this.changes,this.localDb).execute()
+     await new OfflineUpdateOperation(new PaymentsModel().initialize(item) ,this.changes,this.localDb,await this.manager.asyncSignature()).execute()
     }
     return this.paymentsListRef.child(item.key).update(item.serialize());
   }
