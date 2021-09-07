@@ -31,10 +31,17 @@ import { CategoriesViewerComponent } from './components/categories-viewer/catego
 import { DynamicFormModule } from './modules/dynamic-form/dynamic-form.module';
 import { WidgetModule } from './modules/widget/widget.module';
 import { DecoratorService } from './modules/offline/services/decorator-service.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ItemModule,UserModule,DynamicFormModule,WidgetModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ItemModule,UserModule,DynamicFormModule,WidgetModule, ServiceWorkerModule.register('ngsw-worker.js', {
+  enabled: environment.production,
+  // Register the ServiceWorker as soon as the app is stable
+  // or after 30 seconds (whichever comes first).
+  registrationStrategy: 'registerWhenStable:30000'
+})],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },DecoratorService],
   bootstrap: [AppComponent,
     ],
