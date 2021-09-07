@@ -58,11 +58,9 @@ export class ChangesService {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
-        console.log('ref on changes')
         this.changesListRef.once('value', items => {
           const rawItems: RawItem[] = []
           items.forEach(snap => {
-            console.log('change',snap.val()['owner'])
             rawItems.push({ item: snap.val(), key: snap.key })
           })
           callback(rawItems)
@@ -79,9 +77,9 @@ export class ChangesService {
     var items: Items2Update[] =[]
 
     raw_items.forEach(item=>{
-      console.log('* ',item)
       const change = new Items2Update(item.item['owner'],item.item['item'],item.item['operation']).setKey(item.key).setEntityLabel2Update(item.item['entity'])
-      console.log('pushing change *',change)
+      const entity = JSON.parse(item.item['item'])
+      change.item = entity
       items.push(change) //changes to Be defined from offlineManager
 
     })

@@ -16,6 +16,7 @@ import { Items2Update } from '../models/items2Update';
 })
 export class OfflineManagerService {
   static servicesList: Array<OfflineItemServiceInterface> = []
+   servicesList: Array<OfflineItemServiceInterface> = []
   static staticLocalDb
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
@@ -24,10 +25,16 @@ export class OfflineManagerService {
     const changes:Items2Update[]=[]
     this.changes.items.subscribe(items=>{
       items.forEach(item=>{
-        console.log('change *,item',item.entityLabel2Update,item.item['key'],item.operationKey,item)
+       const Service = this.servicesList.filter(service=>service.entityLabel==item.entityLabel2Update)[0]
+       const entity = Service.getDummyItem().initialize(item.item)
+       const change = new Items2Update(item.owner,entity,item.operationKey)
+       change.item = entity
+       changes.push(change)
     
 
       })
+
+      console.log('got changes **',changes)
 
     })
   }
@@ -139,6 +146,7 @@ export class OfflineManagerService {
     if(!OfflineManagerService.servicesList.map(service=>service.entityLabel).includes(service.entityLabel)){
       console.log('registering',service.entityLabel)
       OfflineManagerService.servicesList.push(service)
+      this.servicesList.push(service)
       
       service.setHref()
     }

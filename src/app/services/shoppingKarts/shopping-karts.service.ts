@@ -28,6 +28,7 @@ import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEnti
 import { OfflineUpdateOperation } from 'src/app/modules/offline/business/offlineUpdateOperation';
 import { OfflineDeleteOperation } from 'src/app/modules/offline/business/offlineDeleteOperation';
 import { OfflineCreateOperation } from 'src/app/modules/offline/business/offlineCreateOperation';
+import { OfflineItemModelInterface } from 'src/app/modules/offline/models/offlineItemModelInterface';
 // tslint:disable:semicolon
 
 @Injectable({
@@ -95,7 +96,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
      }
     return this.shoppingKartsListRef.child(key).remove();
   }
-  getDummyItem(): ItemModelInterface {
+  getDummyItem(): OfflineItemModelInterface {
     return new ShoppingKartModel()
   }
   async createItem(item: ItemModelInterface) {

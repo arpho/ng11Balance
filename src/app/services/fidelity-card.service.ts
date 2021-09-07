@@ -18,6 +18,7 @@ import { DeleteEntityOffline } from '../modules/offline/business/deleteEntityOff
 import { OfflineDeleteOperation } from '../modules/offline/business/offlineDeleteOperation';
 import { OfflineUpdateOperation } from '../modules/offline/business/offlineUpdateOperation';
 import { OfflineCreateOperation } from '../modules/offline/business/offlineCreateOperation';
+import { OfflineItemModelInterface } from '../modules/offline/models/offlineItemModelInterface';
 
 @Injectable({
   providedIn: 'root'
@@ -139,7 +140,7 @@ export class FidelityCardService implements OfflineItemServiceInterface {
 
     return this.fidelityCardsListRef.child(key).remove()
   }
-  getDummyItem(): ItemModelInterface {
+  getDummyItem(): OfflineItemModelInterface {
     return new FidelityCardModel()
   }
   async createItem(item: ItemModelInterface) {

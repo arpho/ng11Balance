@@ -1,6 +1,7 @@
 import { ItemModelInterface } from "../../item/models/itemModelInterface";
 import { ItemServiceInterface } from "../../item/models/ItemServiceInterface";
 import { offLineDbStatus } from "./offlineDbStatus";
+import { OfflineItemModelInterface } from "./offlineItemModelInterface";
 
 export interface OfflineItemServiceInterface extends ItemServiceInterface {
     entityLabel: string; // identify entity in localForage's items
@@ -9,6 +10,7 @@ export interface OfflineItemServiceInterface extends ItemServiceInterface {
     initializeItems: (items: Array<{}>) => Array<ItemModelInterface>
     loadItemFromLocalDb(): Promise<ItemModelInterface[]>
     offlineDbStatus:offLineDbStatus
+    getDummyItem():OfflineItemModelInterface
     setHref()
 
 }
