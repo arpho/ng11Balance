@@ -45,7 +45,7 @@ export class Items2Update {
         return {
             'entityLabel': '2BeUpdate',
             'operation': this.operationKey,
-            item: this.item,
+            item: JSON.stringify(this.item),
             'date': this.date.formatFullDate(),
             'entity': this.entityLabel2Update,
             'owner': this.owner,
