@@ -13,8 +13,9 @@ export class OfflineDeleteOperation implements offlineCrudOperation {
     item2Update: Items2Update
     localDb: OfflineDbService;
     changes: ChangesService
-    constructor(signature: string, item: ItemModelInterface, localDb: OfflineDbService, changes: ChangesService) {
+    constructor(signature: string, item: OfflineItemModelInterface, localDb: OfflineDbService, changes: ChangesService) {
         this.changes = changes
+        this.item = item
         this.localDb = localDb
         this.item2Update = new Items2Update(signature, this.item, OperationKey.delete)
     }

@@ -20,8 +20,13 @@ export class OfflineManagerService {
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
 
 
-  constructor(public localDb: OfflineDbService, public users: UsersService) {
+  constructor(public localDb: OfflineDbService, public users: UsersService,public changes:ChangesService) {
+    this.changes.items.subscribe(items=>{
+      console.log('changes',items)
+    })
     //this.localDb.clear()
+
+    
 
     this.makeSignature(async sign => {
 

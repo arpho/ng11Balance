@@ -90,7 +90,8 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
    async deleteItem(key: string) {
      const enabled = await this.manager.isLoggedUserOflineEnabled()
      if(enabled){
-       await new OfflineDeleteOperation(await this.manager.asyncSignature(),new ShoppingKartModel().setKey(key),this.localDb,this.changes).execute()
+       const kart = new ShoppingKartModel().setKey(key)
+       await new OfflineDeleteOperation(await this.manager.asyncSignature(),kart,this.localDb,this.changes).execute()
      }
     return this.shoppingKartsListRef.child(key).remove();
   }
