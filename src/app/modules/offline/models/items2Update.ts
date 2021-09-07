@@ -12,13 +12,19 @@ export class Items2Update {
     date: DateModel
     owner: string
     signatures: Set<string> = new Set([])
-    constructor(owner: string,item?: OfflineItemModelInterface, operationKey?: OperationKey, ) {
-        this.entityLabel2Update = item?.entityLabel
-        this.item = item ? item.serialize() : undefined
+    constructor(owner: string,item?: OfflineItemModelInterface|{}, operationKey?: OperationKey, ) {
+        
+        this.item = item 
         this.operationKey = operationKey
         this.date = new DateModel(new Date())
         this.key = new Date().getTime() + '' // +'' cast to a string
         this.owner=owner
+        console.log('*',this)
+    }
+
+    setEntityLabel2Update(label:string){
+        this.entityLabel2Update= label
+        return this
     }
 
     initialize(args: {}) {
@@ -28,6 +34,11 @@ export class Items2Update {
     }
     setKey(key: string) {
         this.key = key
+        return this
+    }
+
+    setItem(item:OfflineItemModelInterface){
+        this.item= item
         return this
     }
 

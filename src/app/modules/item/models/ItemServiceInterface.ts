@@ -3,6 +3,7 @@
 import * as firebase from 'firebase/app';
 import { ItemModelInterface } from './itemModelInterface';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { OfflineItemModelInterface } from '../../offline/models/offlineItemModelInterface';
 export interface ItemServiceInterface {
 // extra service for complex models
 categoriesService?: ItemServiceInterface
@@ -31,7 +32,7 @@ suppliersListRef?
     deleteItem(key: string);
 
     /** return a void item of the type handled by the service */
-    getDummyItem(): ItemModelInterface;
+    getDummyItem(): OfflineItemModelInterface|ItemModelInterface;
     /**crea un item in firebase
      *
      */

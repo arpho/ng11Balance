@@ -9,6 +9,7 @@ import { ChangesService } from './changes.service';
 import { OfflineDbService } from './offline-db.service';
 import { take,first } from 'rxjs/operators';
 import { of, pipe} from 'rxjs'
+import { Items2Update } from '../models/items2Update';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +20,21 @@ export class OfflineManagerService {
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
 
+  pullChangesFromCloud(){
+    const changes:Items2Update[]=[]
+    this.changes.items.subscribe(items=>{
+      items.forEach(item=>{
+        console.log('change *,item',item.entityLabel2Update,item.item['key'],item.operationKey,item)
+    
+
+      })
+
+    })
+  }
+
 
   constructor(public localDb: OfflineDbService, public users: UsersService,public changes:ChangesService) {
-    this.changes.items.subscribe(items=>{
-      console.log('changes',items)
-    })
+    this.pullChangesFromCloud()
     //this.localDb.clear()
 
     

@@ -4,6 +4,7 @@ import { Items2Update } from '../models/items2Update';
 import * as firebase from 'firebase/app';
 import { RawItem } from '../models/rawItem';
 import { ItemModelInterface } from '../../item/models/itemModelInterface';
+import { OfflineManagerService } from './offline-manager.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,10 @@ export class ChangesService {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
+        this.fetchItemsFromCloud(items=>{
+         const changes = this.initializeItems(items)
+          this._items.next(changes)
+        })
       }
     }
     )
@@ -57,6 +62,7 @@ export class ChangesService {
         this.changesListRef.once('value', items => {
           const rawItems: RawItem[] = []
           items.forEach(snap => {
+            console.log('change',snap.val()['owner'])
             rawItems.push({ item: snap.val(), key: snap.key })
           })
           callback(rawItems)
@@ -70,13 +76,14 @@ export class ChangesService {
   }
 
   initializeItems = (raw_items: RawItem[]) => {
-    var items: Items2Update[]
-    this.changesListRef.on('value', (changes) => {
-      items = []
-      changes.forEach(item => {
+    var items: Items2Update[] =[]
 
-        items.push(new Items2Update(item.val()['owner'],item.val()))
-      })
+    raw_items.forEach(item=>{
+      console.log('* ',item)
+      const change = new Items2Update(item.item['owner'],item.item['item'],item.item['operation']).setKey(item.key).setEntityLabel2Update(item.item['entity'])
+      console.log('pushing change *',change)
+      items.push(change) //changes to Be defined from offlineManager
+
     })
     return items
   }
