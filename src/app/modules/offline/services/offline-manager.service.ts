@@ -21,23 +21,7 @@ export class OfflineManagerService {
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
 
-  pullChangesFromCloud(){
-    const changes:Items2Update[]=[]
-    this.changes.items.subscribe(items=>{
-      items.forEach(item=>{
-       const Service = this.servicesList.filter(service=>service.entityLabel==item.entityLabel2Update)[0]
-       const entity = Service.getDummyItem().initialize(item.item)
-       const change = new Items2Update(item.owner,entity,item.operationKey)
-       change.item = entity
-       changes.push(change)
-    
 
-      })
-
-      console.log('got changes **',changes)
-
-    })
-  }
 
 
   constructor(public localDb: OfflineDbService, public users: UsersService,public changes:ChangesService) {
@@ -52,6 +36,26 @@ export class OfflineManagerService {
     })
     
 
+  }
+
+  async pullChangesFromCloud(){
+    const changes:Items2Update[]=[]
+    this.changes.items.subscribe(async items=>{
+      items.forEach(item=>{
+       const Service = this.servicesList.filter(service=>service.entityLabel==item.entityLabel2Update)[0]
+       const entity = Service.getDummyItem().initialize(item.item)
+       const change = new Items2Update(item.owner,entity,item.operationKey)
+       change.item = entity
+       changes.push(change)
+    
+
+      })
+      const signature = await this.asyncSignature()
+      console.log('* signature',signature)
+      const changes2Pull = changes.filter(change=>!change.isSignedBy(signature))
+      console.log('changes 2 pull *',changes2Pull)
+
+    })
   }
 
   sign(uid:string){
