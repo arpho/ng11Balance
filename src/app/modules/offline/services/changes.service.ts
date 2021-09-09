@@ -19,6 +19,7 @@ export class ChangesService {
 
 
   constructor() {
+    if(firebase.default.apps.length!=0){
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
@@ -28,7 +29,7 @@ export class ChangesService {
         })
       }
     }
-    )
+    )}
   }
 
 
