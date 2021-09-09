@@ -11,9 +11,11 @@ export class ChangesServiceMockers extends ChangesService{
         this.changesList= changes
     }
 
-    update(key:string,item:Items2Update){
+    async updateItem(item:Items2Update):Promise<any>{
+        const key = item.key
         const index = this.changesList.findIndex(obj=>obj.key==key)
         this.changesList[index]= item
+        return true
     }
 
     delete(key:string){

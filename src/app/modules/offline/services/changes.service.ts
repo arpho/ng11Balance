@@ -74,6 +74,11 @@ export class ChangesService {
     return ChangesService.changesListRef?.child(updatedItem.key).update(updatedItem.serialize());
   }
 
+  updateItem(updatedItem: Items2Update) {
+    return ChangesService.changesListRef?.child(updatedItem.key).update(updatedItem.serialize());
+  }
+
+
   initializeItems = (raw_items: RawItem[]) => {
     var items: Items2Update[] =[]
 
