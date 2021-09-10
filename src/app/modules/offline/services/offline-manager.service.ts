@@ -28,6 +28,7 @@ export class OfflineManagerService {
   constructor(public localDb: OfflineDbService, public users: UsersService, public changes: ChangesService) {
     // this.pullChangesFromCloud()
     //this.localDb.clear()
+    this.push2Cloud()
 
 
 
@@ -37,6 +38,9 @@ export class OfflineManagerService {
     })
 
 
+  }
+  push2Cloud() {
+    throw new Error('Method not implemented.');
   }
 
   async pullChangesFromCloud() {
