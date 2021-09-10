@@ -10,7 +10,7 @@ export class pullChangesFromCloud {
         this.localDb = localDb
         this.changes = changes
     }
-    execute(changes: Items2Update[], signature: string) {
+    async execute(changes: Items2Update[], signature: string) {
         changes.forEach(async change => {
 
             if (change.operationKey == OperationKey.create)

@@ -10,6 +10,7 @@ import { OfflineDbService } from './offline-db.service';
 import { take, first } from 'rxjs/operators';
 import { of, pipe } from 'rxjs'
 import { Items2Update } from '../models/items2Update';
+import { pullChangesFromCloud } from '../business/pullFromCloud';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class OfflineManagerService {
 
 
   constructor(public localDb: OfflineDbService, public users: UsersService, public changes: ChangesService) {
-    this.pullChangesFromCloud()
+    // this.pullChangesFromCloud()
     //this.localDb.clear()
 
 
@@ -40,6 +41,7 @@ export class OfflineManagerService {
 
   async pullChangesFromCloud() {
     const changes: Items2Update[] = []
+    const pull = new pullChangesFromCloud(this.changes, this.localDb)
     this.changes.items.subscribe(async items => {
       items.forEach(item => {
         const Service = this.servicesList.filter(service => service.entityLabel == item.entityLabel2Update)[0]
@@ -47,10 +49,9 @@ export class OfflineManagerService {
         const change = new Items2Update(item.owner, entity, item.operationKey)
         change.item = entity
         changes.push(change)
-
-
       })
       const signature = await this.asyncSignature()
+      await pull.execute(changes,signature)
       console.log('* signature', signature)
       const changes2Pull = changes.filter(change => !change.isSignedBy(signature))
       console.log('changes 2 pull *', changes2Pull)
