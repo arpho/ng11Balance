@@ -69,5 +69,35 @@ describe('testing pull changes',()=>{
 
     })
 
+    it('deleting an item',async ()=>  {
+        const changesService = new ChangesServiceMockers()
+        const pull = new pullChangesFromCloud(changesService,db)
+        const cat = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZ",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis"
+        })
+        await db.set(cat.key,cat)
+        const catUpdate = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZ",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis mod"
+        })
+
+        const change = new Items2Update('me',catUpdate,OperationKey.delete)
+        const changes = [change]
+        pull.execute(changes,'test')
+
+        db.get(cat.key).then(item=>{
+            expect(db.db[cat.key]).toBeFalsy()
+            expect(changesService.changesList[0].isSignedBy('me')).toBeTrue()
+        })
+
+
+    })
+
+
 
 })
