@@ -6,7 +6,7 @@ import { Items2Update } from "../models/items2Update"
 import { OperationKey } from "../models/operationKey"
 import { waitForAsync } from "@angular/core/testing"
 var db 
-describe('testing create operation',()=>{
+describe('testing pull changes',()=>{
     beforeEach(waitForAsync(()=>{ db = new LocalForageMocker()}))
     
    
@@ -35,5 +35,39 @@ describe('testing create operation',()=>{
       
       
     })
+
+    it('updating an item',async ()=>  {
+        const changesService = new ChangesServiceMockers()
+        const pull = new pullChangesFromCloud(changesService,db)
+        const cat = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZ",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis"
+        })
+        await db.set(cat.key,cat)
+        const catUpdate = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZ",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis mod"
+        })
+
+        const change = new Items2Update('me',catUpdate,OperationKey.update)
+        const changes = [change]
+        pull.execute(changes,'test')
+
+        db.get(cat.key).then(item=>{
+            expect(db.db[cat.key]).toBeTruthy()
+            expect(db.db[cat.key]['key']).toEqual(catUpdate.key)
+            expect(db.db[cat.key]['title']).toEqual(catUpdate.title)
+            expect(db.db[cat.key]['fatherKey']).toEqual(catUpdate.fatherKey)
+            expect(db.db[cat.key]['entityLabel']).toEqual(catUpdate.entityLabel)
+            expect(changesService.changesList[0].isSignedBy('me')).toBeTrue()
+        })
+
+
+    })
+
 
 })
