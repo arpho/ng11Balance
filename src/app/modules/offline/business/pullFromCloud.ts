@@ -17,7 +17,7 @@ export class pullChangesFromCloud {
                 await this.localDb.set(change.item['key'], change.item['serialize4OfflineDb']())
             if (change.operationKey == OperationKey.update) {
                 await this.localDb.set(change.item['key'], change.item['serialize4OfflineDb']())
-            } 
+            }
             if (change.operationKey == OperationKey.delete) {
                 await this.localDb.remove(change.item['key'])
             }

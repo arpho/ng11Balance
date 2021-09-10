@@ -7,8 +7,8 @@ import { offLineDbStatus } from '../models/offlineDbStatus';
 import { OfflineItemServiceInterface } from '../models/offlineItemServiceInterface';
 import { ChangesService } from './changes.service';
 import { OfflineDbService } from './offline-db.service';
-import { take,first } from 'rxjs/operators';
-import { of, pipe} from 'rxjs'
+import { take, first } from 'rxjs/operators';
+import { of, pipe } from 'rxjs'
 import { Items2Update } from '../models/items2Update';
 
 @Injectable({
@@ -16,7 +16,7 @@ import { Items2Update } from '../models/items2Update';
 })
 export class OfflineManagerService {
   static servicesList: Array<OfflineItemServiceInterface> = []
-   servicesList: Array<OfflineItemServiceInterface> = []
+  servicesList: Array<OfflineItemServiceInterface> = []
   static staticLocalDb
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
@@ -24,41 +24,41 @@ export class OfflineManagerService {
 
 
 
-  constructor(public localDb: OfflineDbService, public users: UsersService,public changes:ChangesService) {
+  constructor(public localDb: OfflineDbService, public users: UsersService, public changes: ChangesService) {
     this.pullChangesFromCloud()
     //this.localDb.clear()
 
-    
+
 
     this.makeSignature(async sign => {
 
       await new StoreSignature(this.localDb, sign).execute()
     })
-    
+
 
   }
 
-  async pullChangesFromCloud(){
-    const changes:Items2Update[]=[]
-    this.changes.items.subscribe(async items=>{
-      items.forEach(item=>{
-       const Service = this.servicesList.filter(service=>service.entityLabel==item.entityLabel2Update)[0]
-       const entity = Service.getDummyItem().initialize(item.item)
-       const change = new Items2Update(item.owner,entity,item.operationKey)
-       change.item = entity
-       changes.push(change)
-    
+  async pullChangesFromCloud() {
+    const changes: Items2Update[] = []
+    this.changes.items.subscribe(async items => {
+      items.forEach(item => {
+        const Service = this.servicesList.filter(service => service.entityLabel == item.entityLabel2Update)[0]
+        const entity = Service.getDummyItem().initialize(item.item)
+        const change = new Items2Update(item.owner, entity, item.operationKey)
+        change.item = entity
+        changes.push(change)
+
 
       })
       const signature = await this.asyncSignature()
-      console.log('* signature',signature)
-      const changes2Pull = changes.filter(change=>!change.isSignedBy(signature))
-      console.log('changes 2 pull *',changes2Pull)
+      console.log('* signature', signature)
+      const changes2Pull = changes.filter(change => !change.isSignedBy(signature))
+      console.log('changes 2 pull *', changes2Pull)
 
     })
   }
 
-  sign(uid:string){
+  sign(uid: string) {
     return `${uid}_${navigator.platform}_${this.getBrowserName()}`
   }
 
@@ -73,7 +73,7 @@ export class OfflineManagerService {
 
   }
 
-  async asyncSignature(){
+  async asyncSignature() {
     const user = await this.users.loggedUser.pipe(take(1)).toPromise()
     return this.sign(user.uid)
   }
@@ -81,17 +81,18 @@ export class OfflineManagerService {
   getBrowserName() {
     if ((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1) {
       return 'Opera';
-    } else if(window.navigator.userAgent.indexOf("Edge") !=-1){
+    } else if (window.navigator.userAgent.indexOf("Edge") != -1) {
       return "Edge";
-    } 
+    }
     else if (navigator.userAgent.indexOf("Chrome") != -1) {
       return 'Chrome';
     } else if (navigator.userAgent.indexOf("Safari") != -1) {
       return 'Safari';
     } else if (navigator.userAgent.indexOf("Firefox") != -1) {
       return 'Firefox';
-      
-    } else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.DOCUMENT_NODE == true)) {1
+
+    } else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.DOCUMENT_NODE == true)) {
+      1
       return 'Internet Explorer';
     } else {
       return 'Not sure!';
@@ -141,23 +142,23 @@ export class OfflineManagerService {
 
   }
 
-  async isLoggedUserOflineEnabled(){
-    const user  = await this.users.loggedUser.pipe(take(1)).toPromise()
+  async isLoggedUserOflineEnabled() {
+    const user = await this.users.loggedUser.pipe(take(1)).toPromise()
     return user.isOfflineEnabled()
   }
 
   async registerService(service: OfflineItemServiceInterface) {
-    if(!OfflineManagerService.servicesList.map(service=>service.entityLabel).includes(service.entityLabel)){
-      console.log('registering',service.entityLabel)
+    if (!OfflineManagerService.servicesList.map(service => service.entityLabel).includes(service.entityLabel)) {
+      console.log('registering', service.entityLabel)
       OfflineManagerService.servicesList.push(service)
       this.servicesList.push(service)
-      
+
       service.setHref()
     }
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
     if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
       console.log(`initializing ${service.entityLabel}`)
-      new CloneEntity(this.localDb,service).execute()
+      new CloneEntity(this.localDb, service).execute()
       const db = new OfflineDbService()
 
       service.offlineDbStatus = offLineDbStatus.syncing
@@ -176,7 +177,7 @@ export class OfflineManagerService {
       service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
 
     }
-  
+
 
   }
 
