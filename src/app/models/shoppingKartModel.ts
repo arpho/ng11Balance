@@ -150,7 +150,7 @@ export class ShoppingKartModel implements OfflineItemModelInterface {
 
     updateItem(purchase: PurchaseModel) {
         if (purchase) {
-            this.items = this.items.map((item: PurchaseModel) => (item.key === purchase.key) ? purchase : item)
+            this.items = this.items.map((item: PurchaseModel) => (item?.key === purchase?.key) ? purchase : item)
         }
     }
 

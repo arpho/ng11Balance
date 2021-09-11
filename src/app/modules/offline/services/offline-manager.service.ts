@@ -40,7 +40,7 @@ export class OfflineManagerService {
 
   }
   push2Cloud() {
-    throw new Error('Method not implemented.');
+    
   }
 
   async pullChangesFromCloud() {
