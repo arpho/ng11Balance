@@ -88,6 +88,7 @@ describe('testing pull changes', () => {
 
         const change = new Items2Update('me', catUpdate, OperationKey.delete)
         const changes = [change]
+        changesService.setChanges(changes)
         pull.execute(changes, 'test')
 
         db.get(cat.key).then(item => {
