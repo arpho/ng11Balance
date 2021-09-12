@@ -24,7 +24,6 @@ export class UpdateFidelityCardPage extends CreateFidelityCardPage implements On
 
   ngOnInit() {
     this.card = this.navParams.get('item')
-    console.log('updating card', this.card)
     if (this.card) {
       this.title = `modifica carta ${this.card.title}`
     }

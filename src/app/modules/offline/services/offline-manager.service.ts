@@ -120,15 +120,12 @@ export class OfflineManagerService {
     console.log('status', status)
     let out = 0;
     if (status == 0) {
-      console.log('not init')
       out = offLineDbStatus.notInitialized
     }
     if (status == 1) {
-      console.log('up2date')
       out = offLineDbStatus.up2Date
     }
     if (statusList.includes(2)) {
-      console.log('syncing')
       out = offLineDbStatus.syncing
     }
 

@@ -24,7 +24,6 @@ describe("we should update an entity offline and when needed  add an update item
         await new UpdateEntityOffline(categoryTest, db,'key').execute(true)
         const rawCategory = await db.get(categoryTest.key)
         const updatedCategory = new CategoryModel().initialize(rawCategory.item)
-        console.log('@ updatedCategory',updatedCategory)
         expect(rawCategory.item['entityLabel']).toEqual(categoryTest.entityLabel)
         expect(updatedCategory.title).toEqual('test')
         const updated = await db.fetchAllRawItems4Entity('update')
