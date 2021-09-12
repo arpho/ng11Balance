@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CreateFidelityCardPage } from '../create-fidelity-card/create-fidelity-card.page';
 import { NavParams, ModalController } from '@ionic/angular';
-import { FidelityCardService } from 'src/app/services/fidelity-card.service';
+import { FidelityCardService } from 'src/app/services/fidelityCards/fidelity-card.service';
 import { QuestionBarcode } from 'src/app/modules/dynamic-form/models/question-barcode';
 import { TextboxQuestion } from 'src/app/modules/dynamic-form/models/question-textbox';
 import { TextAreaBox } from 'src/app/modules/dynamic-form/models/question-textArea';

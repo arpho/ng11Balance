@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FidelityCardModel } from 'src/app/models/fidelityCardModel';
 import { ItemModelInterface } from 'src/app/modules/item/models/itemModelInterface';
-import { FidelityCardService } from 'src/app/services/fidelity-card.service';
+import { FidelityCardService } from 'src/app/services/fidelityCards/fidelity-card.service';
 import { CreateFidelityCardPage } from '../create-fidelity-card/create-fidelity-card.page';
 import { UpdateFidelityCardPage } from '../update-fidelity-card/update-fidelity-card.page';
 

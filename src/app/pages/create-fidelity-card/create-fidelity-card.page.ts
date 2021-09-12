@@ -4,7 +4,7 @@ import { TextboxQuestion } from 'src/app/modules/dynamic-form/models/question-te
 import { FidelityCardModel } from 'src/app/models/fidelityCardModel';
 import { ModalController } from '@ionic/angular';
 import { QuestionBarcode } from 'src/app/modules/dynamic-form/models/question-barcode';
-import { FidelityCardService } from 'src/app/services/fidelity-card.service';
+import { FidelityCardService } from 'src/app/services/fidelityCards/fidelity-card.service';
 import { TextAreaBox } from 'src/app/modules/dynamic-form/models/question-textArea';
 
 @Component({

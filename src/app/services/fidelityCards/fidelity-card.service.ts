@@ -1,24 +1,24 @@
 import { Injectable, OnInit } from '@angular/core';
 import * as firebase from 'firebase/app';
-import { ItemServiceInterface } from '../modules/item/models/ItemServiceInterface';
+import { ItemServiceInterface } from '../../modules/item/models/ItemServiceInterface';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { FidelityCardModel } from '../models/fidelityCardModel';
-import { ItemModelInterface } from '../modules/item/models/itemModelInterface';
-import { OfflineItemServiceInterface } from '../modules/offline/models/offlineItemServiceInterface';
-import { offLineDbStatus } from '../modules/offline/models/offlineDbStatus';
-import { RawItem } from '../modules/offline/models/rawItem';
-import { OfflineDbService } from '../modules/offline/services/offline-db.service';
-import { OfflineManagerService } from '../modules/offline/services/offline-manager.service';
-import { ChangesService } from '../modules/offline/services/changes.service';
-import { Items2Update } from '../modules/offline/models/items2Update';
-import { CreateEntityOffline } from '../modules/offline/business/createEntityOffline';
-import { OperationKey } from '../modules/offline/models/operationKey';
-import { UpdateEntityOffline } from '../modules/offline/business/updateEntityOffline';
-import { DeleteEntityOffline } from '../modules/offline/business/deleteEntityOffline';
-import { OfflineDeleteOperation } from '../modules/offline/business/offlineDeleteOperation';
-import { OfflineUpdateOperation } from '../modules/offline/business/offlineUpdateOperation';
-import { OfflineCreateOperation } from '../modules/offline/business/offlineCreateOperation';
-import { OfflineItemModelInterface } from '../modules/offline/models/offlineItemModelInterface';
+import { FidelityCardModel } from '../../models/fidelityCardModel';
+import { ItemModelInterface } from '../../modules/item/models/itemModelInterface';
+import { OfflineItemServiceInterface } from '../../modules/offline/models/offlineItemServiceInterface';
+import { offLineDbStatus } from '../../modules/offline/models/offlineDbStatus';
+import { RawItem } from '../../modules/offline/models/rawItem';
+import { OfflineDbService } from '../../modules/offline/services/offline-db.service';
+import { OfflineManagerService } from '../../modules/offline/services/offline-manager.service';
+import { ChangesService } from '../../modules/offline/services/changes.service';
+import { Items2Update } from '../../modules/offline/models/items2Update';
+import { CreateEntityOffline } from '../../modules/offline/business/createEntityOffline';
+import { OperationKey } from '../../modules/offline/models/operationKey';
+import { UpdateEntityOffline } from '../../modules/offline/business/updateEntityOffline';
+import { DeleteEntityOffline } from '../../modules/offline/business/deleteEntityOffline';
+import { OfflineDeleteOperation } from '../../modules/offline/business/offlineDeleteOperation';
+import { OfflineUpdateOperation } from '../../modules/offline/business/offlineUpdateOperation';
+import { OfflineCreateOperation } from '../../modules/offline/business/offlineCreateOperation';
+import { OfflineItemModelInterface } from '../../modules/offline/models/offlineItemModelInterface';
 
 @Injectable({
   providedIn: 'root'
