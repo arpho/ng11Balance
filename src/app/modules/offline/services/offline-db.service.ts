@@ -6,12 +6,21 @@ import { RawItem } from '../models/rawItem';
   providedIn: 'root'
 })
 export class OfflineDbService {
+  public db: {} // to be compatible with localForageMocker
+
 
   constructor() {
     localforage.config({
       storeName: 'BalanceOfflineDb'
     })
   }
+
+  iterate(callback: (value: unknown, key: string) => void) { //to be compatible with localForageMocker
+    for (const [key, value] of Object.entries(this.db)) {
+
+        callback(value, key)
+    }
+}
 
 
   get(key: string) {

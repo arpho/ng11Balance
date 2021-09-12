@@ -11,6 +11,8 @@ import { take, first } from 'rxjs/operators';
 import { of, pipe } from 'rxjs'
 import { Items2Update } from '../models/items2Update';
 import { pullChangesFromCloud } from '../business/pullFromCloud';
+import { ConnectionStatusService } from './connection-status.service';
+import { Push2Cloud } from '../business/push2Cloud';
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +27,20 @@ export class OfflineManagerService {
 
 
 
-  constructor(public localDb: OfflineDbService, public users: UsersService, public changes: ChangesService) {
+  constructor(public localDb: OfflineDbService, 
+    public users: UsersService,
+     public changes: ChangesService,
+     connection:ConnectionStatusService) {
     // this.pullChangesFromCloud()
     //this.localDb.clear()
+    connection.monitor(async status=>{
+      if(status){
+        await this.pullChangesFromCloud()
+        await this.push2Cloud()
+      }
+    })
     this.push2Cloud()
+  
 
 
 
@@ -39,7 +51,8 @@ export class OfflineManagerService {
 
 
   }
-  push2Cloud() {
+  async push2Cloud() {
+    new Push2Cloud(this.localDb,this.servicesList)
     
   }
 

@@ -6,7 +6,7 @@ import { LocalForageMocker } from "../services/mockers/offlineDbServiceMocker";
 import { OfflineDbService } from "../services/offline-db.service";
 
 export class Push2Cloud{
-    localDb:LocalForageMocker
+    localDb:LocalForageMocker|OfflineDbService
     servicesList:OfflineItemServiceInterface[]
     constructor(localDb:LocalForageMocker,servicesList:OfflineItemServiceInterface[]){
         this.localDb=localDb
