@@ -6,8 +6,8 @@ import { UsersService } from "src/app/modules/user/services/users.service";
 import { CategoriesService } from "./categorie.service";
 
 export class CategoriesServiceMocker extends CategoriesService {
-    constructor(manager: OfflineManagerService, localDb: OfflineDbService, changes: ChangesService, users: UsersService) {
-        super(manager, users, localDb, changes)
+    constructor(manager: OfflineManagerService, localDb: OfflineDbService, changes: ChangesService, ) {
+        super(manager,  localDb, changes)
     }
 
     db = {}

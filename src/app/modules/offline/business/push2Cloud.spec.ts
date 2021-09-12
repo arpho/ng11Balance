@@ -28,7 +28,7 @@ describe('push changes to the cloud', () => {
         })
         const key = new Date().getTime() + ''
         await db.set(key, { entityLabel: 'update', operation: OperationKey.create, 'entity': cat.serialize4OfflineDb() }) //insert the offline update to be synchronized
-        const servicesList = [new CategoriesServiceMocker(new OfflineManagerService(db, users,changes), db,changes, users)]
+        const servicesList = [new CategoriesServiceMocker(new OfflineManagerService(db, users,changes), db,changes)]
         const pusher = new Push2Cloud(db, servicesList)
         await pusher.execute()
         // the created cat must be removed
@@ -48,7 +48,7 @@ describe('push changes to the cloud', () => {
             key: "-Ks0UdZGtzunNoCmGGJd",
             title: "gnosis"
         })
-        const categories = new CategoriesServiceMocker(new OfflineManagerService(db, users,changes), db,changes, users)
+        const categories = new CategoriesServiceMocker(new OfflineManagerService(db, users,changes), db,changes)
         categories.createItem(cat)
         const servicesList = [categories]
         const pusher = new Push2Cloud(db,servicesList)
@@ -77,7 +77,7 @@ describe('push changes to the cloud', () => {
             key: "-Ks0UdZGtzunNoCmGGJd",
             title: "gnosis"
         })
-        const categories = new CategoriesServiceMocker(new OfflineManagerService(db, users,changes), db,changes, users)
+        const categories = new CategoriesServiceMocker(new OfflineManagerService(db, users,changes), db,changes)
         categories.createItem(cat)
         const servicesList = [categories]
         const pusher = new Push2Cloud(db,servicesList)

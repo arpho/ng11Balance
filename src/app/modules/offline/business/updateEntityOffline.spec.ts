@@ -51,7 +51,6 @@ describe("we should update an entity offline and when needed  add an update item
         expect(updated[0].item['entity']['key']).toEqual(categoryTest.key)
         expect(updated[0].item['entity']['title']).toEqual('test')
         expect(updated[0].item['entity']['entityLabel']).toEqual(categoryTest.entityLabel)
-        console.log('operation @',updated[0])
         expect(updated[0].item['operation']).toEqual(OperationKey.update)
 
     })
