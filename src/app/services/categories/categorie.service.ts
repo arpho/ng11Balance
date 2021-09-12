@@ -43,6 +43,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   _items: BehaviorSubject<Array<CategoryModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<CategoryModel>> = this._items.asObservable()
   items_list: Array<CategoryModel> = []
+ 
 
 
 
@@ -167,7 +168,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
 
-  constructor(public manager: OfflineManagerService, public users: UsersService, public localDb: OfflineDbService, public changes: ChangesService) {
+  constructor(public manager: OfflineManagerService,  public localDb: OfflineDbService, public changes: ChangesService) {
     this.setHref()
 
     firebase.default.auth().onAuthStateChanged(user => {
@@ -176,27 +177,27 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
       }
     }
     )
-
-    this.users.loggedUser.subscribe(user => {
-
-      if (user.isOfflineEnabled()) {
-        console.log('users is offline enabled')
+    this.manager.isLoggedUserOflineEnabled().then(enabled=>{
+      if(enabled){
+        this.setHref()
         this.manager.registerService(this)
       }
-      else {
-        console.log('user is not offline enabled, loading from cloud')
-
-        this.fetchItemsFromCloud((items) => {
-          console.log('got from firebase')
-          this.publish(this.initializeItems(items))
-        })
+      else{
+        this.loadFromFirebase()
       }
     })
+
+    
 
 
 
 
   }
+  async loadFromFirebase() {
+
+    this.publish(this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel)))
+  }
+
 
 
   async createItem(item: CategoryModel) {

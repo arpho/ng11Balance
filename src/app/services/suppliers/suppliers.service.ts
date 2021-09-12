@@ -33,7 +33,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   items_list: Array<SupplierModel> = []
 
   constructor(public localDb: OfflineDbService, public manager: OfflineManagerService, public changes: ChangesService) {
-    this.manager.registerService(this)
+ 
     this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
       return entities.map((item: ShoppingKartModel) => {
 
@@ -58,6 +58,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
         this.loadFromFirebase()
       }
     })
+  
 
   }
 
