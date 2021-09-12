@@ -70,4 +70,24 @@ describe('push changes to the cloud', () => {
         expect(removed).toBeUndefined()
 
     })
+    it('category deleted offline',async ()=>{
+        const cat = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZ",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis"
+        })
+        const categories = new CategoriesServiceMocker(new OfflineManagerService(db, users,changes), db,changes, users)
+        categories.createItem(cat)
+        const servicesList = [categories]
+        const pusher = new Push2Cloud(db,servicesList)
+        const key = new Date().getTime() + ''
+        await db.set(key, { entityLabel: 'update', operation: OperationKey.delete, 'entity': new CategoryModel().setKey(cat.key).serialize4OfflineDb() }) //insert the offline update to be synchronized
+        categories.createItem(cat)
+        await pusher.execute()
+        expect(categories.db[cat.key]).toBeUndefined()
+        const removed = await db.db[key]
+        expect(removed).toBeUndefined()
+
+    })
 })
