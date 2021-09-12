@@ -34,6 +34,9 @@ describe('push changes to the cloud', () => {
         // the created cat must be removed
         const removed = await db.db[key]
         expect(removed).toBeUndefined()
+        const createdCat = await servicesList[0].db[cat.key]
+        expect(createdCat['title']).toEqual(cat.title)
+        expect(createdCat['fatherKey']).toEqual(cat.fatherKey)
 
     })
 })
