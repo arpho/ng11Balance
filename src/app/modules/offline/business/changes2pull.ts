@@ -22,7 +22,7 @@ export class Changes2Pull{
     async fetchChanges(){
 
         const changes: Items2Update[] = []
-    const pull = new pullChangesFromCloud(this.changes, this.localDb)
+    const pull = new pullChangesFromCloud(this.changes, this.localDb,this.services)
     this.changes.items.subscribe(async items => {
       items.forEach(item => {
         const Service = this.services.filter(service => service.entityLabel == item.entityLabel2Update)[0]

@@ -5,7 +5,7 @@ import { OfflineItemModelInterface } from "./offlineItemModelInterface";
 import { OperationKey } from "./operationKey";
 
 export class Items2Update {
-    item: {};
+    item: OfflineItemModelInterface;
     key: string
     entityLabel2Update: string
     operationKey: OperationKey;
@@ -45,6 +45,7 @@ export class Items2Update {
         if (signature != this.owner) {  //owner does not need to sign
             this.signatures.add(signature)
         }
+        return this
     }
 
     isSignedBy(signature: string) {

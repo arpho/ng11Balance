@@ -9,6 +9,7 @@ export class ChangesServiceMockers extends ChangesService{
 
     setChanges(changes:Items2Update[]){
         this.changesList= changes
+        this._items.next(changes)
     }
 
     async updateItem(item:Items2Update):Promise<any>{
