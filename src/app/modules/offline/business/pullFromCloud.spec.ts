@@ -39,6 +39,7 @@ describe('testing pull changes', () => {
     it('updating an item', async () => {
         const changesService = new ChangesServiceMockers()
         const pull = new pullChangesFromCloud(changesService, db)
+
         const cat = new CategoryModel().initialize({
             entityLabel: "Categoria",
             fatherKey: "-LMTmZbBd6roqklYDflZ",
@@ -55,6 +56,7 @@ describe('testing pull changes', () => {
 
         const change = new Items2Update('me', catUpdate, OperationKey.update)
         const changes = [change]
+        changesService.setChanges(changes)
         pull.execute(changes, 'test')
 
         db.get(cat.key).then(item => {
