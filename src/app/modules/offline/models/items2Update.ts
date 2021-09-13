@@ -21,6 +21,11 @@ export class Items2Update {
         this.owner=owner
     }
 
+    setItem(entity:OfflineItemModelInterface){
+        this.item = entity
+        return this
+    }
+
     initialize(args: {}) {
         Object.assign(this, args)
         this.signatures = new Set(this.signatures)

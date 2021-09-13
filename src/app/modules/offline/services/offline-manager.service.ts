@@ -58,7 +58,7 @@ export class OfflineManagerService {
 
   async pullChangesFromCloud() {
     const changes: Items2Update[] = []
-    const pull = new pullChangesFromCloud(this.changes, this.localDb)
+    const pull = new pullChangesFromCloud(this.changes, this.localDb,this.servicesList)
     this.changes.items.subscribe(async items => {
       items.forEach(item => {
         const Service = this.servicesList.filter(service => service.entityLabel == item.entityLabel2Update)[0]
