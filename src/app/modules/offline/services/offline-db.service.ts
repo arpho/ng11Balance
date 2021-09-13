@@ -23,8 +23,8 @@ export class OfflineDbService {
 }
 
 
-  get(key: string) {
-    return localforage.getItem(key);
+  async get(key: string) {
+    return new RawItem({key,'item': await localforage.getItem(key)});
   }
 
   set(key: string, value: any) {

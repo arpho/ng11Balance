@@ -4,19 +4,21 @@ import { CategoriesServiceMocker } from "src/app/services/categories/categoriesS
 import { UsersService } from "../../user/services/users.service"
 import { OperationKey } from "../models/operationKey"
 import { ChangesService } from "../services/changes.service"
+import { ConnectionStatusService } from "../services/connection-status.service"
 import { LocalForageMocker } from "../services/mockers/offlineDbServiceMocker"
 import { OfflineManagerService } from "../services/offline-manager.service"
 import { Push2Cloud } from "./push2Cloud"
 var db: LocalForageMocker
 var changes: ChangesService
 var users:UsersService
-var manager
+var manager,connection
 describe('push changes to the cloud', () => {
     beforeEach(waitForAsync(() => {
         db = new LocalForageMocker()
         changes = new ChangesService()
         users = new UsersService()
-        manager = new OfflineManagerService(db, users,changes)
+        connection = new ConnectionStatusService()
+        manager = new OfflineManagerService(db, users,changes,connection)
     }))
 
     it('category created offline', async () => {
@@ -28,7 +30,7 @@ describe('push changes to the cloud', () => {
         })
         const key = new Date().getTime() + ''
         await db.set(key, { entityLabel: 'update', operation: OperationKey.create, 'entity': cat.serialize4OfflineDb() }) //insert the offline update to be synchronized
-        const servicesList = [new CategoriesServiceMocker(new OfflineManagerService(db, users,changes), db,changes)]
+        const servicesList = [new CategoriesServiceMocker(new OfflineManagerService(db, users,changes,connection), db,changes)]
         const pusher = new Push2Cloud(db, servicesList)
         await pusher.execute()
         // the created cat must be removed
@@ -48,7 +50,7 @@ describe('push changes to the cloud', () => {
             key: "-Ks0UdZGtzunNoCmGGJd",
             title: "gnosis"
         })
-        const categories = new CategoriesServiceMocker(new OfflineManagerService(db, users,changes), db,changes)
+        const categories = new CategoriesServiceMocker(new OfflineManagerService(db, users,changes,connection), db,changes)
         categories.createItem(cat)
         const servicesList = [categories]
         const pusher = new Push2Cloud(db,servicesList)
@@ -77,7 +79,7 @@ describe('push changes to the cloud', () => {
             key: "-Ks0UdZGtzunNoCmGGJd",
             title: "gnosis"
         })
-        const categories = new CategoriesServiceMocker(new OfflineManagerService(db, users,changes), db,changes)
+        const categories = new CategoriesServiceMocker(new OfflineManagerService(db, users,changes,connection), db,changes)
         categories.createItem(cat)
         const servicesList = [categories]
         const pusher = new Push2Cloud(db,servicesList)

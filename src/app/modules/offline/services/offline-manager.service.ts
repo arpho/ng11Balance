@@ -171,7 +171,7 @@ export class OfflineManagerService {
       service.setHref()
     }
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
-    if (entityStatus == offLineDbStatus.notInitialized || entityStatus == null) {
+    if (entityStatus.item == offLineDbStatus.notInitialized || entityStatus == null) {
       console.log(`initializing ${service.entityLabel}`)
       new CloneEntity(this.localDb, service).execute()
       const db = new OfflineDbService()
@@ -186,7 +186,7 @@ export class OfflineManagerService {
 
       service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
     }
-    else if (entityStatus == 1) {
+    else if (entityStatus.item == 1) {
       console.log('db ready')
       console.log('load from local')
       service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
