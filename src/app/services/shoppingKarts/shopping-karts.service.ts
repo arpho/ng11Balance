@@ -36,36 +36,36 @@ import { OfflineItemModelInterface } from 'src/app/modules/offline/models/offlin
 })
 export class ShoppingKartsService implements OfflineItemServiceInterface {
   public shoppingKartsListRef: firebase.default.database.Reference;
-  static  shoppingKartsListRef: firebase.default.database.Reference;
+  static shoppingKartsListRef: firebase.default.database.Reference;
   _items: BehaviorSubject<Array<ShoppingKartModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<ShoppingKartModel>> = this._items.asObservable()
   items_list: Array<ShoppingKartModel> = []
   categoriesService?: ItemServiceInterface;
 
   constructor(categories: CategoriesService,
-     public payments: PaymentsService, 
-     public suppliers: SuppliersService,
-     public localDb:OfflineDbService,
-     public manager:OfflineManagerService,
-     public changes:ChangesService) {
+    public payments: PaymentsService,
+    public suppliers: SuppliersService,
+    public localDb: OfflineDbService,
+    public manager: OfflineManagerService,
+    public changes: ChangesService) {
 
     this.categoriesService = categories
-  this.manager.isLoggedUserOflineEnabled().then(offlineEnabled=>{
-    if(offlineEnabled){
-      manager.registerService(this)
-    }
-    else{
-     this.loadFromFirebase() 
-    }
-  })
-   
+    this.manager.isLoggedUserOflineEnabled().then(offlineEnabled => {
+      if (offlineEnabled) {
+        manager.registerService(this)
+      }
+      else {
+        this.loadFromFirebase()
+      }
+    })
 
-  
+
+
 
   }
 
 
-  async loadFromFirebase(){
+  async loadFromFirebase() {
 
     this.publish(this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel)))
   }
@@ -74,7 +74,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     return this.shoppingKartsListRef.child(key);
   }
 
-  get entityLabel(){
+  get entityLabel() {
     const dummy = new ShoppingKartModel()
     return dummy.entityLabel
   }
@@ -83,40 +83,40 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
   async updateItem(item: ItemModelInterface) {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    if(enabled){
-      await new OfflineUpdateOperation(new ShoppingKartModel().initialize(item),this.changes,this.localDb,await this.manager.asyncSignature()).execute()
+    if (enabled) {
+      await new OfflineUpdateOperation(new ShoppingKartModel().initialize(item), this.changes, this.localDb, await this.manager.asyncSignature()).execute()
     }
     return this.shoppingKartsListRef.child(item.key).update(item.serialize());
   }
-   async deleteItem(key: string) {
-     const enabled = await this.manager.isLoggedUserOflineEnabled()
-     if(enabled){
-       const kart = new ShoppingKartModel().setKey(key)
-       await new OfflineDeleteOperation(await this.manager.asyncSignature(),kart,this.localDb,this.changes).execute()
-     }
+  async deleteItem(key: string) {
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    if (enabled) {
+      const kart = new ShoppingKartModel().setKey(key)
+      await new OfflineDeleteOperation(await this.manager.asyncSignature(), kart, this.localDb, this.changes).execute()
+    }
     return this.shoppingKartsListRef.child(key).remove();
   }
   getDummyItem(): OfflineItemModelInterface {
     return new ShoppingKartModel()
   }
   async createItem(item: ItemModelInterface) {
-    const enabled= await this.manager.isLoggedUserOflineEnabled()
-    if (enabled){
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    if (enabled) {
       console.log('creating kart offline')
       item.key = `${this.entityLabel}_${new Date().getTime()}`
       var Kart = new ShoppingKartModel().initialize(item).setKey(item.key)
-      await new OfflineCreateOperation(Kart,this.changes,await this.manager.asyncSignature(),this.localDb).execute()
+      await new OfflineCreateOperation(Kart, this.changes, await this.manager.asyncSignature(), this.localDb).execute()
       this.shoppingKartsListRef.push(item.serialize())
     }
     else {
       console.log('creating kart only online')
-    const result = await this.shoppingKartsListRef.push(item.serialize())
-    Kart.setKey(result.key)
+      const result = await this.shoppingKartsListRef.push(item.serialize())
+      Kart.setKey(result.key)
     }
     return Kart;
   }
-  
-  
+
+
   publish: (items: ItemModelInterface[]) => void = (items: ShoppingKartModel[]) => {
     this._items.next(items)
   };
@@ -155,7 +155,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   suppliersListRef?: any;
 
   initializeSingleKart(snap) {
-    
+
 
     const purchaseInitializer = (purchase2initialize) => {
 
@@ -189,8 +189,8 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
 
 
-  initializeSingleKartFromRawItem(item:RawItem) {
-    
+  initializeSingleKartFromRawItem(item: RawItem) {
+
 
     const purchaseInitializer = (purchase2initialize) => {
 
@@ -218,7 +218,16 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     kart.key = item.key
 
     kart.items = kart.items?.map(purchaseInitializer)
-    console.log('kart',kart)
+    this.suppliers.items.subscribe(suppliers => {
+      const sup = suppliers.filter(supplier => supplier.key == kart.fornitoreId)[0]
+      kart.setSupplier(sup)
+    })
+    this.payments.items.subscribe(payments => {
+      const pay = payments.filter(payment => payment.key == kart.pagamentoId)[0]
+      kart.setPayment(pay)
+
+    })
+    this.suppliers.items
 
     return kart
   }
@@ -228,9 +237,8 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
 
   // initialize all the karts
-   initializeItems(items: RawItem[]) {
-     console.log('initializing karts',items)
-     const karts:Array<ShoppingKartModel>=[]
+  initializeItems(items: RawItem[]) {
+    const karts: Array<ShoppingKartModel> = []
 
     const purchaseInitializer = (purchase2initialize) => {
       const Purchase = new PurchaseModel().initialize(purchase2initialize)
@@ -246,10 +254,10 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
       Purchase.categorie = Purchase.categorieId ? Purchase.categorieId.map(initiateCategory) : []
       return Purchase
     }
-    
 
-    items.forEach(item=>{
-      const kart =this.initializeSingleKartFromRawItem(item)
+
+    items.forEach(item => {
+      const kart = this.initializeSingleKartFromRawItem(item)
       karts.push(kart)
     })
     return karts
