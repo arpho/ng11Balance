@@ -66,9 +66,9 @@ describe('testing pull changes', () => {
         const change = new Items2Update('me', catUpdate, OperationKey.update)
         const changes = [change]
         changesService.setChanges(changes)
-        pull.execute(changes, 'test')
-        pull.changes.subscribe(changes=>{console.log('got changes **',changes)
-        const  item = changes[0].item
+        await pull.execute(changes, 'test')
+        pull.changes.subscribe(changes=>{console.log('got changes **',changes,changes.length)
+        const  item = changes[0]?.item
         expect(changes.length).toEqual(1)
         expect(item['key']).toEqual(catUpdate.key)
         expect(item['title']).toEqual(catUpdate.title)
@@ -105,11 +105,10 @@ describe('testing pull changes', () => {
         const change = new Items2Update('me', catUpdate, OperationKey.delete)
         const changes = [change]
         changesService.setChanges(changes)
-        pull.execute(changes, 'test')
 
         
         pull.changes.subscribe(changes=>{console.log('got changes **',changes)
-        const  item = changes[0].item
+        const  item = changes[0]?.item
         expect(changes.length).toEqual(1)
         expect(item['key']).toEqual(cat.key)
         expect(item['title']).toEqual(cat.title)
@@ -119,6 +118,8 @@ describe('testing pull changes', () => {
         expect(changes[0].operationKey).toEqual(OperationKey.delete)
     
     })
+
+   await  pull.execute(changes, 'test')
 
 
     })

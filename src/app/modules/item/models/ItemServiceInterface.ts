@@ -18,6 +18,7 @@ suppliersListRef?
     /**get one item from firebase
      * @param key:string
      * @returns firebase.database reference
+     * @deprecated
      */
     getItem(key: string): firebase.default.database.Reference;
 

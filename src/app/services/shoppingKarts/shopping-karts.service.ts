@@ -218,6 +218,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     kart.key = item.key
 
     kart.items = kart.items?.map(purchaseInitializer)
+    console.log('kart',kart)
 
     return kart
   }
@@ -228,6 +229,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
   // initialize all the karts
    initializeItems(items: RawItem[]) {
+     console.log('initializing karts',items)
      const karts:Array<ShoppingKartModel>=[]
 
     const purchaseInitializer = (purchase2initialize) => {
