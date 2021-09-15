@@ -29,6 +29,7 @@ import { OfflineUpdateOperation } from 'src/app/modules/offline/business/offline
 import { OfflineDeleteOperation } from 'src/app/modules/offline/business/offlineDeleteOperation';
 import { OfflineCreateOperation } from 'src/app/modules/offline/business/offlineCreateOperation';
 import { OfflineItemModelInterface } from 'src/app/modules/offline/models/offlineItemModelInterface';
+import { DateModel } from 'src/app/modules/user/models/birthDateModel';
 // tslint:disable:semicolon
 
 @Injectable({
@@ -227,7 +228,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
       kart.setPayment(pay)
 
     })
-    this.suppliers.items
+    kart.purchaseDate = new DateModel(kart.dataAcquisto)
 
     return kart
   }
