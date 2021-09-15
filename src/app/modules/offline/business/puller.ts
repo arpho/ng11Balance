@@ -1,3 +1,4 @@
+import { DateModel } from "../../user/models/birthDateModel";
 import { Items2Update } from "../models/items2Update";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
 import { OperationKey } from "../models/operationKey";
@@ -28,6 +29,7 @@ export class Puller {
                 const Service = this.services.filter(service => service.entityLabel == item.item['entityLabel2Update'])[0]
                 const entity = Service.getDummyItem().initialize(item.item)
                 const change = new Items2Update(item['owner'], entity, item['operationKey']).setItem(entity)
+                change.date = new DateModel(new Date(item.item['date']))
                 this.changes.push(change)
             })
 
