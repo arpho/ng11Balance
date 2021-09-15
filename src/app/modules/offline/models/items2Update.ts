@@ -49,6 +49,7 @@ export class Items2Update {
     }
 
     isSignedBy(signature: string) {
+        console.log('change',this)
         return this.signatures.has(signature)|| this.owner==signature
     }
 

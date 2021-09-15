@@ -19,22 +19,26 @@ export class Puller {
         this.Changes = Changes
     }
 
-    async fetchChangesFromFirebase() {
 
-        const entitiesRestore = (items: RawItem[]) =>/**
+     entitiesRestore = (items: RawItem[]) =>/**
         initializes the entities inside the changes
         */ {
             this.changes = []
             items.forEach(item => {
-                const Service = this.services.filter(service => service.entityLabel == item.item['entityLabel2Update'])[0]
+                const Service = this.services.filter(service => service.entityLabel == item.item['entity'])[0]
                 const entity = Service.getDummyItem().initialize(item.item)
-                const change = new Items2Update(item['owner'], entity, item['operationKey']).setItem(entity)
+           
+                const change = new Items2Update(item.item['owner'], entity, item['operationKey']).setItem(entity)
                 change.date = new DateModel(new Date(item.item['date']))
                 this.changes.push(change)
             })
 
         }
-        this.Changes.fetchItemsFromCloud(entitiesRestore)
+
+    async restoreEntities() {
+
+        
+        this.Changes.fetchItemsFromCloud(this.entitiesRestore)
         return this
     }
 
