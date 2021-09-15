@@ -38,20 +38,113 @@ describe('testing puller', () => {
         })
         const catmod = new CategoryModel().initialize({
             entityLabel: "Categoria",
-            fatherKey: "-LMTmZbBd6roqklYDflZ",
+            fatherKey: "-LMTmZbBd6roqklYDflZl",
             key: "-Ks0UdZGtzunNoCmGGJd",
             title: "gnosis mod"
         })
         const items = [
-            new RawItem({ key: cat.key, item: { ...cat.serialize(), owner: 'me', operation: OperationKey.create,entity:'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
-            new RawItem({ key: catmod.key, item: { ...catmod.serialize(), owner: 'me', operation: OperationKey.update,entity:'Categoria', date: new DateModel(new Date()).formatFullDate() } })
+            new RawItem({ key: cat.key, item: { ...cat.serialize(), owner: 'me', operation: OperationKey.create, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
+            new RawItem({ key: catmod.key, item: { ...catmod.serialize(), owner: 'me', operation: OperationKey.update, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
+            new RawItem({ key: catmod.key, item: { ...new CategoryModel().setKey(cat.key).serialize(), owner: 'me', operation: OperationKey.delete, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } })
 
         ]
 
         puller.entitiesRestore(items)
 
-        expect(puller.changes.length).toEqual(2)
+        expect(puller.changes.length).toEqual(items.length)
         expect(puller.changes[0].item).toBeInstanceOf(CategoryModel)
         expect(puller.changes[0].isSignedBy('me')).toBeTrue()
+        expect(puller.changes[0].operationKey).toEqual(OperationKey.create)
+        expect(puller.changes[1].operationKey).toEqual(OperationKey.update)
+        expect(puller.changes[2].operationKey).toEqual(OperationKey.delete)
+        expect(puller.changes[2].item.key).toEqual(cat.key)
+        expect(puller.changes[0].item.title).toEqual(cat.title)
+        expect(puller.changes[1].item.title).toEqual(catmod.title)
+        console.log('chang', puller.changes[0])
+        expect(puller.changes[0].item['fatherKey']).toEqual(cat['fatherKey'])
+        expect(puller.changes[1].item['fatherKey']).toEqual(catmod['fatherKey'])
+        expect(puller.changes[1].date).toBeTruthy()
+
+    })
+    it('creation is stored correctly', async () => {
+
+        const cat = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZ",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis"
+        })
+        const catmod = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZl",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis mod"
+        })
+        const items = [
+            new RawItem({ key: cat.key, item: { ...cat.serialize(), owner: 'me', operation: OperationKey.create, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
+            /* new RawItem({ key: catmod.key, item: { ...catmod.serialize(), owner: 'me', operation: OperationKey.update,entity:'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
+            new RawItem({ key: catmod.key, item: { ...new CategoryModel().setKey(cat.key).serialize(), owner: 'me', operation: OperationKey.delete,entity:'Categoria', date: new DateModel(new Date()).formatFullDate() } })
+ */
+        ]
+
+        puller.entitiesRestore(items).storeChanges()
+
+        expect((await db.get(cat.key)).item).toBeTruthy()
+        expect((await db.get(cat.key)).item['title']).toEqual(cat.title)
+
+    })
+
+    it('creation and update are stored correctly', async () => {
+
+        const cat = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZ",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis"
+        })
+        const catmod = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZl",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis mod"
+        })
+        const items = [
+            new RawItem({ key: cat.key, item: { ...cat.serialize(), owner: 'me', operation: OperationKey.create, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
+            new RawItem({ key: catmod.key, item: { ...catmod.serialize(), owner: 'me', operation: OperationKey.update, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
+            /*new RawItem({ key: catmod.key, item: { ...new CategoryModel().setKey(cat.key).serialize(), owner: 'me', operation: OperationKey.delete,entity:'Categoria', date: new DateModel(new Date()).formatFullDate() } })
+ */
+        ]
+
+        puller.entitiesRestore(items).storeChanges()
+        expect((await db.get(cat.key)).item['title']).toEqual(catmod.title)
+
+    })
+
+    it('creation and update and delete are stored correctly', async () => {
+
+        const cat = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZ",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis"
+        })
+        const catmod = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZl",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis mod"
+        })
+        const items = [
+            new RawItem({ key: cat.key, item: { ...cat.serialize(), owner: 'me0', operation: OperationKey.create, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
+            new RawItem({ key: catmod.key, item: { ...catmod.serialize(), owner: 'me0', operation: OperationKey.update, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
+            new RawItem({ key: catmod.key, item: { ...new CategoryModel().setKey(cat.key).serialize(), owner: 'me0', operation: OperationKey.delete, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } })
+
+        ]
+
+        puller.entitiesRestore(items).storeChanges()
+        expect(((await db.get(cat.key)).item)).toBeFalsy()
+        expect(puller.changes[0].isSignedBy('me')).toBeTrue()
+        expect(puller.changes[0].isSignedBy('me0')).toBeTrue()
+
     })
 })

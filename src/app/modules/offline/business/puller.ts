@@ -28,11 +28,11 @@ export class Puller {
                 const Service = this.services.filter(service => service.entityLabel == item.item['entity'])[0]
                 const entity = Service.getDummyItem().initialize(item.item)
            
-                const change = new Items2Update(item.item['owner'], entity, item['operationKey']).setItem(entity)
+                const change = new Items2Update(item.item['owner'], entity, item.item['operation']).setItem(entity)
                 change.date = new DateModel(new Date(item.item['date']))
                 this.changes.push(change)
             })
-
+            return this
         }
 
     async restoreEntities() {
@@ -44,6 +44,7 @@ export class Puller {
 
     async storeChanges() {
         this.changes.forEach(async change => {
+            console.log('change',change)
             if (change.operationKey == OperationKey.create) {
                 await this.localDb.set(change.item.key, change.item.serialize4OfflineDb())
             }
