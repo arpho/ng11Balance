@@ -117,6 +117,8 @@ describe('testing puller', () => {
 
         puller.entitiesRestore(items).storeChanges()
         expect((await db.get(cat.key)).item['title']).toEqual(catmod.title)
+       const test = await db.get(cat.key)
+        expect(test.item['entityLabel']).toEqual(catmod.entityLabel)
 
     })
 
