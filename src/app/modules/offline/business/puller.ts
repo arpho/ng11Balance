@@ -43,7 +43,7 @@ export class Puller {
     }
 
     async storeChanges() {
-        this.changes.forEach(async change => {
+        this.changes.filter(change=>!change.isSignedBy(this.signature)).forEach(async change => {// store only not signeed changes
             console.log('change',change)
             if (change.operationKey == OperationKey.create) {
                 await this.localDb.set(change.item.key, change.item.serialize4OfflineDb())
@@ -55,6 +55,27 @@ export class Puller {
                 await this.localDb.remove(change.item.key)
             }
             change.sign(this.signature)
+        })
+        return this
+    }
+
+    async updateChanges(){
+        this.changes.forEach(async change=>{
+          await  this.Changes.updateItem(change)
+        })
+
+        return this
+    }
+
+    async removeOldChanges()
+    {const oneMonth= 60*60 // secs in a minute
+        *60 //secs in one hour
+        *24 // secs in day
+        *30 // secs in a month
+        *1000 // msecs in a month
+        const today = new Date()
+        this.changes.filter(change=>today.getTime()-change.date.getTime()<oneMonth).forEach(async change=>{
+         await    this.Changes.deleteItem(change.key)
         })
         return this
     }

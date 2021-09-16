@@ -13,6 +13,7 @@ import { Items2Update } from '../models/items2Update';
 import { pullChangesFromCloud } from '../business/pullFromCloud';
 import { ConnectionStatusService } from './connection-status.service';
 import { Push2Cloud } from '../business/push2Cloud';
+import { Puller } from '../business/puller';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,7 @@ export class OfflineManagerService {
     // this.pullChangesFromCloud()
     //this.localDb.clear()
     connection.monitor(async status=>{
+      console.log('monitor',status)
       if(status){
         await this.pullChangesFromCloud()
         await this.push2Cloud()
@@ -57,23 +59,15 @@ export class OfflineManagerService {
   }
 
   async pullChangesFromCloud() {
-    const changes: Items2Update[] = []
-    const pull = new pullChangesFromCloud(this.changes, this.localDb,this.servicesList)
-    this.changes.items.subscribe(async items => {
-      items.forEach(item => {
-        const Service = this.servicesList.filter(service => service.entityLabel == item.entityLabel2Update)[0]
-        const entity = Service.getDummyItem().initialize(item.item)
-        const change = new Items2Update(item.owner, entity, item.operationKey)
-        change.item = entity
-        changes.push(change)
-      })
-      const signature = await this.asyncSignature()
-      await pull.execute(changes,signature)
-      console.log('* signature', signature)
-      const changes2Pull = changes.filter(change => !change.isSignedBy(signature))
-      console.log('changes 2 pull *', changes2Pull)
-
-    })
+   const puller = new Puller(this.localDb,await this.asyncSignature(),this.servicesList,this.changes)
+   this.changes.fetchItemsFromCloud(changes=>puller.// download changes
+    entitiesRestore(changes).// resdtore entities in changes
+    storeChanges().// apply the changes on local db
+    finally(()=>{puller.
+      updateChanges().finally(()=>{ // update changes on firebase 
+     puller.
+     removeOldChanges() //remove old changes older than a month
+   })}))
   }
 
   sign(uid: string) {
