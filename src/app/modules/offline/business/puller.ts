@@ -74,7 +74,7 @@ export class Puller {
         *30 // secs in a month
         *1000 // msecs in a month
         const today = new Date()
-        this.changes.filter(change=>today.getTime()-change.date.getTime()<oneMonth).forEach(async change=>{
+        this.changes.filter(change=>today.getTime()-change.date.getTime()>oneMonth).forEach(async change=>{
          await    this.Changes.deleteItem(change.key)
         })
         return this
