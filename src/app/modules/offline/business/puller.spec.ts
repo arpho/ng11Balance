@@ -87,7 +87,7 @@ describe('testing puller', () => {
  */
         ]
 
-        puller.entitiesRestore(items).storeChanges()
+        puller.entitiesRestore(items).applyChanges()
 
         expect((await db.get(cat.key)).item).toBeTruthy()
         expect((await db.get(cat.key)).item['title']).toEqual(cat.title)
@@ -115,7 +115,7 @@ describe('testing puller', () => {
  */
         ]
 
-        puller.entitiesRestore(items).storeChanges()
+        puller.entitiesRestore(items).applyChanges()
         expect((await db.get(cat.key)).item['title']).toEqual(catmod.title)
        const test = await db.get(cat.key)
         expect(test.item['entityLabel']).toEqual(catmod.entityLabel)
@@ -143,7 +143,7 @@ describe('testing puller', () => {
 
         ]
 
-        puller.entitiesRestore(items).storeChanges()
+        puller.entitiesRestore(items).applyChanges()
         expect(((await db.get(cat.key)).item)).toBeFalsy()
         expect(puller.changes[0].isSignedBy('me')).toBeTrue()
         expect(puller.changes[0].isSignedBy('me0')).toBeTrue()

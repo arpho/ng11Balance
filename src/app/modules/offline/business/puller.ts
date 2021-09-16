@@ -42,7 +42,7 @@ export class Puller {
         return this
     }
 
-    async storeChanges() {
+    async applyChanges() {
         this.changes.filter(change=>!change.isSignedBy(this.signature)).forEach(async change => {// store only not signeed changes
             console.log('change',change)
             if (change.operationKey == OperationKey.create) {
@@ -67,7 +67,7 @@ export class Puller {
         return this
     }
 
-    async removeOldChanges()
+    async removeOldChanges()/**rremove older than a month changes */
     {const oneMonth= 60*60 // secs in a minute
         *60 //secs in one hour
         *24 // secs in day
