@@ -153,7 +153,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   async deleteItem(key: string) {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-    await new OfflineDeleteOperation(signature,new SupplierModel().setKey(key),this.localDb,this.changes,enabled).runOperations()
+    await new OfflineDeleteOperation(signature, new SupplierModel().setKey(key), this.localDb, this.changes, enabled).runOperations()
     return (key) ? this.suppliersListRef.child(key).remove() : undefined;
   }
 
