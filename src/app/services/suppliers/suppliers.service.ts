@@ -145,13 +145,8 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   }
 
   async updateItem(item: SupplierModel) {
-    const enabled = await this.manager.isLoggedUserOflineEnabled()
-    if (enabled) {
-      await new OfflineUpdateOperation(new SupplierModel().initialize(item), this.changes, this.localDb, await this.manager.asyncSignature()).execute
-    }
-    await new UpdateEntityOffline(new SupplierModel().initialize(item), this.localDb, await this.manager.asyncSignature(),).execute(navigator.onLine)
-    this.changes.createItem(new Items2Update(await this.manager.asyncSignature(), new SupplierModel().initialize(item), OperationKey.update))
-    return this.suppliersListRef.child(item.key).update(item.serialize());
+    const Supplier = await new OfflineUpdateOperation(item,this.changes,this.localDb,await this.manager.asyncSignature(),await this.manager.isLoggedUserOflineEnabled()).runOperations()
+    return this.suppliersListRef.child(Supplier.key).update(Supplier.serialize());
   }
   async deleteItem(key: string) {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
