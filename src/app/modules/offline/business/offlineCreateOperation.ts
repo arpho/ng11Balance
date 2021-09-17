@@ -6,22 +6,26 @@ import { OfflineDbService } from "../services/offline-db.service"
 import { CreateEntityOffline } from "./createEntityOffline"
 import { offlineCrudOperation } from "./offlineCrudOperation"
 
-export class OfflineCreateOperation implements offlineCrudOperation{
-    signature:string
-    item:OfflineItemModelInterface
-    item2Update:Items2Update
-    localDb:OfflineDbService
-    changes:ChangesService
-    constructor(item:OfflineItemModelInterface,changes:ChangesService,signature:string,localDb:OfflineDbService) {
-        this.signature= signature
-        this.item= item
-        this.localDb= localDb
-        this.changes= changes
-        this.item2Update =  new Items2Update(signature, this.item, OperationKey.create)
+export class OfflineCreateOperation extends offlineCrudOperation {
+    signature: string
+    item: OfflineItemModelInterface
+    item2Update: Items2Update
+    localDb: OfflineDbService
+    changes: ChangesService
+    constructor(item: OfflineItemModelInterface, changes: ChangesService, signature: string, localDb: OfflineDbService, userOfflineEnabled: boolean) {
+        super(changes, localDb, item, userOfflineEnabled, signature)
+        if (userOfflineEnabled) {
+            this.item.key = `${this.item.entityLabel}_${new Date().getTime()}`
+        }
     }
-    async execute(){
 
-        await new CreateEntityOffline(this.item, this.localDb, this.signature).execute(navigator.onLine)
 
-        await this.changes.createItem(this.item2Update)}
+    async applyOnLocalDb() {
+        this.localDb.set(this.item.key, this.item)
+        return this
+    }
+
+    /**createsChange not implemented because super.createsChanges do what is needed */
+
+
 }
