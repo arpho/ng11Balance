@@ -33,7 +33,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   items_list: Array<SupplierModel> = []
 
   constructor(public localDb: OfflineDbService, public manager: OfflineManagerService, public changes: ChangesService) {
- 
+
     this.counterWidget = (entityKey: string, entities: ShoppingKartModel[]) => {
       return entities.map((item: ShoppingKartModel) => {
 
@@ -58,7 +58,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
         this.loadFromFirebase()
       }
     })
-  
+
 
   }
 
@@ -125,21 +125,12 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   }
 
   async createItem(item: ItemModelInterface) {
-    const enabled = await this.manager.isLoggedUserOflineEnabled()
-    if (enabled) {
-      item.key = `${this.entityLabel}_${new Date().getTime()}`
-      var Supplier = new SupplierModel().initialize(item)
-      await new OfflineCreateOperation(Supplier, this.changes, await this.manager.asyncSignature(), this.localDb).execute()
-
-    }
-    const fornitore = await this.suppliersListRef.push(item.serialize())
-    fornitore.on('value', result => {
-      Supplier.setKey(result.key)
-    })
-
-
-
-
+    const Supplier = await new OfflineCreateOperation(new SupplierModel().
+      initialize(item),
+      this.changes,
+      await this.manager.asyncSignature(),
+      this.localDb, await this.manager.isLoggedUserOflineEnabled()).runOperations()
+      await this.suppliersListRef.push(Supplier.serialize())
     return Supplier
   }
 
