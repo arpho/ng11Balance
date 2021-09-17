@@ -150,19 +150,16 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   async updateItem(item: OfflineItemModelInterface) {
 
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    if(enabled){
-     await new OfflineUpdateOperation(item,this.changes,this.localDb,await this.manager.asyncSignature()).execute()
-    }
- 
-    
+    const signature = await this.manager.asyncSignature()
+    await new OfflineUpdateOperation(item,this.changes,this.localDb,signature,enabled).runOperations()
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
   async deleteItem(key: string) {
+   
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-
-    if(enabled){
-      new OfflineDeleteOperation(await this.manager.asyncSignature(),new CategoryModel().setKey(key),this.localDb,this.changes).execute()
-    }
+    const signature = await this.manager.asyncSignature()
+    const cat = new CategoryModel().setKey(key)
+    await new OfflineDeleteOperation(signature,cat,this.localDb,this.changes,enabled).runOperations()
     return this.categoriesListRef?.child(key).remove();
   }
 
@@ -202,21 +199,11 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
   async createItem(item: CategoryModel) {
 
-    var Category
-   const enabled = await this.manager.isLoggedUserOflineEnabled()
-   if(enabled){
-    item.key = `${this.entityLabel}_${new Date().getTime()}`
-    await new OfflineCreateOperation(item,this.changes,await this.manager.asyncSignature(),this.localDb).execute()
-
-   }
-   else{
-    const category = await CategoriesService.categoriesListRef.push(item.serialize())
-    category.on('value',async cat=>{
-      Category.key=cat.key
-    })
-   }
-
-    
+    var Category:OfflineItemModelInterface
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    const signature = await this.manager.asyncSignature()
+   Category = await new OfflineCreateOperation(item,this.changes,signature,this.localDb,enabled).runOperations()
+   await this.categoriesListRef.push(Category.serialize())   
     return Category;
 
   }
