@@ -6,24 +6,24 @@ import { OfflineDbService } from "../services/offline-db.service";
 import { offlineCrudOperation } from "./offlineCrudOperation";
 import { UpdateEntityOffline } from "./updateEntityOffline";
 
-export class OfflineUpdateOperation implements offlineCrudOperation{
+export class OfflineUpdateOperation extends offlineCrudOperation{
     changes: ChangesService
     signature: string
     item: OfflineItemModelInterface
     item2Update: Items2Update
     localDb: OfflineDbService
-    constructor(item: OfflineItemModelInterface,  changes: ChangesService, localDb: OfflineDbService,signature:string) {
-        this.changes = changes
-        this.signature = signature
-        this.localDb = localDb
-        this.item = item
-        this.item2Update = new Items2Update(this.signature, this.item, OperationKey.update)
+    constructor(item: OfflineItemModelInterface,  changes: ChangesService, localDb: OfflineDbService,signature:string,userOfflineEnabled) {
+      super(changes,localDb,item,userOfflineEnabled,signature)
 
     }
 
-    async execute() {
-        await new UpdateEntityOffline(this.item, this.localDb, this.signature).execute(navigator.onLine)
+   async applyOnLocalDb(){
+       this.localDb.set(this.item.key,this.item.serialize4OfflineDb())
+       return this
+   }
 
-        await this.changes.createItem(this.item2Update)
-    }
+   async createsChange(){
+       const change = new Items2Update(this.signature,this.item,OperationKey.update)
+       return this 
+   }
 }
