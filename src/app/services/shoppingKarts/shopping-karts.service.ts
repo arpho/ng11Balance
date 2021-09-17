@@ -83,10 +83,11 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
 
   async updateItem(item: ItemModelInterface) {
+    
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    if (enabled) {
-      await new OfflineUpdateOperation(new ShoppingKartModel().initialize(item), this.changes, this.localDb, await this.manager.asyncSignature()).execute()
-    }
+    const signature = await this.manager.asyncSignature()
+    const kart = new ShoppingKartModel().initialize(item)
+    await new OfflineUpdateOperation(kart,this.changes,this.localDb,signature,enabled).runOperations()
     return this.shoppingKartsListRef.child(item.key).update(item.serialize());
   }
   async deleteItem(key: string) {
