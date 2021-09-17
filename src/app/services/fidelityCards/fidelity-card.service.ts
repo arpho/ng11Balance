@@ -133,36 +133,25 @@ export class FidelityCardService implements OfflineItemServiceInterface {
     const dummyCard = new FidelityCardModel()
     dummyCard.setKey(key)
 
-    const offlineEnabled = await this.manager.isLoggedUserOflineEnabled()
-    if (offlineEnabled) {
-      await new OfflineDeleteOperation(await this.manager.asyncSignature(), dummyCard, this.localDb, this.changes).execute()
-    }
+   
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    const signature = await this.manager.asyncSignature()
+    await new OfflineDeleteOperation(signature,dummyCard,this.localDb,this.changes,enabled).runOperations()
 
     return this.fidelityCardsListRef.child(key).remove()
   }
+
   getDummyItem(): OfflineItemModelInterface {
     return new FidelityCardModel()
   }
+
   async createItem(item: ItemModelInterface) {
 
-    var card = new FidelityCardModel().initialize(item)
-    this.manager.isLoggedUserOflineEnabled().then(async enabled=>{
-      if(enabled){
-        card.key = `${this.entityLabel}_${new Date().getTime()}`
-       new OfflineCreateOperation(card,this.changes,await this.manager.asyncSignature(),this.localDb).execute()
-       await this.fidelityCardsListRef.push(item.serialize())
-      }
-      else{
-        const resp = await this.fidelityCardsListRef.push(item.serialize())
-        resp.on('value',fc=>{
-          card.setKey(fc.key)
-        })
-      }
-    })
-    
-  
-
-    return card;
+    var fc = new FidelityCardModel().initialize(item)
+   
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    const signature = await this.manager.asyncSignature()
+    return new FidelityCardModel().initialize(fc);
   }
   getEntitiesList(): firebase.default.database.Reference {
     return this.fidelityCardsListRef
