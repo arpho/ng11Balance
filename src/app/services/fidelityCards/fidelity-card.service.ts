@@ -120,11 +120,11 @@ export class FidelityCardService implements OfflineItemServiceInterface {
     return this.fidelityCardsListRef.child(key)
   }
   async updateItem(item: ItemModelInterface) {
-    this.manager.isLoggedUserOflineEnabled().then(async enabled=>{
-      if (enabled){
-        await new OfflineUpdateOperation(new FidelityCardModel().initialize(item),this.changes,this.localDb,await this.manager.asyncSignature()).execute()
-      }
-    })
+    
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    const signature = await this.manager.asyncSignature()
+    const fc = new FidelityCardModel().initialize(item)
+    await new OfflineUpdateOperation(fc,this.changes,this.localDb,signature,enabled).runOperations()
     return this.fidelityCardsListRef.child(item.key).update(item.serialize())
   }
   async deleteItem(key: string) {
