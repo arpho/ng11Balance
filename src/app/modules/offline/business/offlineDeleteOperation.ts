@@ -7,21 +7,23 @@ import { OfflineDbService } from "../services/offline-db.service";
 import { DeleteEntityOffline } from "./deleteEntityOffline";
 import { offlineCrudOperation } from "./offlineCrudOperation";
 
-export class OfflineDeleteOperation implements offlineCrudOperation {
+export class OfflineDeleteOperation extends offlineCrudOperation {
     item: OfflineItemModelInterface
     signature: string
     item2Update: Items2Update
     localDb: OfflineDbService;
     changes: ChangesService
-    constructor(signature: string, item: OfflineItemModelInterface, localDb: OfflineDbService, changes: ChangesService) {
-        this.changes = changes
-        this.item = item
-        this.localDb = localDb
-        this.item2Update = new Items2Update(signature, this.item, OperationKey.delete)
+    constructor(signature: string, item: OfflineItemModelInterface, localDb: OfflineDbService, changes: ChangesService,userOfflineEnabled:boolean) {
+     super(changes,localDb,item,userOfflineEnabled,signature)
     }
-    async execute() {
-        await new DeleteEntityOffline(this.item.key, this.localDb, this.item.entityLabel, this.signature).execute(navigator.onLine)
+    async applyOnLocalDb(){
+        await this.localDb.remove(this.item.key)
+        return this
+    }
 
-        await this.changes.createItem(this.item2Update)
+    async createsChange(){
+    const change = new Items2Update(this.signature,this.item,OperationKey.delete)
+    await this.changes.createItem(change)
+        return this
     }
 }
