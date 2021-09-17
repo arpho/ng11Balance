@@ -151,6 +151,8 @@ export class FidelityCardService implements OfflineItemServiceInterface {
    
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
+    fc = new FidelityCardModel().initialize( await new OfflineCreateOperation(fc,this.changes,signature,this.localDb,enabled).runOperations())
+    await this.fidelityCardsListRef.push(fc.serialize())
     return new FidelityCardModel().initialize(fc);
   }
   getEntitiesList(): firebase.default.database.Reference {

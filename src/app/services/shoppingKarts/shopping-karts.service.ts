@@ -90,17 +90,19 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     await new OfflineUpdateOperation(kart,this.changes,this.localDb,signature,enabled).runOperations()
     return this.shoppingKartsListRef.child(item.key).update(item.serialize());
   }
+
   async deleteItem(key: string) {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    if (enabled) {
-      const kart = new ShoppingKartModel().setKey(key)
-      await new OfflineDeleteOperation(await this.manager.asyncSignature(), kart, this.localDb, this.changes).execute()
-    }
+    const signature = await this.manager.asyncSignature()
+    const dummy = new ShoppingKartModel().setKey(key)
+    await new OfflineDeleteOperation(signature,dummy,this.localDb,this.changes,enabled).runOperations()
     return this.shoppingKartsListRef.child(key).remove();
   }
+
   getDummyItem(): OfflineItemModelInterface {
     return new ShoppingKartModel()
   }
+  
   async createItem(item: ItemModelInterface) {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     if (enabled) {
