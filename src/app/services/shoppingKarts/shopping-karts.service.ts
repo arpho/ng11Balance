@@ -102,21 +102,13 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   getDummyItem(): OfflineItemModelInterface {
     return new ShoppingKartModel()
   }
-  
+
   async createItem(item: ItemModelInterface) {
+    var Kart = this.getDummyItem().initialize(item)
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    if (enabled) {
-      console.log('creating kart offline')
-      item.key = `${this.entityLabel}_${new Date().getTime()}`
-      var Kart = new ShoppingKartModel().initialize(item).setKey(item.key)
-      await new OfflineCreateOperation(Kart, this.changes, await this.manager.asyncSignature(), this.localDb).execute()
-      this.shoppingKartsListRef.push(item.serialize())
-    }
-    else {
-      console.log('creating kart only online')
-      const result = await this.shoppingKartsListRef.push(item.serialize())
-      Kart.setKey(result.key)
-    }
+    const signature = await this.manager.asyncSignature()
+     Kart = await new OfflineCreateOperation(Kart,this.changes,signature,this.localDb,enabled).runOperations()
+    await this.shoppingKartsListRef.push(item.serialize())
     return Kart;
   }
 
