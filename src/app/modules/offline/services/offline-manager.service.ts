@@ -62,7 +62,7 @@ export class OfflineManagerService {
    const puller = new Puller(this.localDb,await this.asyncSignature(),this.servicesList,this.changes)
    this.changes.fetchItemsFromCloud(changes=>puller.// download changes
     entitiesRestore(changes).// resdtore entities in changes
-    applyChanges().// apply the changes on local db
+    applyChangesnotOwnedByMe().// apply the changes on local db
     finally(()=>{puller.
       updateChanges().finally(()=>{ // update changes on firebase 
      puller.

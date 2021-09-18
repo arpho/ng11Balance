@@ -44,7 +44,7 @@ export class Puller {
         return this
     }
 
-    async applyChanges() {
+    async applyChangesnotOwnedByMe() {
         console.log('applying changes')
         this.changes.filter(change=>!change.isSignedBy(this.signature)).forEach(async change => {// store only not signeed changes
             console.log('change',change.operationKey)
