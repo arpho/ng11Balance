@@ -32,6 +32,8 @@ export class Puller {
                 change.date = new DateModel(new Date(item.item['date']))
                 this.changes.push(change)
             })
+
+            console.log('changes',this.changes)
             return this
         }
 
@@ -43,13 +45,17 @@ export class Puller {
     }
 
     async applyChanges() {
+        console.log('applying changes')
         this.changes.filter(change=>!change.isSignedBy(this.signature)).forEach(async change => {// store only not signeed changes
-            console.log('change',change)
+            console.log('change',change.operationKey)
             if (change.operationKey == OperationKey.create) {
+                console.log('creation')
                 await this.localDb.set(change.item.key, change.item.serialize4OfflineDb())
+                console.log('after creation',this.localDb)
             }
             if (change.operationKey == OperationKey.update) {
                 await this.localDb.set(change.item.key, change.item.serialize4OfflineDb())
+                console.log('after update',this.localDb )
             }
             if (change.operationKey == OperationKey.delete) {
                 await this.localDb.remove(change.item.key)

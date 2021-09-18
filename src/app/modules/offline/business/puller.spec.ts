@@ -60,13 +60,38 @@ describe('testing puller', () => {
         expect(puller.changes[2].item.key).toEqual(cat.key)
         expect(puller.changes[0].item.title).toEqual(cat.title)
         expect(puller.changes[1].item.title).toEqual(catmod.title)
-        console.log('chang', puller.changes[0])
         expect(puller.changes[0].item['fatherKey']).toEqual(cat['fatherKey'])
         expect(puller.changes[1].item['fatherKey']).toEqual(catmod['fatherKey'])
         expect(puller.changes[1].date).toBeTruthy()
 
     })
     it('creation is stored correctly', async () => {
+
+        const cat = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZ",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis"
+        })
+        const catmod = new CategoryModel().initialize({
+            entityLabel: "Categoria",
+            fatherKey: "-LMTmZbBd6roqklYDflZl",
+            key: "-Ks0UdZGtzunNoCmGGJd",
+            title: "gnosis mod"
+        })
+        const items = [
+            new RawItem({ key: cat.key, item: { ...cat.serialize(), owner: 'me0', operation: OperationKey.create, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
+            /* new RawItem({ key: catmod.key, item: { ...catmod.serialize(), owner: 'me', operation: OperationKey.update,entity:'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
+            new RawItem({ key: catmod.key, item: { ...new CategoryModel().setKey(cat.key).serialize(), owner: 'me', operation: OperationKey.delete,entity:'Categoria', date: new DateModel(new Date()).formatFullDate() } })
+ */
+        ]
+
+        puller.entitiesRestore(items).applyChanges()
+        expect((await db.get(cat.key)).item).toBeTruthy()
+        expect((await db.get(cat.key)).item['title']).toEqual(cat.title)
+
+    })
+    it('changes owned by me are not applyed', async () => {
 
         const cat = new CategoryModel().initialize({
             entityLabel: "Categoria",
@@ -88,9 +113,7 @@ describe('testing puller', () => {
         ]
 
         puller.entitiesRestore(items).applyChanges()
-
-        expect((await db.get(cat.key)).item).toBeTruthy()
-        expect((await db.get(cat.key)).item['title']).toEqual(cat.title)
+        expect((await db.get(cat.key)).item).toBeFalsy()
 
     })
 
@@ -109,8 +132,8 @@ describe('testing puller', () => {
             title: "gnosis mod"
         })
         const items = [
-            new RawItem({ key: cat.key, item: { ...cat.serialize(), owner: 'me', operation: OperationKey.create, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
-            new RawItem({ key: catmod.key, item: { ...catmod.serialize(), owner: 'me', operation: OperationKey.update, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
+            new RawItem({ key: cat.key, item: { ...cat.serialize(), owner: 'me0', operation: OperationKey.create, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
+            new RawItem({ key: catmod.key, item: { ...catmod.serialize(), owner: 'me0', operation: OperationKey.update, entity: 'Categoria', date: new DateModel(new Date()).formatFullDate() } }),
             /*new RawItem({ key: catmod.key, item: { ...new CategoryModel().setKey(cat.key).serialize(), owner: 'me', operation: OperationKey.delete,entity:'Categoria', date: new DateModel(new Date()).formatFullDate() } })
  */
         ]
