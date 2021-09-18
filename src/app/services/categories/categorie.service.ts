@@ -43,7 +43,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   _items: BehaviorSubject<Array<CategoryModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<CategoryModel>> = this._items.asObservable()
   items_list: Array<CategoryModel> = []
- 
+
 
 
 
@@ -151,21 +151,22 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-    await new OfflineUpdateOperation(item,this.changes,this.localDb,signature,enabled).runOperations()
+    await new OfflineUpdateOperation(item, this.changes, this.localDb, signature, enabled).runOperations()
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
+
   async deleteItem(key: string) {
-   
+
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     const cat = new CategoryModel().setKey(key)
-    await new OfflineDeleteOperation(signature,cat,this.localDb,this.changes,enabled).runOperations()
+    await new OfflineDeleteOperation(signature, cat, this.localDb, this.changes, enabled).runOperations()
     return this.categoriesListRef?.child(key).remove();
   }
 
 
 
-  constructor(public manager: OfflineManagerService,  public localDb: OfflineDbService, public changes: ChangesService) {
+  constructor(public manager: OfflineManagerService, public localDb: OfflineDbService, public changes: ChangesService) {
     this.setHref()
 
     firebase.default.auth().onAuthStateChanged(user => {
@@ -174,17 +175,17 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
       }
     }
     )
-    this.manager.isLoggedUserOflineEnabled().then(enabled=>{
-      if(enabled){
+    this.manager.isLoggedUserOflineEnabled().then(enabled => {
+      if (enabled) {
         this.setHref()
         this.manager.registerService(this)
       }
-      else{
+      else {
         this.loadFromFirebase()
       }
     })
 
-    
+
 
 
 
@@ -199,11 +200,11 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
   async createItem(item: CategoryModel) {
 
-    var Category:OfflineItemModelInterface
+    var Category: OfflineItemModelInterface
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-   Category = await new OfflineCreateOperation(item,this.changes,signature,this.localDb,enabled).runOperations()
-   await this.categoriesListRef.push(Category.serialize())   
+    Category = await new OfflineCreateOperation(item, this.changes, signature, this.localDb, enabled).runOperations()
+    await this.categoriesListRef.push(Category.serialize())
     return Category;
 
   }

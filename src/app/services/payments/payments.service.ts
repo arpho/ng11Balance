@@ -37,13 +37,13 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   }
 
   constructor(public localDb: OfflineDbService, public manager: OfflineManagerService, public changes: ChangesService) {
-   
-    this.manager.isLoggedUserOflineEnabled().then(async enabled=>{
+
+    this.manager.isLoggedUserOflineEnabled().then(async enabled => {
       this.setHref()
-      if(enabled){
+      if (enabled) {
         this.manager.registerService(this)
       }
-      else{
+      else {
         this.loadFromFirebase()
       }
 
@@ -68,18 +68,18 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
       return new PaymentsModel().initialize(args)
     }
 
-    this.manager.isLoggedUserOflineEnabled().then(offlineEnabled=>{
-      if(offlineEnabled){
+    this.manager.isLoggedUserOflineEnabled().then(offlineEnabled => {
+      if (offlineEnabled) {
         manager.registerService(this)
       }
-      else{
-       this.loadFromFirebase() 
+      else {
+        this.loadFromFirebase()
       }
     })
 
   }
 
-  async loadFromFirebase(){
+  async loadFromFirebase() {
 
     this.publish(this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel)))
   }
@@ -149,33 +149,28 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   }
 
   async createItem(item: ItemModelInterface) {
-    var Payment:PaymentsModel = new PaymentsModel().initialize(item)
+    var Payment: PaymentsModel = new PaymentsModel().initialize(item)
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
+    Payment.setKey(await (await new OfflineCreateOperation(Payment, this.changes, signature, this.localDb, enabled).runOperations()).key)
+    this.paymentsListRef.push(Payment.serialize())
 
-    Payment.setKey( await (await new OfflineCreateOperation(Payment,this.changes,signature,this.localDb,enabled).runOperations()).key)
-   this.paymentsListRef.push(Payment.serialize())
-   
     return Payment
-
-
   }
 
   async updateItem(item: ItemModelInterface) {
-    
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     const payment = new PaymentsModel().initialize(item)
-    await new OfflineUpdateOperation(payment,this.changes,this.localDb,signature,enabled).runOperations()
+    await new OfflineUpdateOperation(payment, this.changes, this.localDb, signature, enabled).runOperations()
     return this.paymentsListRef.child(item.key).update(item.serialize());
   }
 
   async deleteItem(key: string) {
-    
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-    const dummy =new PaymentsModel().setKey(key)
-    await new OfflineDeleteOperation(signature,dummy,this.localDb,this.changes,enabled).runOperations()
+    const dummy = new PaymentsModel().setKey(key)
+    await new OfflineDeleteOperation(signature, dummy, this.localDb, this.changes, enabled).runOperations()
     return this.paymentsListRef.child(key).remove();
   }
 }
