@@ -149,21 +149,12 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   }
 
   async createItem(item: ItemModelInterface) {
-    var Payment:PaymentsModel
-    const enabled= await this.manager.isLoggedUserOflineEnabled()
-    if(enabled){
+    var Payment:PaymentsModel = new PaymentsModel().initialize(item)
+    const enabled = await this.manager.isLoggedUserOflineEnabled()
+    const signature = await this.manager.asyncSignature()
 
-    item.key = `${this.entityLabel}_${new Date().getTime()}`
-    Payment = new PaymentsModel().initialize(item)
-    await new OfflineCreateOperation(new PaymentsModel().initialize(item),this.changes,await this.manager.asyncSignature(),this.localDb).execute()
-    await this.paymentsListRef.push(item.serialize());
-    }
- else{
-
-  const payment = await this.paymentsListRef.push(item.serialize());
-  Payment = new PaymentsModel().initialize(item).setKey(payment.key) 
- }
-   
+    Payment.setKey( await (await new OfflineCreateOperation(Payment,this.changes,signature,this.localDb,enabled).runOperations()).key)
+   this.paymentsListRef.push(Payment.serialize())
    
     return Payment
 
@@ -171,18 +162,20 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   }
 
   async updateItem(item: ItemModelInterface) {
+    
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    if(enabled){
-     await new OfflineUpdateOperation(new PaymentsModel().initialize(item) ,this.changes,this.localDb,await this.manager.asyncSignature()).execute()
-    }
+    const signature = await this.manager.asyncSignature()
+    const payment = new PaymentsModel().initialize(item)
+    await new OfflineUpdateOperation(payment,this.changes,this.localDb,signature,enabled).runOperations()
     return this.paymentsListRef.child(item.key).update(item.serialize());
   }
 
   async deleteItem(key: string) {
+    
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    if(enabled){
-      await new OfflineDeleteOperation(await this.manager.asyncSignature(),new PaymentsModel().setKey(key),this.localDb,this.changes).execute()
-    }
+    const signature = await this.manager.asyncSignature()
+    const dummy =new PaymentsModel().setKey(key)
+    await new OfflineDeleteOperation(signature,dummy,this.localDb,this.changes,enabled).runOperations()
     return this.paymentsListRef.child(key).remove();
   }
 }

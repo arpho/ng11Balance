@@ -128,12 +128,8 @@ export class FidelityCardService implements OfflineItemServiceInterface {
     return this.fidelityCardsListRef.child(item.key).update(item.serialize())
   }
   async deleteItem(key: string) {
-
-
     const dummyCard = new FidelityCardModel()
     dummyCard.setKey(key)
-
-   
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     await new OfflineDeleteOperation(signature,dummyCard,this.localDb,this.changes,enabled).runOperations()

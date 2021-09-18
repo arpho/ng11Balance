@@ -14,6 +14,7 @@ export class CategoriesServiceMocker extends CategoriesService {
 
     async createItem(item: OfflineItemModelInterface) {
         this.db[item.key] = item
+        return item
 
     }
 
