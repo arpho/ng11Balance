@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createStore, applyMiddleware } from 'redux'
+import { SorterItemsPipe } from '../../item/pipes/sorter-items.pipe';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,6 +16,8 @@ export class ConnectionStatusService {
 
 
     }
+
+    
     function updateOnlineStatus(event) {
       this.status = navigator.onLine ? "online" : "offline";
       if (navigator.onLine) {
@@ -32,6 +35,17 @@ export class ConnectionStatusService {
     // and use the `reducer` for the update logic
     const store = createStore(reducer)
     this.store = store
+
+
+    if(navigator.onLine){
+      console.log('dispatchiong')
+      store.dispatch({type:'connection/online'})
+    }
+
+    else{
+      store.dispatch({type:'connection/offline'})
+    }
+
     function reducer(state = initialState, action) {
       switch (action.type) {
         case "connection/online":
@@ -47,10 +61,11 @@ export class ConnectionStatusService {
 
 
     }
-
   }
   monitor(callback) {
-    const out =  this.store.subscribe(()=>{return callback(navigator.onLine)})
+    const out =  this.store.subscribe(()=>{
+      console.log('monitor triggered')
+      return callback(navigator.onLine)})
     return out
   }
   getStatus() {

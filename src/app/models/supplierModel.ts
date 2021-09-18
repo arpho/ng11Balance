@@ -81,7 +81,7 @@ export class SupplierModel implements OfflineItemModelInterface, WidgetitemIntef
         }
 
     }
-    entityLabel: string = "fgornitore"
+    entityLabel: string = "fornitore"
     serialize4OfflineDb(): offlineSerializer<{ entityLabel: string; }> {
         const entityLabel = this.entityLabel
         return { ... this.serialize(), entityLabel }
