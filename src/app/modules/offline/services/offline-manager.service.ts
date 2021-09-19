@@ -14,6 +14,7 @@ import { pullChangesFromCloud } from '../business/pullFromCloud';
 import { ConnectionStatusService } from './connection-status.service';
 import { Push2Cloud } from '../business/push2Cloud';
 import { Puller } from '../business/puller';
+import { configs } from 'src/app/configs/configs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,21 +29,20 @@ export class OfflineManagerService {
 
 
 
-  constructor(public localDb: OfflineDbService, 
+  constructor(public localDb: OfflineDbService,
     public users: UsersService,
-     public changes: ChangesService,
-     connection:ConnectionStatusService) {
+    public changes: ChangesService,
+    connection: ConnectionStatusService) {
     // this.pullChangesFromCloud()
     //this.localDb.clear()
-    connection.monitor(async status=>{
-      console.log('monitor',status)
-      if(status){
-        await this.pullChangesFromCloud()
-        await this.push2Cloud()
+    connection.monitor(async status => {
+      console.log('monitor', status)
+      if (status) {
+        this.syncChanges()
       }
     })
     this.push2Cloud()
-  
+
 
 
 
@@ -53,21 +53,28 @@ export class OfflineManagerService {
 
 
   }
+  async syncChanges() {
+    await this.pullChangesFromCloud()
+    await this.push2Cloud()
+
+  }
   async push2Cloud() {
-    new Push2Cloud(this.localDb,this.servicesList)
-    
+    new Push2Cloud(this.localDb, this.servicesList)
+
   }
 
   async pullChangesFromCloud() {
-   const puller = new Puller(this.localDb,await this.asyncSignature(),this.servicesList,this.changes)
-   this.changes.fetchItemsFromCloud(changes=>puller.// download changes
-    entitiesRestore(changes).// resdtore entities in changes
-    applyChangesnotOwnedByMe().// apply the changes on local db
-    finally(()=>{puller.
-      updateChanges().finally(()=>{ // update changes on firebase 
-     puller.
-     removeOldChanges() //remove old changes older than a month
-   })}))
+    const puller = new Puller(this.localDb, await this.asyncSignature(), this.servicesList, this.changes)
+    this.changes.fetchItemsFromCloud(changes => puller.// download changes
+      entitiesRestore(changes).// resdtore entities in changes
+      applyChangesnotOwnedByMe().// apply the changes on local db
+      finally(() => {
+        puller.
+          updateChanges().finally(() => { // update changes on firebase 
+            puller.
+              removeOldChanges() //remove old changes older than a month
+          })
+      }))
   }
 
   sign(uid: string) {
@@ -163,6 +170,9 @@ export class OfflineManagerService {
       this.servicesList.push(service)
 
       service.setHref()
+      if (this.servicesList.length == configs.offlineEntityNumber) {
+        await this.syncChanges()
+      }
     }
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
     if (entityStatus.item == offLineDbStatus.notInitialized || entityStatus == null) {
