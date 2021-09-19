@@ -16,6 +16,7 @@ const categoryTest = new CategoryModel().initialize({
 })
 describe('create operation works',()=>{
     beforeEach(waitForAsync(()=>{
+        console.log('chacha')
         Changes = new ChangesServiceMockers()
         db = new LocalForageMocker()
 
@@ -31,7 +32,7 @@ describe('create operation works',()=>{
 
     })
 
-    it('changes shoul be created properly',()=>{
+    it('changes should be created properly',()=>{
         expect(Changes.changesList.length).toEqual(1)
         expect(Changes.changesList[0].operationKey).toEqual(OperationKey.create)
         expect(Changes.changesList[0].owner).toEqual('test')

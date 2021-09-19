@@ -23,4 +23,9 @@ export class ChangesServiceMockers extends ChangesService{
         const index = this.changesList.findIndex(obj=>obj.key==key)
         delete this.changesList[index]
     }
+
+    async createItem(item){
+        this.changesList.push(item)
+
+    }
 }

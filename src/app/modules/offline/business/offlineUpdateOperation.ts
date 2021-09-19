@@ -24,6 +24,7 @@ export class OfflineUpdateOperation extends offlineCrudOperation{
 
    async createsChange(){
        const change = new Items2Update(this.signature,this.item,OperationKey.update)
+       await this.changes.createItem(change)
        return this 
    }
 }
