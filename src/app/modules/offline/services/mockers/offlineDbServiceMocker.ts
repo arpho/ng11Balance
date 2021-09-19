@@ -13,6 +13,7 @@ export class LocalForageMocker extends OfflineDbService {
     }
 
     async get(key: string) {
+        console.log('geting ',key)
         return new RawItem({'key':key,'item':this.db[key]})
     }
 

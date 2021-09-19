@@ -45,10 +45,26 @@ it('changes should be created properly',async ()=>{
 
 
     creatOP = new OfflineUpdateOperation(categoryTest,Changes,db,'test',true)
+    categoryTest = new CategoryModel().initialize({
+        entityLabel: "Categoria",
+        fatherKey: "-LMTmZbBd6roqklYDflZ",
+        key: "-Ks0UdZGtzunNoCmGGJd",
+        title: "gnosis"
+    })
+    await db.set(categoryTest.key,categoryTest.serialize4OfflineDb())
+     const catmod = categoryTest = new CategoryModel().initialize({
+        entityLabel: "Categoria",
+        fatherKey: "-LMTmZbBd6roqklYDflZ",
+        key: "-Ks0UdZGtzunNoCmGGJd",
+        title: "gnosis"
+    })
+    creatOP = new OfflineUpdateOperation(catmod,Changes,db,'test',true)
     await creatOP.runOperations()
     expect(Changes.changesList.length).toEqual(1)
     expect(Changes.changesList[0].operationKey).toEqual(OperationKey.update)
     expect(Changes.changesList[0].isSignedBy('test0')).toBeFalse()
     expect(Changes.changesList[0].item).toBeInstanceOf(CategoryModel)
     expect(Changes.changesList[0].item.title).toEqual(categoryTest.title)
+    expect(await (await db.get(catmod.key)).item).toBeTruthy()
+    expect(await (await db.get(catmod.key)).item['title']).toEqual(catmod.title)
 })
