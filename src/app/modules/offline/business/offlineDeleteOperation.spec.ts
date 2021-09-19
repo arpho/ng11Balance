@@ -7,28 +7,21 @@ import { OfflineCreateOperation } from "./offlineCreateOperation"
 import { OfflineDeleteOperation } from "./offlineDeleteOperation"
 import { OfflineUpdateOperation } from "./offlineUpdateOperation"
 
-var Changes:ChangesServiceMockers
-var db : LocalForageMocker
-var creatOP:OfflineCreateOperation
+var Changes: ChangesServiceMockers
+var db: LocalForageMocker
+var creatOP: OfflineCreateOperation
 var categoryTest = new CategoryModel().initialize({
     entityLabel: "Categoria",
     fatherKey: "-LMTmZbBd6roqklYDflZ",
     key: "-Ks0UdZGtzunNoCmGGJd",
     title: "gnosis"
 })
-describe('create operation works',()=>{
-    beforeEach(waitForAsync(()=>{
-       
-
-   
-
-
+describe('create operation works', () => {
+    beforeEach(waitForAsync(() => {
     }))
 })
 
-
-
-it('changes should be created properly',async ()=>{
+it('changes should be created properly', async () => {
     Changes = new ChangesServiceMockers()
     db = new LocalForageMocker()
     const cat = categoryTest = new CategoryModel().initialize({
@@ -37,9 +30,9 @@ it('changes should be created properly',async ()=>{
         key: "-Ks0UdZGtzunNoCmGGJd",
         title: "gnosis"
     })
-    db.set(cat.key,cat.serialize4OfflineDb())
+    db.set(cat.key, cat.serialize4OfflineDb())
     const dummy = new CategoryModel().setKey(cat.key)
-    const deleteOp = new OfflineDeleteOperation('test',dummy,db,Changes,true)
+    const deleteOp = new OfflineDeleteOperation('test', dummy, db, Changes, true)
 
     await deleteOp.runOperations()
     expect(Changes.changesList.length).toEqual(1)

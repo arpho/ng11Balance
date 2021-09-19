@@ -5,46 +5,37 @@ import { ChangesServiceMockers } from "../services/mockers/ChangeServiceMocks"
 import { LocalForageMocker } from "../services/mockers/offlineDbServiceMocker"
 import { OfflineCreateOperation } from "./offlineCreateOperation"
 
-var Changes:ChangesServiceMockers
-var db : LocalForageMocker
-var creatOP:OfflineCreateOperation
+var Changes: ChangesServiceMockers
+var db: LocalForageMocker
+var creatOP: OfflineCreateOperation
 const categoryTest = new CategoryModel().initialize({
     entityLabel: "Categoria",
     fatherKey: "-LMTmZbBd6roqklYDflZ",
     key: "-Ks0UdZGtzunNoCmGGJd",
     title: "gnosis"
 })
-describe('create operation works',()=>{
-    beforeEach(waitForAsync(()=>{
-        
-
-    
-
+describe('create operation works', () => {
+    beforeEach(waitForAsync(() => {
     }))
 })
 
 
-it('item should be properly created',async ()=>{
+it('item should be properly created', async () => {
     Changes = new ChangesServiceMockers()
-        db = new LocalForageMocker()
-
-
-        creatOP = new OfflineCreateOperation(categoryTest,Changes,'test',db,true)
-        creatOP.runOperations()
+    db = new LocalForageMocker()
+    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true)
+    creatOP.runOperations()
     const item = await db.get(categoryTest.key)
     expect(item.item).toBeTruthy()
     expect(item.item['entityLabel']).toEqual(categoryTest.entityLabel)
     expect(item.item['title']).toEqual(categoryTest.title)
-
 })
 
-it('changes should be created properly',async ()=>{
+it('changes should be created properly', async () => {
     Changes = new ChangesServiceMockers()
-        db = new LocalForageMocker()
-
-
-        creatOP = new OfflineCreateOperation(categoryTest,Changes,'test',db,true)
-        await creatOP.runOperations()
+    db = new LocalForageMocker()
+    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true)
+    await creatOP.runOperations()
     expect(Changes.changesList.length).toEqual(1)
     expect(Changes.changesList[0].operationKey).toEqual(OperationKey.create)
     expect(Changes.changesList[0].owner).toEqual('test')
@@ -52,7 +43,7 @@ it('changes should be created properly',async ()=>{
     expect(Changes.changesList[0].item.title).toEqual(categoryTest.title)
 })
 
-it('item correctly created on local db',async ()=>{
+it('item correctly created on local db', async () => {
     Changes = new ChangesServiceMockers()
     db = new LocalForageMocker()
     const categoryTest = new CategoryModel().initialize({
@@ -61,14 +52,12 @@ it('item correctly created on local db',async ()=>{
         key: "-Ks0UdZGtzunNoCmGGJd",
         title: "gnosis"
     })
-
-
-    creatOP = new OfflineCreateOperation(categoryTest,Changes,'test',db,true)
+    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true)
     await creatOP.runOperations()
-    console.log('db',db)
-    expect( (await db.get("Ks0UdZGtzunNoCmGGJd")).item).toBeFalsy()
-    expect( (await db.get(categoryTest.key)).item['entityLabel']).toEqual(categoryTest.entityLabel)
-    expect( (await db.get(categoryTest.key)).item['fatherKey']).toEqual(categoryTest.fatherKey)
-    expect( (await db.get(categoryTest.key)).item['title']).toEqual(categoryTest.title)
+    console.log('db', db)
+    expect((await db.get("Ks0UdZGtzunNoCmGGJd")).item).toBeFalsy()
+    expect((await db.get(categoryTest.key)).item['entityLabel']).toEqual(categoryTest.entityLabel)
+    expect((await db.get(categoryTest.key)).item['fatherKey']).toEqual(categoryTest.fatherKey)
+    expect((await db.get(categoryTest.key)).item['title']).toEqual(categoryTest.title)
 
 })

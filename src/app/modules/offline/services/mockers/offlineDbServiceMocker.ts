@@ -13,8 +13,8 @@ export class LocalForageMocker extends OfflineDbService {
     }
 
     async get(key: string) {
-        console.log('geting ',key)
-        return new RawItem({'key':key,'item':this.db[key]})
+        console.log('geting ', key)
+        return new RawItem({ 'key': key, 'item': this.db[key] })
     }
 
     iterate(callback: (value: unknown, key: string) => void) {
@@ -24,7 +24,7 @@ export class LocalForageMocker extends OfflineDbService {
         }
     }
 
-    async remove(key:string){
+    async remove(key: string) {
         delete this.db[key]
     }
 

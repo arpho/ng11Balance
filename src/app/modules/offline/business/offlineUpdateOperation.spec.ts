@@ -6,31 +6,31 @@ import { LocalForageMocker } from "../services/mockers/offlineDbServiceMocker"
 import { OfflineCreateOperation } from "./offlineCreateOperation"
 import { OfflineUpdateOperation } from "./offlineUpdateOperation"
 
-var Changes:ChangesServiceMockers
-var db : LocalForageMocker
-var creatOP:OfflineCreateOperation
+var Changes: ChangesServiceMockers
+var db: LocalForageMocker
+var creatOP: OfflineCreateOperation
 var categoryTest = new CategoryModel().initialize({
     entityLabel: "Categoria",
     fatherKey: "-LMTmZbBd6roqklYDflZ",
     key: "-Ks0UdZGtzunNoCmGGJd",
     title: "gnosis"
 })
-describe('create operation works',()=>{
-    beforeEach(waitForAsync(()=>{
-       
+describe('create operation works', () => {
+    beforeEach(waitForAsync(() => {
 
-   
+
+
 
 
     }))
 })
 
-it('item should be properly created',async ()=>{
+it('item should be properly created', async () => {
     Changes = new ChangesServiceMockers()
     db = new LocalForageMocker()
 
 
-    creatOP = new OfflineUpdateOperation(categoryTest,Changes,db,'test',true)
+    creatOP = new OfflineUpdateOperation(categoryTest, Changes, db, 'test', true)
     creatOP.runOperations()
     const item = await db.get(categoryTest.key)
     expect(item.item).toBeTruthy()
@@ -39,26 +39,26 @@ it('item should be properly created',async ()=>{
 
 })
 
-it('changes should be created properly',async ()=>{
+it('changes should be created properly', async () => {
     Changes = new ChangesServiceMockers()
     db = new LocalForageMocker()
 
 
-    creatOP = new OfflineUpdateOperation(categoryTest,Changes,db,'test',true)
+    creatOP = new OfflineUpdateOperation(categoryTest, Changes, db, 'test', true)
     categoryTest = new CategoryModel().initialize({
         entityLabel: "Categoria",
         fatherKey: "-LMTmZbBd6roqklYDflZ",
         key: "-Ks0UdZGtzunNoCmGGJd",
         title: "gnosis"
     })
-    await db.set(categoryTest.key,categoryTest.serialize4OfflineDb())
-     const catmod = categoryTest = new CategoryModel().initialize({
+    await db.set(categoryTest.key, categoryTest.serialize4OfflineDb())
+    const catmod = categoryTest = new CategoryModel().initialize({
         entityLabel: "Categoria",
         fatherKey: "-LMTmZbBd6roqklYDflZ",
         key: "-Ks0UdZGtzunNoCmGGJd",
         title: "gnosis"
     })
-    creatOP = new OfflineUpdateOperation(catmod,Changes,db,'test',true)
+    creatOP = new OfflineUpdateOperation(catmod, Changes, db, 'test', true)
     await creatOP.runOperations()
     expect(Changes.changesList.length).toEqual(1)
     expect(Changes.changesList[0].operationKey).toEqual(OperationKey.update)
