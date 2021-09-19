@@ -9,6 +9,7 @@ import { OfflineManagerService } from '../modules/offline/services/offline-manag
 import { UsersService } from '../modules/user/services/users.service';
 import { CreateShoppingKartPage } from '../pages/create-shopping-kart/create-shopping-kart.page';
 import { DetailShoppingKartPage } from '../pages/detail-shopping-kart/detail-shopping-kart.page';
+import { FidelityCardService } from '../services/fidelityCards/fidelity-card.service';
 import { ShoppingKartsService } from '../services/shoppingKarts/shopping-karts.service';
 
 @Component({
@@ -41,6 +42,7 @@ export class FolderPage implements OnInit {
     public user: UsersService,
     public manager: OfflineManagerService,
     public ds: DecoratorService,
+    public fc:FidelityCardService,
     public connectionStatus: ConnectionStatusService,
     private changesService: ChangesService
   ) {

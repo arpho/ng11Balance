@@ -1,3 +1,4 @@
+import { service } from "firebase-functions/v1/analytics";
 import { DateModel } from "../../user/models/birthDateModel";
 import { Items2Update } from "../models/items2Update";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
@@ -25,12 +26,14 @@ export class Puller {
         */ {
             this.changes = []
             items.forEach(item => {
+                console.log('pulling ',item,this.services)
                 const Service = this.services.filter(service => service.entityLabel == item.item['entity'])[0]
+                if(Service){
                 const entity = Service.getDummyItem().initialize(item.item)
            
                 const change = new Items2Update(item.item['owner'], entity, item.item['operation']).setItem(entity)
                 change.date = new DateModel(new Date(item.item['date']))
-                this.changes.push(change)
+                this.changes.push(change)}
             })
 
             console.log('changes',this.changes)

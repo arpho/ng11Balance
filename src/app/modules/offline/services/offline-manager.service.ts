@@ -56,6 +56,7 @@ export class OfflineManagerService {
   async syncChanges() {
     await this.pullChangesFromCloud()
     await this.push2Cloud()
+    console.log('syncing changes')
 
   }
   async push2Cloud() {
