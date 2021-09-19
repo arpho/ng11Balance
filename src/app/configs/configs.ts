@@ -5,5 +5,6 @@ export const configs = {
     new RoleModel({ key: "Sviluppatore", value: 1 }),
     new RoleModel({ key: "Responsabile", value: 2 }),
     new RoleModel({ key: "Utente standard", value: 3 })
-  ]
+  ],
+  offlineEntityNumber:5
 };
