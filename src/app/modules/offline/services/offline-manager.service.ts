@@ -45,7 +45,9 @@ export class OfflineManagerService {
 
 
 
-
+    /**
+     * signs he db
+     */
     this.makeSignature(async sign => {
 
       await new StoreSignature(this.localDb, sign).execute()
@@ -161,6 +163,30 @@ export class OfflineManagerService {
   async isLoggedUserOflineEnabled() {
     const user = await this.users.loggedUser.pipe(take(1)).toPromise()
     return user.isOfflineEnabled()
+  }
+
+  async rebaseDb() {
+    await this.localDb.clear()
+    this.makeSignature(async sign => {
+
+      await new StoreSignature(this.localDb, sign).execute()
+    })
+    //clones entiites for every service
+    this.servicesList.forEach(async service => {
+      new CloneEntity(this.localDb, service).execute()
+      const db = new OfflineDbService()
+
+      service.offlineDbStatus = offLineDbStatus.syncing
+
+      OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
+
+
+      await new CloneEntity(db, service).execute()
+      OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
+
+      service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
+
+    })
   }
 
   async registerService(service: OfflineItemServiceInterface) {
