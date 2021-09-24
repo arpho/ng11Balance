@@ -16,4 +16,8 @@ export class OfflineStatusComponent implements OnInit {
 
   ngOnInit() {}
 
+
+  refresh(){
+    console.log('refresh db')
+  }
 }

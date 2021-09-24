@@ -38,7 +38,6 @@ export class ConnectionStatusService {
 
 
     if(navigator.onLine){
-      console.log('dispatchiong')
       store.dispatch({type:'connection/online'})
     }
 
@@ -49,7 +48,6 @@ export class ConnectionStatusService {
     function reducer(state = initialState, action) {
       switch (action.type) {
         case "connection/online":
-          console.log('status switch', navigator.onLine)
           return { ...state, value: navigator.onLine }
         case "connection/offline":
           console.log('status switch', false)

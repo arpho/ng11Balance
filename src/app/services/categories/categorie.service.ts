@@ -177,7 +177,8 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     )
     this.manager.isLoggedUserOflineEnabled().then(enabled => {
       if (enabled) {
-        this.setHref()
+        if(!this.categoriesListRef){
+        this.setHref()}
         this.manager.registerService(this)
       }
       else {

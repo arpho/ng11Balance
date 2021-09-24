@@ -26,7 +26,6 @@ export class Puller {
         */ {
             this.changes = []
             items.forEach(item => {
-                console.log('pulling ',item,this.services)
                 const Service = this.services.filter(service => service.entityLabel == item.item['entity'])[0]
                 if(Service){
                 const entity = Service.getDummyItem().initialize(item.item)
@@ -35,8 +34,6 @@ export class Puller {
                 change.date = new DateModel(new Date(item.item['date']))
                 this.changes.push(change)}
             })
-
-            console.log('changes',this.changes)
             return this
         }
 
