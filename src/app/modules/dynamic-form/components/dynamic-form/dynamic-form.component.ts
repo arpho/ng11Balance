@@ -41,7 +41,6 @@ export class DynamicFormComponent implements OnInit,OnChanges {
 
   constructor(private qcs: QuestionControlService) { }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes',changes)
     this.changes.emit(changes)
   }
 

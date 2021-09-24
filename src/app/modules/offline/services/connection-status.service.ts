@@ -50,7 +50,6 @@ export class ConnectionStatusService {
         case "connection/online":
           return { ...state, value: navigator.onLine }
         case "connection/offline":
-          console.log('status switch', false)
           return { ...state, value: navigator.onLine }
         default:
           return state
@@ -62,7 +61,6 @@ export class ConnectionStatusService {
   }
   monitor(callback) {
     const out =  this.store.subscribe(()=>{
-      console.log('monitor triggered')
       return callback(navigator.onLine)})
     return out
   }

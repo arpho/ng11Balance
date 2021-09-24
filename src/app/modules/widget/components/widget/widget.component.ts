@@ -18,7 +18,6 @@ export class WidgetComponent implements OnInit, OnChanges {
 
   constructor() {
     this.Widget && this.Widget.Value.subscribe(v => {
-      console.log('v', v)
       if (v != -1) {
         this.showSpinner = false
       }

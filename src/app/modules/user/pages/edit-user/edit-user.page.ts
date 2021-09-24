@@ -116,7 +116,6 @@ export class EditUserPage implements OnInit {
 
   filter(ev) { }
   submit(ev) {
-    console.log('submit', ev);
     ev.email = this.currentUser.email; // non modifico email
     const user = new UserModel(ev);
     user.key = this.currentUser.key;
@@ -125,7 +124,6 @@ export class EditUserPage implements OnInit {
       // tslint:disable-next-line: no-unused-expression
       r.value == this.currentUser.level;
     })[0];
-    console.log('updating user', user);
     user.role = configs.accessLevel.filter(
       (v: RoleModel) => v.value == ev.level
     )[0];
@@ -135,11 +133,9 @@ export class EditUserPage implements OnInit {
     this.service
       .updateItem(user)
       .then(v => {
-        console.log('updated', v);
         this.router.navigate(['/users']);
       })
       .catch(e => {
-        console.log('error', e);
       });
   }
 }

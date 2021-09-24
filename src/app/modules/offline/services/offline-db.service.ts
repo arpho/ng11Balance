@@ -47,7 +47,6 @@ export class OfflineDbService {
    * fetch all items of label
     @param label 
    */
-  console.log('fetching for',entityLabel)
     const out: RawItem[] = []
    await  localforage.iterate((value, key, iterationNumber) => {
       const rawitem = new RawItem({ item: value, key: key })
@@ -55,7 +54,6 @@ export class OfflineDbService {
         out.push(rawitem)
       }
     })
-    console.log(`fetched for ${entityLabel}`,out)
     return out;
   }
 

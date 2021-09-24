@@ -163,7 +163,6 @@ export class CreateWidgetPage implements OnInit {
   ngOnInit() {
 
     this.order = this.navParams.get('order')
-    console.log('order',this.order)
   }
 
 }

@@ -132,7 +132,6 @@ export class OfflineManagerService {
       return val;
     };
     var status = statusList.reduce(reducer, 0)
-    console.log('status', status)
     let out = 0;
     if (status == 0) {
       out = offLineDbStatus.notInitialized
@@ -176,9 +175,7 @@ export class OfflineManagerService {
       }
     }
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
-    console.log(`edntity tatus for ${service.entityLabel}`,entityStatus)
     if (entityStatus.item == offLineDbStatus.notInitialized || entityStatus.item == null) {
-      console.log(`initializing ${service.entityLabel}`)
       new CloneEntity(this.localDb, service).execute()
       const db = new OfflineDbService()
 

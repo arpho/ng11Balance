@@ -30,7 +30,6 @@ export class FilterPopupPage implements OnInit {
   }
 
   editing(ev){
-    console.log('editing',ev)
   }
 
 }

@@ -44,14 +44,11 @@ export class InputGeolocationComponent implements OnInit, ControlValueAccessor {
     private formBuilder: FormBuilder) { }
 
   writeValue(value) {
-    console.log('writing ', value)
 
     value = value || new Coordinates({ latitude: 0, longitude: 0, address: '' });
     this.address = value.address
     // if value is undefined it fails
     this.location = value;
-    console.log('location', this.location
-    )
     this.onChange(this.location);
 
 

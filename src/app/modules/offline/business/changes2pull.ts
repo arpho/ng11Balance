@@ -33,10 +33,7 @@ export class Changes2Pull{
       })
       
       await pull.execute(changes,this.signature)
-      console.log('* signature', this.signature)
       const changes2Pull = changes.filter(change => !change.isSignedBy(this.signature))
-      console.log('changes 2 pull *', changes2Pull)
-
     })
 
     }

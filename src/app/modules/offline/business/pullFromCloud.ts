@@ -26,7 +26,6 @@ export class pullChangesFromCloud {
         const pull = new pullChangesFromCloud(this.Changes,this.localDb,this.services)
         this.Changes.items.subscribe(async items=>{
             items.forEach(async item=>{
-                console.log('elaborating **',item)
                 const Service = this.services.filter(service=>service.entityLabel==item.entityLabel2Update)[0]
                 const entity = Service.getDummyItem().initialize(item.item)
                 if(item.operationKey==OperationKey.create){
