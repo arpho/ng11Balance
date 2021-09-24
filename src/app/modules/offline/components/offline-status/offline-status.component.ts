@@ -11,13 +11,13 @@ export class OfflineStatusComponent implements OnInit {
   status = OfflineManagerService.offlineDbStatus
 
   constructor() {
-    OfflineManagerService._offlineDbStatus.subscribe(status=>{})
-   }
 
-  ngOnInit() {}
+  }
+
+  ngOnInit() { }
 
 
-  refresh(){
+  refresh() {
     console.log('refresh db')
   }
 }
