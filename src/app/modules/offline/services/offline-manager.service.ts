@@ -31,7 +31,7 @@ export class OfflineManagerService {
   _msg: BehaviorSubject<string> = new BehaviorSubject('')
   readonly msg: Observable<string> = this._msg.asObservable()
 
-  publishmessage(msg:string){
+  publishMessage(msg:string){
     this._msg.next(msg)
   }
 
