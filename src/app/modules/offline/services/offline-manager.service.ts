@@ -15,6 +15,7 @@ import { ConnectionStatusService } from './connection-status.service';
 import { Push2Cloud } from '../business/push2Cloud';
 import { Puller } from '../business/puller';
 import { configs } from 'src/app/configs/configs';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Injectable({
   providedIn: 'root'
@@ -166,13 +167,14 @@ export class OfflineManagerService {
   }
 
   async rebaseDb() {
-    await this.localDb.clear()
+    /* await this.localDb.clear()
     this.makeSignature(async sign => {
 
       await new StoreSignature(this.localDb, sign).execute()
-    })
+    }) */
+    console.log('rebasing')
     //clones entiites for every service
-    this.servicesList.forEach(async service => {
+    /* this.servicesList.forEach(async service => {
       new CloneEntity(this.localDb, service).execute()
       const db = new OfflineDbService()
 
@@ -186,7 +188,7 @@ export class OfflineManagerService {
 
       service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
 
-    })
+    }) */
   }
 
   async registerService(service: OfflineItemServiceInterface) {

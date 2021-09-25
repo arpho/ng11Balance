@@ -11,7 +11,7 @@ import { OfflineManagerService } from '../../services/offline-manager.service';
 export class OfflineStatusComponent implements OnInit {
   status = OfflineManagerService.offlineDbStatus
 
-  constructor(public alertController:AlertController) {
+  constructor(public alertController:AlertController,public manager:OfflineManagerService) {
 
   }
 
@@ -35,6 +35,7 @@ export class OfflineStatusComponent implements OnInit {
           text: 'sincronizza',
           handler: () => {
             console.log('Confirm Okay');
+            this.manager.rebaseDb()
           }
         }
       ]
