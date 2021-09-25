@@ -11,8 +11,10 @@ export class CloneEntity {
     this.service = service
   }
   async execute() {
+    var itemsNumber:number
     console.time(`fetching ${this.service.entityLabel}`)
     await this.service.fetchItemsFromCloud(async (items) => {
+      itemsNumber = items.length
       items.forEach(async (item: RawItem) => {
         item.item['entityLabel'] = this.service.entityLabel
         await this.db.set(item.key, item.item)
@@ -24,6 +26,7 @@ export class CloneEntity {
       this.service.offlineDbStatus = offLineDbStatus.up2Date
       this.service.fetchItemsFromCloud((items)=>{this.service.publish(this.service.initializeItems(items))})
     })
+    return itemsNumber
   }
 
 }
