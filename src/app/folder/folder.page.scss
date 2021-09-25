@@ -27,14 +27,6 @@ ion-menu-button {
   text-decoration: none;
 }
 
-.list-md {
-  margin-left: 0;
-  margin-right: 0;
-  margin-top: 34em;
-  margin-bottom: 0;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 26px;
-  padding-bottom: 8px;
-  background: var(--ion-item-background, var(--ion-background-color, #fff));
+ion-list.ios.list-ios.hydrated {
+  margin-top: 33em;
 }
