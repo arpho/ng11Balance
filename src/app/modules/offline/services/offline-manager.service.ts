@@ -191,7 +191,6 @@ export class OfflineManagerService {
 
   async registerService(service: OfflineItemServiceInterface) {
     if (!OfflineManagerService.servicesList.map(service => service.entityLabel).includes(service.entityLabel)) {
-      console.log('registering', service.entityLabel)
       OfflineManagerService.servicesList.push(service)
       this.servicesList.push(service)
 
@@ -216,8 +215,6 @@ export class OfflineManagerService {
       service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
     }
     else if (entityStatus.item == 1) {
-      console.log('db ready')
-      console.log('load from local')
       service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
 
     }

@@ -68,7 +68,6 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
       if (user) {
         this.suppliersListRef = firebase.default.database().ref(`/fornitori/${user.uid}/`)
         SuppliersService.suppliersListRef = firebase.default.database().ref(`/fornitori/${user.uid}/`)
-        console.log('set href', this.suppliersListRef)
       }
     }
     )
