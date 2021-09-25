@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { OfflineManagerService } from '../../services/offline-manager.service';
 
 @Component({
@@ -11,11 +11,19 @@ import { OfflineManagerService } from '../../services/offline-manager.service';
 export class OfflineStatusComponent implements OnInit {
   status = OfflineManagerService.offlineDbStatus
 
-  constructor(public alertController:AlertController,public manager:OfflineManagerService) {
+  constructor(public alertController:AlertController,public manager:OfflineManagerService,public toastController:ToastController) {
 
   }
 
   ngOnInit() { }
+
+  async presentToast(msg:string) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000
+    });
+    toast.present();
+  }
 
 
   async presentAlertConfirm() {

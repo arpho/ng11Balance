@@ -28,6 +28,13 @@ export class OfflineManagerService {
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
 
+  _msg: BehaviorSubject<string> = new BehaviorSubject('')
+  readonly msg: Observable<string> = this._msg.asObservable()
+
+  publishmessage(msg:string){
+    this._msg.next(msg)
+  }
+
 
 
 
