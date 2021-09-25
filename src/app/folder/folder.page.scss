@@ -26,3 +26,15 @@ ion-menu-button {
 #container a {
   text-decoration: none;
 }
+
+.list-md {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 34em;
+  margin-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 26px;
+  padding-bottom: 8px;
+  background: var(--ion-item-background, var(--ion-background-color, #fff));
+}
