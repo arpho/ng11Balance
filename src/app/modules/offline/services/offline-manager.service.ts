@@ -168,18 +168,19 @@ export class OfflineManagerService {
   }
 
   async rebaseDb() {
-     await this.localDb.clear()
+    await this.push2Cloud() // upload not synched changes
+    await this.localDb.clear()
     this.makeSignature(async sign => {
 
       await new StoreSignature(this.localDb, sign).execute()
-    }) 
+    })
     console.log('rebasing')
-    const synchonizer = new RebaseEntity(this.localDb,this)
+    const synchonizer = new RebaseEntity(this.localDb, this)
     //clones entiites for every service
-     this.servicesList.forEach(async service => {
-     await synchonizer.synchronizes(service)
+    this.servicesList.forEach(async service => {
+      await synchonizer.synchronizes(service)
 
-    }) 
+    })
   }
 
   async registerService(service: OfflineItemServiceInterface) {
