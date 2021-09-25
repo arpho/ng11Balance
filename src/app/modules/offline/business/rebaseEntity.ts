@@ -14,9 +14,8 @@ export class RebaseEntity {
         this.manager = manager
     }
 
-    async run(service: OfflineItemServiceInterface) {
+    async synchronizes(service: OfflineItemServiceInterface) {
         await new CloneEntity(this.localDb, service).execute()
-        const db = new OfflineDbService()
         service.offlineDbStatus = offLineDbStatus.syncing
         OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
         service.offlineDbStatus = offLineDbStatus.up2Date

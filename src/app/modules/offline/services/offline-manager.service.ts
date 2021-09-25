@@ -16,6 +16,7 @@ import { Push2Cloud } from '../business/push2Cloud';
 import { Puller } from '../business/puller';
 import { configs } from 'src/app/configs/configs';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import { RebaseEntity } from '../business/rebaseEntity';
 
 @Injectable({
   providedIn: 'root'
@@ -167,28 +168,18 @@ export class OfflineManagerService {
   }
 
   async rebaseDb() {
-    /* await this.localDb.clear()
+     await this.localDb.clear()
     this.makeSignature(async sign => {
 
       await new StoreSignature(this.localDb, sign).execute()
-    }) */
+    }) 
     console.log('rebasing')
+    const synchonizer = new RebaseEntity(this.localDb,this)
     //clones entiites for every service
-    /* this.servicesList.forEach(async service => {
-      new CloneEntity(this.localDb, service).execute()
-      const db = new OfflineDbService()
+     this.servicesList.forEach(async service => {
+     await synchonizer.synchronizes(service)
 
-      service.offlineDbStatus = offLineDbStatus.syncing
-
-      OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
-
-
-      await new CloneEntity(db, service).execute()
-      OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
-
-      service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
-
-    }) */
+    }) 
   }
 
   async registerService(service: OfflineItemServiceInterface) {
