@@ -31,7 +31,7 @@ export class OfflineManagerService {
   _msg: BehaviorSubject<string> = new BehaviorSubject('')
   readonly msg: Observable<string> = this._msg.asObservable()
 
-  publishMessage(msg:string){
+  publishMessage(msg: string) {
     this._msg.next(msg)
   }
 
@@ -186,6 +186,7 @@ export class OfflineManagerService {
     //clones entiites for every service
     this.servicesList.forEach(async service => {
       await synchonizer.synchronizes(service)
+      this.publishMessage(`synchronized ${service.entityLabel}`)
 
     })
   }

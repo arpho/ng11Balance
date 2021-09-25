@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
+import { Observable, Subscription } from 'rxjs';
 import { OfflineManagerService } from '../../services/offline-manager.service';
 
 @Component({
@@ -8,16 +9,23 @@ import { OfflineManagerService } from '../../services/offline-manager.service';
   styleUrls: ['./offline-status.component.scss'],
 })
 /**subscribe to offlineStatus field in offlineManager */
-export class OfflineStatusComponent implements OnInit {
+export class OfflineStatusComponent implements OnInit, OnDestroy {
   status = OfflineManagerService.offlineDbStatus
+  msgSubscription: Subscription
 
-  constructor(public alertController:AlertController,public manager:OfflineManagerService,public toastController:ToastController) {
-
+  constructor(public alertController: AlertController, public manager: OfflineManagerService, public toastController: ToastController) {
+    this.msgSubscription = manager.msg.subscribe(msg => {
+      this.presentToast(msg)
+    })
   }
 
   ngOnInit() { }
+  ngOnDestroy() {
+    this.msgSubscription.unsubscribe()
 
-  async presentToast(msg:string) {
+  }
+
+  async presentToast(msg: string) {
     const toast = await this.toastController.create({
       message: msg,
       duration: 2000
