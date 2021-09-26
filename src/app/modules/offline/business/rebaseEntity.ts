@@ -14,10 +14,14 @@ export class RebaseEntity {
         this.manager = manager
     }
 
-    async synchronizes(service: OfflineItemServiceInterface) {
+    async synchronizes(service: OfflineItemServiceInterface,message?:(data:number)=>void) {/**
+     * @service:service relativo all'entità sincronizzato
+        @message funzione di callback che presenta messaggio relativo al numero di items
+     */
         var numberOfItems
          const itemsNumber = await new CloneEntity(this.localDb, service).execute(n=>{
             console.log('number',n) 
+            message(n)
             numberOfItems = n})
          console.log('synchronizing',itemsNumber)
         service.offlineDbStatus = offLineDbStatus.syncing
@@ -25,7 +29,7 @@ export class RebaseEntity {
         service.offlineDbStatus = offLineDbStatus.up2Date
         OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
         service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
-        return numberOfItems
+      
 
     }
 }
