@@ -11,9 +11,9 @@ export class CloneEntity {
     this.service = service
   }
   async execute(next?) {
-    var itemsNumber:number
+    var itemsNumber: number
     console.time(`fetching ${this.service.entityLabel}`)
-    await this.service.fetchItemsFromCloud(async (items) => {
+     this.service.fetchItemsFromCloud(async (items) => {
       itemsNumber = items.length
       next(itemsNumber)
       items.forEach(async (item: RawItem) => {
@@ -23,10 +23,11 @@ export class CloneEntity {
       })
       await this.db.set(`${this.service.entityLabel}_status_db`, offLineDbStatus.up2Date)
       console.time(`fetching ${this.service.entityLabel}`)
-      console.log('synced', this.service.entityLabel,itemsNumber)
+      console.log('synced', this.service.entityLabel, itemsNumber)
       this.service.offlineDbStatus = offLineDbStatus.up2Date
-      this.service.fetchItemsFromCloud((items)=>{this.service.publish(this.service.initializeItems(items))
-      itemsNumber = items.length
+      this.service.fetchItemsFromCloud((items) => {
+        this.service.publish(this.service.initializeItems(items))
+        itemsNumber = items.length
       })
     })
     return itemsNumber
