@@ -187,7 +187,6 @@ export class OfflineManagerService {
     //clones entiites for every service
     this.servicesList.forEach(async service => {
      await synchonizer.synchronizes(service,(data)=>{
-        console.log('ciao',data)
         this.publishMessage(`synchronized ${data} items for  ${service.entityLabel}`)
       })
       
@@ -207,10 +206,12 @@ export class OfflineManagerService {
     }
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
     if (entityStatus.item == offLineDbStatus.notInitialized || entityStatus.item == null) {
-      const entitiesNumber = await new RebaseEntity(this.localDb,this).synchronizes(service)
+      const entitiesNumber = await new RebaseEntity(this.localDb,this).synchronizes(service,(data)=>{
+        this.publishMessage(`synchronized ${data} items for  ${service.entityLabel}`)
       this.publishMessage(`sincronizzati ${entityStatus} items per ${service.entityLabel}`)
   
-    }
+    })
+  }
     else if (entityStatus.item == 1) {
       service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
 

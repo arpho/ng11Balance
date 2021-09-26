@@ -20,10 +20,8 @@ export class RebaseEntity {
      */
         var numberOfItems
          const itemsNumber = await new CloneEntity(this.localDb, service).execute(n=>{
-            console.log('number',n) 
             message(n)
             numberOfItems = n})
-         console.log('synchronizing',itemsNumber)
         service.offlineDbStatus = offLineDbStatus.syncing
         OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
         service.offlineDbStatus = offLineDbStatus.up2Date

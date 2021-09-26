@@ -32,7 +32,6 @@ export class OfflineStatusComponent implements OnInit, OnDestroy {
       duration: 2000,
       position:'top'
     });
-    console.log('presenting toast',msg)
     toast.present();
   }
 
