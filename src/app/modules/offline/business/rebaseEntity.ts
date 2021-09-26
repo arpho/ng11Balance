@@ -18,10 +18,11 @@ export class RebaseEntity {
      * @service:service relativo all'entità sincronizzato
         @message funzione di callback che presenta messaggio relativo al numero di items
      */
-        var numberOfItems
+        
          const itemsNumber = await new CloneEntity(this.localDb, service).execute(n=>{
-            message(n)
-            numberOfItems = n})
+             if(message){
+            message(n)}
+           })
         service.offlineDbStatus = offLineDbStatus.syncing
         OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
         service.offlineDbStatus = offLineDbStatus.up2Date
