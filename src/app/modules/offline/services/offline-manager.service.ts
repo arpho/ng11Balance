@@ -181,7 +181,8 @@ export class OfflineManagerService {
 
       await new StoreSignature(this.localDb, sign).execute()
     })
-    const synchonizer = new RebaseEntity(this.localDb, this)
+    const refreshStatus = () =>{OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())}
+    const synchonizer = new RebaseEntity(this.localDb,refreshStatus)
     //clones entiites for every service
     this.servicesList.forEach(async service => {
       await synchonizer.synchronizes(service, (data) => {
@@ -204,7 +205,8 @@ export class OfflineManagerService {
     }
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
     if (entityStatus.item == offLineDbStatus.notInitialized || entityStatus.item == null) {
-      const entitiesNumber = await new RebaseEntity(this.localDb, this).synchronizes(service, (data) => {
+      const refreshStatus = () =>{OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())}
+      const entitiesNumber = await new RebaseEntity(this.localDb, refreshStatus).synchronizes(service, (data) => {
         this.publishMessage(`synchronized ${data} items for  ${service.entityLabel}`)
         this.publishMessage(`sincronizzati ${entityStatus} items per ${service.entityLabel}`)
 

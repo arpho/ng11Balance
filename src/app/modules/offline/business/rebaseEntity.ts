@@ -1,17 +1,15 @@
 import { offLineDbStatus } from "../models/offlineDbStatus";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
 import { OfflineDbService } from "../services/offline-db.service";
-import { OfflineManagerService } from "../services/offline-manager.service";
 import { CloneEntity } from "./cloneEntityFromFirebase";
 
 export class RebaseEntity {
 
     localDb: OfflineDbService
-    manager: OfflineManagerService
+    refreshStatus:()=>void
 
-    constructor(localDb: OfflineDbService, manager: OfflineManagerService) {
+    constructor(localDb: OfflineDbService,refreshStatus?:()=>void) {
         this.localDb = localDb
-        this.manager = manager
     }
 
     async synchronizes(service: OfflineItemServiceInterface, message?: (data: number) => void) {/**
@@ -25,10 +23,11 @@ export class RebaseEntity {
             }
         })
         service.offlineDbStatus = offLineDbStatus.syncing
-        OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
+        if(this.refreshStatus){
+        this.refreshStatus()}
         service.offlineDbStatus = offLineDbStatus.up2Date
-        OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
-        service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
+        if(this.refreshStatus){
+            this.refreshStatus()}
 
 
     }
