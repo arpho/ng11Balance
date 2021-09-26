@@ -32,7 +32,6 @@ export class OfflineManagerService {
   readonly msg: Observable<string> = this._msg.asObservable()
 
   publishMessage(msg: string) {
-    console.log('publishing',msg)
     this._msg.next(msg)
   }
 
@@ -182,7 +181,6 @@ export class OfflineManagerService {
 
       await new StoreSignature(this.localDb, sign).execute()
     })
-    console.log('rebasing')
     const synchonizer = new RebaseEntity(this.localDb, this)
     //clones entiites for every service
     this.servicesList.forEach(async service => {

@@ -29,7 +29,6 @@ export class CloneEntity {
       itemsNumber = items.length
       })
     })
-    console.log('returning',itemsNumber)
     return itemsNumber
   }
 
