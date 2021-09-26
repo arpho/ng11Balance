@@ -15,13 +15,17 @@ export class RebaseEntity {
     }
 
     async synchronizes(service: OfflineItemServiceInterface) {
-         const itemsNUmber = await new CloneEntity(this.localDb, service).execute()
+        var numberOfItems
+         const itemsNumber = await new CloneEntity(this.localDb, service).execute(n=>{
+            console.log('number',n) 
+            numberOfItems = n})
+         console.log('synchronizing',itemsNumber)
         service.offlineDbStatus = offLineDbStatus.syncing
         OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
         service.offlineDbStatus = offLineDbStatus.up2Date
         OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
         service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
-        return itemsNUmber
+        return numberOfItems
 
     }
 }

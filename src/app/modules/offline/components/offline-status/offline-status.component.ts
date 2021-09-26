@@ -15,6 +15,7 @@ export class OfflineStatusComponent implements OnInit, OnDestroy {
 
   constructor(public alertController: AlertController, public manager: OfflineManagerService, public toastController: ToastController) {
     this.msgSubscription = manager.msg.subscribe(msg => {
+      console.log('showing',msg)
       this.presentToast(msg)
     })
   }
@@ -28,8 +29,10 @@ export class OfflineStatusComponent implements OnInit, OnDestroy {
   async presentToast(msg: string) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 2000
+      duration: 2000,
+      position:'top'
     });
+    console.log('presenting toast',msg)
     toast.present();
   }
 

@@ -32,6 +32,7 @@ export class OfflineManagerService {
   readonly msg: Observable<string> = this._msg.asObservable()
 
   publishMessage(msg: string) {
+    console.log('publishing',msg)
     this._msg.next(msg)
   }
 
