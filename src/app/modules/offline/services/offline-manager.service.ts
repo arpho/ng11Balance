@@ -203,18 +203,9 @@ export class OfflineManagerService {
     }
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
     if (entityStatus.item == offLineDbStatus.notInitialized || entityStatus.item == null) {
-      new CloneEntity(this.localDb, service).execute()
-      const db = new OfflineDbService()
-
-      service.offlineDbStatus = offLineDbStatus.syncing
-
-      OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
-
-
-      await new CloneEntity(db, service).execute()
-      OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())
-
-      service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
+      const entitiesNumber = await new RebaseEntity(this.localDb,this).synchronizes(service)
+      this.publishMessage(`sincronizzati ${entityStatus} items per ${service.entityLabel}`)
+  
     }
     else if (entityStatus.item == 1) {
       service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
