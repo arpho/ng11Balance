@@ -124,7 +124,7 @@ export class FidelityCardService implements OfflineItemServiceInterface {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     const fc = new FidelityCardModel().initialize(item)
-    await new OfflineUpdateOperation(fc,this.changes,this.localDb,signature,enabled).runOperations()
+    await new OfflineUpdateOperation(fc,this.changes,this.localDb,signature,enabled,this).runOperations()
     return this.fidelityCardsListRef.child(item.key).update(item.serialize())
   }
   async deleteItem(key: string) {
@@ -132,7 +132,7 @@ export class FidelityCardService implements OfflineItemServiceInterface {
     dummyCard.setKey(key)
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-    await new OfflineDeleteOperation(signature,dummyCard,this.localDb,this.changes,enabled).runOperations()
+    await new OfflineDeleteOperation(signature,dummyCard,this.localDb,this.changes,enabled,this).runOperations()
 
     return this.fidelityCardsListRef.child(key).remove()
   }
@@ -147,7 +147,7 @@ export class FidelityCardService implements OfflineItemServiceInterface {
    
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-    fc = new FidelityCardModel().initialize( await new OfflineCreateOperation(fc,this.changes,signature,this.localDb,enabled).runOperations())
+    fc = new FidelityCardModel().initialize( await new OfflineCreateOperation(fc,this.changes,signature,this.localDb,enabled,this).runOperations())
     await this.fidelityCardsListRef.push(fc.serialize())
     return new FidelityCardModel().initialize(fc);
   }
