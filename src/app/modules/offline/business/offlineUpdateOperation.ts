@@ -1,5 +1,6 @@
 import { Items2Update } from "../models/items2Update";
 import { OfflineItemModelInterface } from "../models/offlineItemModelInterface";
+import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
 import { OperationKey } from "../models/operationKey";
 import { ChangesService } from "../services/changes.service";
 import { OfflineDbService } from "../services/offline-db.service";
@@ -12,8 +13,8 @@ export class OfflineUpdateOperation extends offlineCrudOperation{
     item: OfflineItemModelInterface
     item2Update: Items2Update
     localDb: OfflineDbService
-    constructor(item: OfflineItemModelInterface,  changes: ChangesService, localDb: OfflineDbService,signature:string,userOfflineEnabled) {
-      super(changes,localDb,item,userOfflineEnabled,signature)
+    constructor(item: OfflineItemModelInterface,  changes: ChangesService, localDb: OfflineDbService,signature:string,userOfflineEnabled,service:OfflineItemServiceInterface) {
+      super(changes,localDb,item,userOfflineEnabled,signature,service)
 
     }
 
