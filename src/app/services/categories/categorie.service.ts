@@ -150,7 +150,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-    await new OfflineUpdateOperation(item, this.changes, this.localDb, signature, enabled).runOperations()
+    await new OfflineUpdateOperation(item, this.changes, this.localDb, signature, enabled,this).runOperations()
     return this.categoriesListRef?.child(item.key).update(item.serialize());
   }
 
@@ -159,7 +159,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     const cat = new CategoryModel().setKey(key)
-    await new OfflineDeleteOperation(signature, cat, this.localDb, this.changes, enabled).runOperations()
+    await new OfflineDeleteOperation(signature, cat, this.localDb, this.changes, enabled,this).runOperations()
     return this.categoriesListRef?.child(key).remove();
   }
 
@@ -203,7 +203,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     var Category: OfflineItemModelInterface
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-    Category = await new OfflineCreateOperation(item, this.changes, signature, this.localDb, enabled).runOperations()
+    Category = await new OfflineCreateOperation(item, this.changes, signature, this.localDb, enabled,this).runOperations()
     await this.categoriesListRef.push(Category.serialize())
     return Category;
 
