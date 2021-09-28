@@ -75,6 +75,13 @@ export class OfflineManagerService {
 
   }
 
+  refreshItems() {
+    /** fetch all items from local db and publishes the items */
+    this.servicesList.forEach(async service => {
+      service.publish(service.initializeItems(await this.localDb.fetchAllRawItems4Entity(service.entityLabel)))
+    })
+  }
+
   async pullChangesFromCloud() {
     const puller = new Puller(this.localDb, await this.asyncSignature(), this.servicesList, this.changes)
     this.changes.fetchItemsFromCloud(changes => puller.// download changes
@@ -85,6 +92,8 @@ export class OfflineManagerService {
           updateChanges().finally(() => { // update changes on firebase 
             puller.
               removeOldChanges() //remove old changes older than a month
+            this.refreshItems()
+
           })
       }))
   }
@@ -181,8 +190,8 @@ export class OfflineManagerService {
 
       await new StoreSignature(this.localDb, sign).execute()
     })
-    const refreshStatus = () =>{OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())}
-    const synchonizer = new RebaseEntity(this.localDb,refreshStatus)
+    const refreshStatus = () => { OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus()) }
+    const synchonizer = new RebaseEntity(this.localDb, refreshStatus)
     //clones entiites for every service
     this.servicesList.forEach(async service => {
       await synchonizer.synchronizes(service, (data) => {
@@ -205,7 +214,7 @@ export class OfflineManagerService {
     }
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
     if (entityStatus.item == offLineDbStatus.notInitialized || entityStatus.item == null) {
-      const refreshStatus = () =>{OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus())}
+      const refreshStatus = () => { OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus()) }
       const entitiesNumber = await new RebaseEntity(this.localDb, refreshStatus).synchronizes(service, (data) => {
         this.publishMessage(`synchronized ${data} items for  ${service.entityLabel}`)
         this.publishMessage(`sincronizzati ${entityStatus} items per ${service.entityLabel}`)
