@@ -86,7 +86,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     const kart = new ShoppingKartModel().initialize(item)
-    await new OfflineUpdateOperation(kart, this.changes, this.localDb, signature, enabled).runOperations()
+    await new OfflineUpdateOperation(kart, this.changes, this.localDb, signature, enabled,this).runOperations()
     return this.shoppingKartsListRef.child(item.key).update(item.serialize());
   }
 
@@ -94,7 +94,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     const dummy = new ShoppingKartModel().setKey(key)
-    await new OfflineDeleteOperation(signature, dummy, this.localDb, this.changes, enabled).runOperations()
+    await new OfflineDeleteOperation(signature, dummy, this.localDb, this.changes, enabled,this).runOperations()
     return this.shoppingKartsListRef.child(key).remove();
   }
 
@@ -106,7 +106,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     var Kart = this.getDummyItem().initialize(item)
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-    Kart = await new OfflineCreateOperation(Kart, this.changes, signature, this.localDb, enabled).runOperations()
+    Kart = await new OfflineCreateOperation(Kart, this.changes, signature, this.localDb, enabled,this).runOperations()
     await this.shoppingKartsListRef.push(item.serialize())
     return Kart;
   }

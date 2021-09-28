@@ -152,7 +152,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
     var Payment: PaymentsModel = new PaymentsModel().initialize(item)
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-    Payment.setKey(await (await new OfflineCreateOperation(Payment, this.changes, signature, this.localDb, enabled).runOperations()).key)
+    Payment.setKey(await (await new OfflineCreateOperation(Payment, this.changes, signature, this.localDb, enabled,this).runOperations()).key)
     this.paymentsListRef.push(Payment.serialize())
 
     return Payment
@@ -162,7 +162,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     const payment = new PaymentsModel().initialize(item)
-    await new OfflineUpdateOperation(payment, this.changes, this.localDb, signature, enabled).runOperations()
+    await new OfflineUpdateOperation(payment, this.changes, this.localDb, signature, enabled,this).runOperations()
     return this.paymentsListRef.child(item.key).update(item.serialize());
   }
 
@@ -170,7 +170,7 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     const dummy = new PaymentsModel().setKey(key)
-    await new OfflineDeleteOperation(signature, dummy, this.localDb, this.changes, enabled).runOperations()
+    await new OfflineDeleteOperation(signature, dummy, this.localDb, this.changes, enabled,this).runOperations()
     return this.paymentsListRef.child(key).remove();
   }
 }
