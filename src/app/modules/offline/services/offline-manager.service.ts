@@ -42,8 +42,7 @@ export class OfflineManagerService {
     public users: UsersService,
     public changes: ChangesService,
     connection: ConnectionStatusService) {
-    // this.pullChangesFromCloud()
-    //this.localDb.clear()
+    this.pullChangesFromCloud()
     connection.monitor(async status => {
       console.log('monitor', status)
       if (status) {
