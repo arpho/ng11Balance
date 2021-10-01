@@ -1,13 +1,20 @@
 import { waitForAsync } from "@angular/core/testing"
 import { CategoryModel } from "src/app/models/CategoryModel"
+import { CategoriesServiceMocker } from "src/app/services/categories/categoriesServiceMocker"
+import { UsersService } from "../../user/services/users.service"
 import { OperationKey } from "../models/operationKey"
+import { ConnectionStatusService } from "../services/connection-status.service"
 import { ChangesServiceMockers } from "../services/mockers/ChangeServiceMocks"
 import { LocalForageMocker } from "../services/mockers/offlineDbServiceMocker"
+import { OfflineManagerService } from "../services/offline-manager.service"
 import { OfflineCreateOperation } from "./offlineCreateOperation"
 
 var Changes: ChangesServiceMockers
 var db: LocalForageMocker
 var creatOP: OfflineCreateOperation
+var users: UsersService
+var manager: OfflineManagerService
+var Categories: CategoriesServiceMocker
 const categoryTest = new CategoryModel().initialize({
     entityLabel: "Categoria",
     fatherKey: "-LMTmZbBd6roqklYDflZ",
@@ -16,6 +23,10 @@ const categoryTest = new CategoryModel().initialize({
 })
 describe('create operation works', () => {
     beforeEach(waitForAsync(() => {
+        db = new LocalForageMocker()
+        users = new UsersService()
+        manager = new OfflineManagerService(db, users, Changes, new ConnectionStatusService())
+        Categories = new CategoriesServiceMocker(manager, db, Changes)
     }))
 })
 
@@ -23,7 +34,7 @@ describe('create operation works', () => {
 it('item should be properly created', async () => {
     Changes = new ChangesServiceMockers()
     db = new LocalForageMocker()
-    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true)
+    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true,Categories)
     creatOP.runOperations()
     const item = await db.get(categoryTest.key)
     expect(item.item).toBeTruthy()
