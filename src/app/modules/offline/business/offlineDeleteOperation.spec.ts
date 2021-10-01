@@ -37,6 +37,9 @@ describe('create operation works', () => {
 it('changes should be created properly', async () => {
     Changes = new ChangesServiceMockers()
     db = new LocalForageMocker()
+    users = new UsersService()
+    manager = new OfflineManagerService(db, users, Changes, new ConnectionStatusService())
+    Categories = new CategoriesServiceMocker(manager, db, Changes)
     const cat = categoryTest = new CategoryModel().initialize({
         entityLabel: "Categoria",
         fatherKey: "-LMTmZbBd6roqklYDflZ",
@@ -45,7 +48,7 @@ it('changes should be created properly', async () => {
     })
     db.set(cat.key, cat.serialize4OfflineDb())
     const dummy = new CategoryModel().setKey(cat.key)
-    const deleteOp = new OfflineDeleteOperation('test', dummy, db, Changes, true,Categories)
+    const deleteOp = new OfflineDeleteOperation('test', dummy, db, Changes, true, Categories)
 
     await deleteOp.runOperations()
     expect(Changes.changesList.length).toEqual(1)

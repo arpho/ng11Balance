@@ -34,7 +34,10 @@ describe('create operation works', () => {
 it('item should be properly created', async () => {
     Changes = new ChangesServiceMockers()
     db = new LocalForageMocker()
-    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true,Categories)
+    users = new UsersService()
+    manager = new OfflineManagerService(db, users, Changes, new ConnectionStatusService())
+    Categories = new CategoriesServiceMocker(manager, db, Changes)
+    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true, Categories)
     creatOP.runOperations()
     const item = await db.get(categoryTest.key)
     expect(item.item).toBeTruthy()
@@ -45,7 +48,10 @@ it('item should be properly created', async () => {
 it('changes should be created properly', async () => {
     Changes = new ChangesServiceMockers()
     db = new LocalForageMocker()
-    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true,Categories)
+    users = new UsersService()
+    manager = new OfflineManagerService(db, users, Changes, new ConnectionStatusService())
+    Categories = new CategoriesServiceMocker(manager, db, Changes)
+    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true, Categories)
     await creatOP.runOperations()
     expect(Changes.changesList.length).toEqual(1)
     expect(Changes.changesList[0].operationKey).toEqual(OperationKey.create)
@@ -57,13 +63,16 @@ it('changes should be created properly', async () => {
 it('item correctly created on local db', async () => {
     Changes = new ChangesServiceMockers()
     db = new LocalForageMocker()
+    users = new UsersService()
+    manager = new OfflineManagerService(db, users, Changes, new ConnectionStatusService())
+    Categories = new CategoriesServiceMocker(manager, db, Changes)
     const categoryTest = new CategoryModel().initialize({
         entityLabel: "Categoria",
         fatherKey: "-LMTmZbBd6roqklYDflZ",
         key: "-Ks0UdZGtzunNoCmGGJd",
         title: "gnosis"
     })
-    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true,Categories)
+    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true, Categories)
     await creatOP.runOperations()
     console.log('db', db)
     expect((await db.get("Ks0UdZGtzunNoCmGGJd")).item).toBeFalsy()

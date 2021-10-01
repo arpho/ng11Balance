@@ -1,3 +1,4 @@
+import { first } from "rxjs/operators";
 import { ItemModelInterface } from "../../item/models/itemModelInterface";
 import { Items2Update } from "../models/items2Update";
 import { OfflineItemModelInterface } from "../models/offlineItemModelInterface";
@@ -19,7 +20,7 @@ export class OfflineDeleteOperation extends offlineCrudOperation {
     }
     async applyOnLocalDb() {
         await this.localDb.remove(this.item.key)
-        this.service.items.subscribe(items => {
+        this.service.items.pipe(first()).subscribe(items => {
             const filteredList = items.filter(item => item.key != this.item.key)
             this.service.publish(filteredList)
         })

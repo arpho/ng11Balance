@@ -1,3 +1,4 @@
+import { first } from "rxjs/operators";
 import { Items2Update } from "../models/items2Update";
 import { OfflineItemModelInterface } from "../models/offlineItemModelInterface";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
@@ -20,7 +21,7 @@ export class OfflineUpdateOperation extends offlineCrudOperation{
 
    async applyOnLocalDb(){
        this.localDb.set(this.item.key,this.item.serialize4OfflineDb())
-       this.service.items.subscribe(items=>{
+       this.service.items.pipe(first()).subscribe(items=>{
            const updatedList = items.map(item=> (item.key==this.item.key)? this.item: item)
            this.service.publish(updatedList)
 
