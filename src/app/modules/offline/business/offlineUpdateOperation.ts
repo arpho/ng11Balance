@@ -20,6 +20,11 @@ export class OfflineUpdateOperation extends offlineCrudOperation{
 
    async applyOnLocalDb(){
        this.localDb.set(this.item.key,this.item.serialize4OfflineDb())
+       this.service.items.subscribe(items=>{
+           const updatedList = items.map(item=> (item.key==this.item.key)? this.item: item)
+           this.service.publish(updatedList)
+
+       })
        return this
    }
 
