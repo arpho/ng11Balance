@@ -45,7 +45,7 @@ it('item should be properly created', async () => {
 it('changes should be created properly', async () => {
     Changes = new ChangesServiceMockers()
     db = new LocalForageMocker()
-    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true)
+    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true,Categories)
     await creatOP.runOperations()
     expect(Changes.changesList.length).toEqual(1)
     expect(Changes.changesList[0].operationKey).toEqual(OperationKey.create)
@@ -63,7 +63,7 @@ it('item correctly created on local db', async () => {
         key: "-Ks0UdZGtzunNoCmGGJd",
         title: "gnosis"
     })
-    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true)
+    creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true,Categories)
     await creatOP.runOperations()
     console.log('db', db)
     expect((await db.get("Ks0UdZGtzunNoCmGGJd")).item).toBeFalsy()
