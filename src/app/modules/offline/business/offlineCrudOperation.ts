@@ -29,6 +29,10 @@ export class offlineCrudOperation{
         return this
     }
 
+    publishItems(items){
+        this.service.publish(items)
+    }
+
    async  createsChange(){
        const change = new Items2Update(this.signature,this.item,OperationKey.create)
        await this.changes.createItem(change)

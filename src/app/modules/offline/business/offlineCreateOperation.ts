@@ -1,3 +1,4 @@
+import { service } from "firebase-functions/v1/analytics"
 import { Items2Update } from "../models/items2Update"
 import { OfflineItemModelInterface } from "../models/offlineItemModelInterface"
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface"
@@ -24,6 +25,10 @@ export class OfflineCreateOperation extends offlineCrudOperation {
     async applyOnLocalDb() {
         this.localDb.set(this.item.key, this.item)
         this.service.publish(this.service.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.service.entityLabel)))
+        this.service._items.subscribe(items=>{
+            items.push(this.item)
+            this.publishItems(items)
+        })
         return this
     }
 
