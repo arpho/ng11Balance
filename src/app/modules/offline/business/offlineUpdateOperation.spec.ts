@@ -24,15 +24,15 @@ var categoryTest = new CategoryModel().initialize({
 })
 describe('create operation works', () => {
     beforeEach(waitForAsync(() => {
-        db = new LocalForageMocker()
-        users = new UsersService()
-        manager = new OfflineManagerService(db, users, Changes, new ConnectionStatusService())
-        Categories = new CategoriesServiceMocker(manager, db, Changes)
     }))
 })
 
 it('item should be properly created', async () => {
     Changes = new ChangesServiceMockers()
+    db = new LocalForageMocker()
+    users = new UsersService()
+    manager = new OfflineManagerService(db, users, Changes, new ConnectionStatusService())
+    Categories = new CategoriesServiceMocker(manager, db, Changes)
 
 
 
