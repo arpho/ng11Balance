@@ -132,12 +132,12 @@ export class ShoppingKartModel implements OfflineItemModelInterface {
 
     setSupplier(supplier: SupplierModel) {
         this.fornitore = supplier
-        // this.fornitoreId = supplier.key
+         this.fornitoreId = supplier?.key
     }
 
     setPayment(pay: PaymentsModel) {
         this.pagamento = pay
-        // this.pagamentoId = pay.key
+        this.pagamentoId = pay?.key
     }
 
     addItem(purchase: PurchaseModel) {

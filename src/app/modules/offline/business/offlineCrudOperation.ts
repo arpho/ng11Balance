@@ -41,7 +41,6 @@ export class offlineCrudOperation{
 
    async runOperations(){
      (await this.applyOnLocalDb()).createsChange()
-     this.service.publish(this.service.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.service.entityLabel)))
        return this.item
    }
 

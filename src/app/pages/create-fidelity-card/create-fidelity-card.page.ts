@@ -48,7 +48,6 @@ export class CreateFidelityCardPage implements OnInit {
  }
 
   filter(v) {
-    console.log('filter', v)
   }
   submit(v) {
     console.log('submit', v)

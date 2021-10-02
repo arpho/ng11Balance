@@ -74,7 +74,6 @@ it('item correctly created on local db', async () => {
     })
     creatOP = new OfflineCreateOperation(categoryTest, Changes, 'test', db, true, Categories)
     await creatOP.runOperations()
-    console.log('db', db)
     expect((await db.get("Ks0UdZGtzunNoCmGGJd")).item).toBeFalsy()
     expect((await db.get(categoryTest.key)).item['entityLabel']).toEqual(categoryTest.entityLabel)
     expect((await db.get(categoryTest.key)).item['fatherKey']).toEqual(categoryTest.fatherKey)

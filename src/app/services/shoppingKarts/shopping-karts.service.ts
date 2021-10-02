@@ -30,6 +30,7 @@ import { OfflineDeleteOperation } from 'src/app/modules/offline/business/offline
 import { OfflineCreateOperation } from 'src/app/modules/offline/business/offlineCreateOperation';
 import { OfflineItemModelInterface } from 'src/app/modules/offline/models/offlineItemModelInterface';
 import { DateModel } from 'src/app/modules/user/models/birthDateModel';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 // tslint:disable:semicolon
 
 @Injectable({
@@ -107,7 +108,8 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     Kart = await new OfflineCreateOperation(Kart, this.changes, signature, this.localDb, enabled,this).runOperations()
-    await this.shoppingKartsListRef.push(item.serialize())
+
+    await this.shoppingKartsListRef.push(Kart.serialize()).catch(e=>{console.log('trouble pushing kart',e)})
     return Kart;
   }
 
