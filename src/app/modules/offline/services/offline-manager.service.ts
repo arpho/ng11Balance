@@ -50,6 +50,8 @@ export class OfflineManagerService {
       }
     })
     this.push2Cloud()
+    this.pullChangesFromCloud()
+
 
 
 
