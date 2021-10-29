@@ -28,11 +28,13 @@ export class Puller {
             items.forEach(item => {
                 const Service = this.services.filter(service => service.entityLabel == item.item['entity'])[0]
                 if(Service){
-                const entity = Service.getDummyItem().initialize(item.item)
+                const entity = Service.getDummyItem().initialize(JSON.parse(item.item['item']))
            
                 const change = new Items2Update(item.item['owner'], entity, item.item['operation']).setItem(entity)
                 change.date = new DateModel(new Date(item.item['date']))
-                this.changes.push(change)}
+                this.changes.push(change)
+            
+            }
             })
             return this
         }
@@ -47,7 +49,10 @@ export class Puller {
     async applyChangesnotOwnedByMe() {
         console.log('applying changes')
         this.changes.filter(change=>!change.isSignedBy(this.signature)).forEach(async change => {// store only not signeed changes
+            console.log('* applying this',change, change.item.entityLabel)
+ 
             if (change.operationKey == OperationKey.create) {
+
                 await this.localDb.set(change.item.key, change.item.serialize4OfflineDb())
             }
             if (change.operationKey == OperationKey.update) {

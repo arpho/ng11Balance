@@ -63,7 +63,11 @@ export class ChangesService {
         this.changesListRef.once('value', items => {
           const rawItems: RawItem[] = []
           items.forEach(snap => {
+            const change = new Items2Update(snap.val()['owner'])
+            change.initialize(snap.val())
+          
             rawItems.push({ item: snap.val(), key: snap.key })
+
           })
           callback(rawItems)
         })

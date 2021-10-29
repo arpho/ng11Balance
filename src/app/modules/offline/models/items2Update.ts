@@ -29,6 +29,8 @@ export class Items2Update {
     initialize(args: {}) {
         Object.assign(this, args)
         this.signatures = new Set(this.signatures)
+        this.operationKey = this.operationKey|args['operation']
+                                  
         return this
     }
     setKey(key: string) {

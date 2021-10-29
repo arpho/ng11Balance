@@ -27,6 +27,21 @@ export class CloneEntity {
       this.service.offlineDbStatus = offLineDbStatus.up2Date
       this.service.fetchItemsFromCloud((items) => {
         this.service.publish(this.service.initializeItems(items))
+
+
+        /* if (typeof Worker !== 'undefined') {
+          // Create a new
+          const worker = new Worker(new URL('.modules/ofline/webworker/cloner-worker.worker', import.meta.url));
+          worker.onmessage = ({ data }) => {
+            console.log(`page got message: ${data}`);
+          };
+          worker.postMessage('hello');
+        } else {
+          // Web workers are not supported in this environment.
+          // You should add a fallback so that your program still executes correctly.
+        } */
+
+
         itemsNumber = items.length
       })
     })
