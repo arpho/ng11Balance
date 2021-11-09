@@ -28,7 +28,7 @@ export class Puller {
             items.forEach(item => {
                 const Service = this.services.filter(service => service.entityLabel == item.item['entity'])[0]
                 if(Service){
-                const entity = Service.getDummyItem().initialize(JSON.parse(item.item['item']))
+                const entity = Service.getDummyItem().initialize((item.item))
            
                 const change = new Items2Update(item.item['owner'], entity, item.item['operation']).setItem(entity)
                 change.date = new DateModel(new Date(item.item['date']))
