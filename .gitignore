@@ -33,11 +33,3 @@ npm-debug.log*
 roor-folder.png
 
 functions/src/index.old.ts
-
-*.cache
-
-package-lock.json
-
-src/app/modules/offline/services/mockers/localForageMocker.ts
-
-

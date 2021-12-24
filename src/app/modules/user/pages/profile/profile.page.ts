@@ -22,11 +22,14 @@ export class ProfilePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('init profile')
     this.userProfile = {firstName:'nome',lastName:'cognome'}
     if (this.profileService.getUserProfileReference()) {
+      console.log('getting profile')
       this.profileService
         .getUserProfileReference()
         .on("value", userProfileSnapshot => {
+          console.log('got profile',userProfileSnapshot)
           this.userProfile = userProfileSnapshot.val() || { firstName: '', lastName: '' };
           if (this.userProfile.birthDate) {
             var dob = new Date();
