@@ -49,8 +49,7 @@ export class OfflineManagerService {
         this.syncChanges()
       }
     })
-    this.push2Cloud()
-    this.pullChangesFromCloud()
+   
 
 
 
