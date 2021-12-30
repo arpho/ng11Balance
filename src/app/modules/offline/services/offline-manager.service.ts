@@ -17,6 +17,7 @@ import { Puller } from '../business/puller';
 import { configs } from 'src/app/configs/configs';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { RebaseEntity } from '../business/rebaseEntity';
+import { UserModel } from '../../user/models/userModel';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,10 @@ export class OfflineManagerService {
           this.syncChanges()
         }
         else {
+          console.log('we are offline')
+          const lastLoggedUid = localDb.getLastLoggedUserId()
+          console.log('last uid', lastLoggedUid)
+          users.setLoggedUser(new UserModel({ key: lastLoggedUid }))
 
         }
       }

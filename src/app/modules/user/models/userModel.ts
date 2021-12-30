@@ -25,11 +25,26 @@ export class UserModel implements ItemModelInterface {
   service: ItemServiceInterface;
 
   constructor(user?: {}, key?: string,) {
-    Object.assign(this,user)
+    Object.assign(this, user)
     if (key) {
       this.key = key
       this.uid = key
     }
+  }
+  note?: string;
+  archived?: boolean;
+  isArchived?(): boolean {
+    throw new Error('Method not implemented.');
+  }
+  archiveItem?(b: boolean) {
+    throw new Error('Method not implemented.');
+  }
+  isArchivable?(): boolean {
+    throw new Error('Method not implemented.');
+  }
+  setKey(key: string): ItemModelInterface {
+    this.key = key
+    return this
   }
 
   isOfflineEnabled() {
