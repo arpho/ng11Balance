@@ -22,7 +22,6 @@ export class LastLoggedUidFetcher {
     }
 
     extractUid() {
-        console.log('***', this.lastLoggedSignature)
         return this.lastLoggedSignature.item['signature'].split('_')[0]
     }
 
