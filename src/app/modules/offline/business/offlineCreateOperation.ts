@@ -1,4 +1,4 @@
-import { service } from "firebase-functions/v1/analytics"
+//import { service } from "firebase-functions/v1/analytics"
 import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable"
 import { first } from "rxjs/operators"
 import { Items2Update } from "../models/items2Update"

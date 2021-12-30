@@ -1,4 +1,4 @@
-import { service } from "firebase-functions/v1/analytics";
+//import { service } from "firebase-functions/v1/analytics";
 import { DateModel } from "../../user/models/birthDateModel";
 import { Items2Update } from "../models/items2Update";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
