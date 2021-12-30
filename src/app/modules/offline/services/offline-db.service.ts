@@ -43,6 +43,13 @@ export class OfflineDbService {
     return localforage.keys();
   }
 
+  async getLastLoggedUserId(){
+    const signatures = await this.fetchAllRawItems4Entity('signatures')
+    const lastLoggedSignature = signatures.filter(item=> item.item['lastLogged']==true)[0]
+    return lastLoggedSignature['signature'].split('_')[0]
+
+  }
+
   async fetchAllRawItems4Entity(entityLabel: string) {/**
    * fetch all items of label
     @param label 
