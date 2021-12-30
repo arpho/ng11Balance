@@ -42,25 +42,25 @@ export class OfflineManagerService {
     public users: UsersService,
     public changes: ChangesService,
     connection: ConnectionStatusService) {
-      if( this.isDbPresent()){ //Db offline is present I can synchronize it
-        this.pullChangesFromCloud()
-    connection.monitor(async status => {
-      console.log('monitor', status)
-      if (status) {
-        this.syncChanges()
+    if (this.isDbPresent()) { //Db offline is present I can synchronize it
+      this.pullChangesFromCloud()
+      connection.monitor(async status => {
+        console.log('monitor', status)
+        if (status) {
+          this.syncChanges()
+        }
+        else {
+
+        }
       }
-      else{
-        
-      }
+
+      )
+
     }
-    
-    )
 
-      }
-    
-   
 
-   
+
+
 
 
     /**
@@ -74,10 +74,10 @@ export class OfflineManagerService {
 
   }
 
-  async isDbPresent(){
-const signatures = await  this.localDb.fetchAllRawItems4Entity('signatures')
-return ( signatures).length>0
-      
+  async isDbPresent() {
+    const signatures = await this.localDb.fetchAllRawItems4Entity('signatures')
+    return (signatures).length > 0
+
   }
   async syncChanges() {
     await this.pullChangesFromCloud()

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import * as localforage   from 'localforage';
+import * as localforage from 'localforage';
+import { LastLoggedUidFetcher } from '../business/LastLoggedUidFetcher';
 import { RawItem } from '../models/rawItem';
 
 @Injectable({
@@ -18,13 +19,13 @@ export class OfflineDbService {
   iterate(callback: (value: unknown, key: string) => void) { //to be compatible with localForageMocker
     for (const [key, value] of Object.entries(this.db)) {
 
-        callback(value, key)
+      callback(value, key)
     }
-}
+  }
 
 
   async get(key: string) {
-    return new RawItem({key,'item': await localforage.getItem(key)});
+    return new RawItem({ key, 'item': await localforage.getItem(key) });
   }
 
   set(key: string, value: any) {
@@ -43,10 +44,8 @@ export class OfflineDbService {
     return localforage.keys();
   }
 
-  async getLastLoggedUserId(){
-    const signatures = await this.fetchAllRawItems4Entity('signatures')
-    const lastLoggedSignature = signatures.filter(item=> item.item['lastLogged']==true)[0]
-    return lastLoggedSignature['signature'].split('_')[0]
+  async getLastLoggedUserId() {
+    return new LastLoggedUidFetcher(this).execute()
 
   }
 
@@ -55,7 +54,7 @@ export class OfflineDbService {
     @param label 
    */
     const out: RawItem[] = []
-   await  localforage.iterate((value, key, iterationNumber) => {
+    await localforage.iterate((value, key, iterationNumber) => {
       const rawitem = new RawItem({ item: value, key: key })
       if (value["entityLabel"] === entityLabel) {
         out.push(rawitem)
