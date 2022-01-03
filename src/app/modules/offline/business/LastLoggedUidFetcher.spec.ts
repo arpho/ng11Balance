@@ -14,7 +14,6 @@ describe('fetchLastLoggedUid work', () => {
 it('testing fetchSignature', async () => {
     db = new LocalForageMocker()
     fetcher = new LastLoggedUidFetcher(db)
-    console.log('***', fetcher)
     const uid0 = '0_linux_chrome'
     const uid1 = '1_linux_chrome'
     const uid2 = '2_linux_chrome'
@@ -29,7 +28,6 @@ it('testing fetchSignature', async () => {
 it('testing getLastLogged', async () => {
     db = new LocalForageMocker()
     fetcher = new LastLoggedUidFetcher(db)
-    console.log('***', fetcher)
     const uid0 = '0_linux_chrome'
     const uid1 = '1_linux_chrome'
     const uid2 = '2_linux_chrome'
@@ -44,7 +42,6 @@ it('testing getLastLogged', async () => {
 it('testing extractUid', async () => {
     db = new LocalForageMocker()
     fetcher = new LastLoggedUidFetcher(db)
-    console.log('***', fetcher)
     const testUid = 'qwerty'
     const uid0 = `${testUid}_linux_chrome`
     const uid1 = '1_linux_chrome'
@@ -59,7 +56,6 @@ it('testing extractUid', async () => {
 it('testing integration', async () => {
     db = new LocalForageMocker()
     fetcher = new LastLoggedUidFetcher(db)
-    console.log('***', fetcher)
     const uid0 = '0_linux_chrome'
     const uid1 = '1_linux_chrome'
     const uid2 = '2_linux_chrome'
