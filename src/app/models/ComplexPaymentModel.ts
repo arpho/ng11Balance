@@ -20,14 +20,17 @@ export class ComplexPaymentModel extends PaymentsModel {
     }
     setPaymentKey(key: string) {
         this.paymentKey = key
+        return this
     }
 
     setAmount(amount) {
         this.amount = amount
+        return this
     }
 
     setDate(date: DateModel) {
         this.paymentDate = date
+        return this
 
     }
     serialize4ShoppingKart() {// serialize 4 shoppingkart
