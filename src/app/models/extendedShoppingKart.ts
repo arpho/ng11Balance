@@ -21,6 +21,7 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         }
         else {// retro compatibilità
             const payment = new ComplexPaymentModel()
+            // bisognerebbe inizializzare il pagamento, ma per questo serve un paymentModel che deve essere fornito dal servizio
             payment.setKey(this.pagamento.key)
             payment.setAmount(this.totale)
             payment.setDate(this.purchaseDate)

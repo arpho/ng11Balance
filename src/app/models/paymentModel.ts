@@ -85,7 +85,7 @@ export class PaymentsModel implements OfflineItemModelInterface, WidgetitemIntef
     initialize(payment) {
         Object.assign(this, payment)
         this.widgetText = `pagata tramite ${this.title}`
-        this.nome = payment.nome
+        this.nome = payment?.nome
         this.title = this.title || this.nome
         return this
     }
