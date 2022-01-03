@@ -6,42 +6,32 @@ import { PaymentsModel } from "./paymentModel";
 import { ShoppingKartModel } from "./shoppingKartModel";
 
 export class ExtendedShoppingKartModel extends ShoppingKartModel {
-    payments: ComplexPaymentModel[]=[]
-    pagamenti:ComplexPaymentModel[]=[]
-    Payments:ItemServiceInterface
-    constructor(args?:{data?:any,paymentsService:ItemServiceInterface}) {
+    payments: ComplexPaymentModel[] = []
+    pagamenti: ComplexPaymentModel[] = []
+    Payments: ItemServiceInterface
+    constructor(args?: { data?: any, paymentsService: ItemServiceInterface }) {
         super(args.data)
-        console.log('*** inizializzato super',this)
-        this.totale= args.data.totale
-        this.Payments=args.paymentsService
-        console.log('*** data',args.data)
+        console.log('*** inizializzato super', this)
+        this.totale = args.data.totale
+        this.Payments = args.paymentsService
+        console.log('*** data', args.data)
         this.initialize(args.data)
-        console.log('inizializzato *** exte',this)
+        console.log('inizializzato *** exte', this)
 
     }
 
-    async fetchPayments(key:string){
-        const payment = await this.Payments.items.toPromise()
-        return payment.filter(item=> item.key==key)[0]
-    }
 
     initialize(cart: any): this {
         super.initialize(cart)
         if (cart.payments) {// kart esteso, ha i pagamenti complessi
-            console.log('*** si payments',cart.payment)
-            cart.payments = cart.payments.map( (element:{paymentKey:string,amount:number,paymentDate:string}) => {
-                var xpayment
-                this.Payments.items.subscribe(payments=> {
-                const payment = payments.filter(p=>p.key==element.paymentKey)[0]
-                 xpayment = new ComplexPaymentModel(new PaymentsModel().initialize(payment)).setAmount(element.amount).setDate(new DateModel(new Date(element.paymentDate)))
-                console.log('*** xpayment 2 map',xpayment)
-            })
-            this.pagamenti.push(xpayment)
-                return xpayment
-                
+            cart.payments.forEach((element: { paymentKey: string, amount: number, paymentDate: string }) => {
 
+                this.Payments.items.subscribe(payments => {
+                    const payment = payments.filter(p => p.key == element.paymentKey)[0]
+                    const xpayment = new ComplexPaymentModel(new PaymentsModel().initialize(payment)).setAmount(element.amount).setDate(new DateModel(new Date(element.paymentDate)))
+                    this.pagamenti.push(xpayment)
+                })
             });
-            console.log('*** xkart initialized',this.payments)
         }
         else {// retro compatibilità
             const payment = new ComplexPaymentModel(this.pagamento)
