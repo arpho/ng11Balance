@@ -210,7 +210,6 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
   }
 
   async loadItemFromLocalDb() {
-    console.log('loading item from local')
     return this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel))
   }
   offlineDbStatus: offLineDbStatus;
