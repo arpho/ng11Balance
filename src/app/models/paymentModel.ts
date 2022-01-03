@@ -34,15 +34,15 @@ export class PaymentsModel implements OfflineItemModelInterface, WidgetitemIntef
 
 
     }
-    entityLabel="Pagamento"
+    entityLabel = "Pagamento"
     serialize4OfflineDb(): offlineSerializer<{ entityLabel: string; }> {
         const out = this.serialize()
-        out['entityLabel']= this.entityLabel
-        return out 
+        out['entityLabel'] = this.entityLabel
+        return out
     }
     service?: ItemServiceInterface;
     isArchived?(): boolean {
-        throw new Error('Method not implemented.');return this.archived
+        throw new Error('Method not implemented.'); return this.archived
     }
     archiveItem?(b: boolean) {
         throw new Error('Method not implemented.');
@@ -52,14 +52,14 @@ export class PaymentsModel implements OfflineItemModelInterface, WidgetitemIntef
     }
     widgetText = `..`
 
-    setKey(key:string){
-        this.key= key
+    setKey(key: string) {
+        this.key = key
         return this
     }
 
     build(item) {
         this.key = item.key
-        this.nome = item.nome 
+        this.nome = item.nome
         this.title = item.title || item.nome
         this.addebito = item.addebito
         this.note = item.note
@@ -85,7 +85,7 @@ export class PaymentsModel implements OfflineItemModelInterface, WidgetitemIntef
     initialize(payment) {
         Object.assign(this, payment)
         this.widgetText = `pagata tramite ${this.title}`
-        this.nome= payment.nome
+        this.nome = payment.nome
         this.title = this.title || this.nome
         return this
     }
@@ -123,7 +123,7 @@ export class PaymentsModel implements OfflineItemModelInterface, WidgetitemIntef
 
 
 
-    getEditPopup(item: ItemModelInterface, ) {
+    getEditPopup(item: ItemModelInterface,) {
 
         return {
             subHeader: 'modifica pagamento',
