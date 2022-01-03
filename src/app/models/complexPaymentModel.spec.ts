@@ -9,7 +9,7 @@ describe('testing complexPaymentModel',()=>{
         expect(payment.amount).toEqual(10)
         expect(payment.key)
         expect(payment.paymentDate.formatDate()).toEqual(new DateModel(new Date()).formatDate())
-        expect(payment.serialize4ShoppingKart().key).toEqual('1')
+        expect(payment.serialize4ShoppingKart().paymentKey).toEqual('1')
         expect(payment.serialize4ShoppingKart().amount).toEqual(10)
         expect(payment.serialize4ShoppingKart().paymentDate).toEqual(new DateModel(new Date()).formatDate())
     })
@@ -23,7 +23,7 @@ describe('testing complexPaymentModel',()=>{
         expect(complexPayment.key).toEqual('123')
         expect(complexPayment.title).toEqual(TestData.title)
         expect(complexPayment.nome).toEqual(TestData.nome)
-        expect(complexPayment.serialize4ShoppingKart().key).toEqual('123')
+        expect(complexPayment.serialize4ShoppingKart().paymentKey).toEqual('123')
         expect(complexPayment.serialize4ShoppingKart().amount).toEqual(10)
         expect(complexPayment.serialize4ShoppingKart().paymentDate).toEqual(new DateModel(new Date()).formatDate())
 
