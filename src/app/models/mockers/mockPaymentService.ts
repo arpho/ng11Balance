@@ -45,5 +45,10 @@ export class MockPaymentService implements ItemServiceInterface {
         throw new Error('Method not implemented.');
     }
 
+    putMockItem(item:PaymentsModel){
+        this.items_list.push(item)
+        this._items.next(this.items_list)
+    }
+
 
 }
