@@ -24,14 +24,16 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
     initialize(cart: any): this {
         super.initialize(cart)
         if (cart.payments) {// kart esteso, ha i pagamenti complessi
+            const pagamenti:ComplexPaymentModel[]=[]
             cart.payments.forEach((element: { paymentKey: string, amount: number, paymentDate: string }) => {
 
                 this.Payments.items.subscribe(payments => {
                     const payment = payments.filter(p => p.key == element.paymentKey)[0]
                     const xpayment = new ComplexPaymentModel(new PaymentsModel().initialize(payment)).setAmount(element.amount).setDate(new DateModel(new Date(element.paymentDate)))
-                    this.pagamenti.push(xpayment)
+                    pagamenti.push(xpayment)
                 })
             });
+            this.payments = pagamenti
         }
         else {// retro compatibilità
             const payment = new ComplexPaymentModel(this.pagamento)
@@ -44,7 +46,7 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
     }
     payedAmount() {
         const mapper = (item: ComplexPaymentModel) => item.amount
-        const reducer = (pv, cv) => pv + cv
+        const reducer = (pv:number, cv:number) => pv + cv
         return this.payments.map(mapper).reduce(reducer, 0)
     }
     isFullyPayed() {

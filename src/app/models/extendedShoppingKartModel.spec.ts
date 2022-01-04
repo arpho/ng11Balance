@@ -74,7 +74,7 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         expect(xkart.purchaseDate.formatDate()).toBe(new DateModel(new Date(kartdata.dataAcquisto)).formatDate())
         expect(xkart.title).toBe(kartdata.title)
         expect(xkart.totale).toBe(kartdata.totale)
-        expect(xkart.pagamenti[0].nome).toEqual(paymentTestData.nome)
+        expect(xkart.payments[0].nome).toEqual(paymentTestData.nome)
     })
 })
 
@@ -110,7 +110,7 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
     mocker.pushMockItem(payment2)
     const xkart = new ExtendedShoppingKartModel({data:kartdata,paymentsService:mocker})
     it('shoppingKart data are ok', () => {
-        expect(xkart.pagamenti.length).toEqual(2)
+        expect(xkart.payments.length).toEqual(2)
         expect(kart.dataAcquisto).toBe(kartdata.dataAcquisto)
         expect(xkart.fornitoreId).toBe(kartdata.fornitoreId)
         expect(xkart.pagamentoId).toBe(kartdata.pagamentoId)
@@ -120,6 +120,6 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         expect(xkart.purchaseDate.formatDate()).toBe(new DateModel(new Date(kartdata.dataAcquisto)).formatDate())
         expect(xkart.title).toBe(kartdata.title)
         expect(xkart.totale).toBe(kartdata.totale)
-        expect(xkart.pagamenti[0].nome).toEqual(paymentTestData.nome)
+        expect(xkart.payments[0].nome).toEqual(paymentTestData.nome)
     })
 })
