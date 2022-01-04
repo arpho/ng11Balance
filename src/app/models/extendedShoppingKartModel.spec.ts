@@ -4,6 +4,7 @@ import { MockPaymentService } from "./mockers/mockPaymentService"
 import { ShoppingKartModel } from "./shoppingKartModel"
 import {ItemServiceInterface} from '../modules/item/models/ItemServiceInterface'
 import { PaymentsModel } from "./paymentModel"
+import { PurchaseModel } from "./purchasesModel"
 
 describe('we instatiate an extended shoppingkart with reglar shoppingkart without items',()=>{
 
@@ -129,10 +130,10 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
 
 describe('we instatiate an extended shoppingkart with regular shoppingkart with only one item and two payments only partly payed',()=>{
 
-    const purchaseData = {
+    const purchaseData = new PurchaseModel({
         barcode: '123456', key: '0', descrizione: 'questo è un test', picture: 'picture', prezzo: '100',
         categorieId: ['a', 'b', 'c']
-    }
+    })
     const kartdata = {
         archived: false,
         dataAcquisto: '1977-03-16',
@@ -163,5 +164,6 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         expect(xkart.payments[1].nome).toEqual(paymentTestData2.nome)
         expect(xkart.isFullyPayed()).toBeFalse()
         expect(xkart.payedAmount()).toEqual(90)
+        expect(xkart.serialize().payments.length).toEqual(2)
     })
 })

@@ -45,7 +45,7 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         return this
     }
     serialize() {
-        return { ...super.serialize(), payments: this.payments.map(item => item.serialize()) }
+        return { ...super.serialize(), payments: this.payments.map(item => item.serialize4ShoppingKart()) }
     }
     payedAmount() {
         const mapper = (item: ComplexPaymentModel) => item.amount
