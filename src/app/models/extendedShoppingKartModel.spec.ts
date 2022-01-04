@@ -165,5 +165,8 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         expect(xkart.isFullyPayed()).toBeFalse()
         expect(xkart.payedAmount()).toEqual(90)
         expect(xkart.serialize().payments.length).toEqual(2)
+        expect(xkart.ispayedWith('123')).toBeTrue()
+        expect(xkart.ispayedWith('124')).toBeTrue()
+        expect(xkart.ispayedWith('125')).toBeFalse()
     })
 })

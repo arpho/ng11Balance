@@ -49,6 +49,12 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         return { ...super.serialize(), payments: this.payments.map(item => item.serialize4ShoppingKart()) }
     }
 
+    ispayedWith(paymentKey: string) {
+        const mapper = (p: ComplexPaymentModel) => p.key == paymentKey
+        const reducer = (pv: boolean, cv: boolean) => cv = cv || pv
+        return this.payments.map(mapper).reduce(reducer, false)
+    }
+
     payedAmount() {
         const mapper = (item: ComplexPaymentModel) => item.amount
         const reducer = (pv: number, cv: number) => pv + cv
