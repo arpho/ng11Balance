@@ -9,10 +9,10 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
     payments: ComplexPaymentModel[] = []
     pagamenti: ComplexPaymentModel[] = []
     Payments: ItemServiceInterface
+    _total:number
     constructor(args?: { data?: any, paymentsService: ItemServiceInterface }) {
         super(args.data)
         console.log('*** inizializzato super', this)
-        this.totale = args.data.totale
         this.Payments = args.paymentsService
         console.log('*** data', args.data)
         this.initialize(args.data)
@@ -44,9 +44,11 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         }
         return this
     }
+
     serialize() {
         return { ...super.serialize(), payments: this.payments.map(item => item.serialize4ShoppingKart()) }
     }
+
     payedAmount() {
         const mapper = (item: ComplexPaymentModel) => item.amount
         const reducer = (pv: number, cv: number) => pv + cv
@@ -54,6 +56,17 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
     }
 
     isFullyPayed() {
-        return this.totale <= this.payedAmount()
+        return super.totale <= this.payedAmount()
+    }
+
+    get totale(): number {
+        const reducer: (acc: number, curr: ComplexPaymentModel) => number = (acc: number, curr: ComplexPaymentModel) => {
+            return (curr && curr.amount) ? acc + curr.amount : acc
+        }
+        return this._total||this.payments.reduce(reducer, 0)
+
+    }
+    set totale(total: number) {
+        this._total = total
     }
 }
