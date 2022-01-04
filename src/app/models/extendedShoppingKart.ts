@@ -44,7 +44,9 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         }
         return this
     }
-
+    serialize() {
+        return { ...super.serialize(), payments: this.payments.map(item => item.serialize()) }
+    }
     payedAmount() {
         const mapper = (item: ComplexPaymentModel) => item.amount
         const reducer = (pv: number, cv: number) => pv + cv
