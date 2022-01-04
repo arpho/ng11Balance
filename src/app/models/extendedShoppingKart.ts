@@ -24,7 +24,7 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
     initialize(cart: any): this {
         super.initialize(cart)
         if (cart.payments) {// kart esteso, ha i pagamenti complessi
-            const pagamenti:ComplexPaymentModel[]=[]
+            const pagamenti: ComplexPaymentModel[] = []
             cart.payments.forEach((element: { paymentKey: string, amount: number, paymentDate: string }) => {
 
                 this.Payments.items.subscribe(payments => {
@@ -44,11 +44,13 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         }
         return this
     }
+
     payedAmount() {
         const mapper = (item: ComplexPaymentModel) => item.amount
-        const reducer = (pv:number, cv:number) => pv + cv
+        const reducer = (pv: number, cv: number) => pv + cv
         return this.payments.map(mapper).reduce(reducer, 0)
     }
+
     isFullyPayed() {
         return this.totale <= this.payedAmount()
     }

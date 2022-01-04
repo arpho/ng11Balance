@@ -121,5 +121,47 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         expect(xkart.title).toBe(kartdata.title)
         expect(xkart.totale).toBe(kartdata.totale)
         expect(xkart.payments[0].nome).toEqual(paymentTestData.nome)
+        expect(xkart.payments[1].nome).toEqual(paymentTestData2.nome)
+        expect(xkart.isFullyPayed()).toBeTrue()
+        expect(xkart.payedAmount()).toEqual(100)
+    })
+})
+
+describe('we instatiate an extended shoppingkart with regular shoppingkart with only one item and two payments only partly payed',()=>{
+
+    const purchaseData = {
+        barcode: '123456', key: '0', descrizione: 'questo è un test', picture: 'picture', prezzo: '100',
+        categorieId: ['a', 'b', 'c']
+    }
+    const kartdata = {
+        archived: false,
+        dataAcquisto: '1977-03-16',
+        fornitoreId: 'qwerty',
+        pagamentoId: '123',
+        totale: 100,
+        title: 'title',
+        note: 'note',
+        key: 'zxcvbnm',
+        payments:[{paymentKey:'123',amount:80,paymentDate:new DateModel(new Date()).formatDate()},{paymentKey:'124',amount:10,paymentDate:new DateModel(new Date()).formatDate()}],
+        items:[purchaseData]
+    }
+    const kart = new ShoppingKartModel()
+
+    const paymentTestData = { key: '123', title: 'qwerty', note: 'asdfghj', addebito: '12/05/2019', nome: 'cash' }
+    const paymentTestData2 = { key: '124', title: 'qwerty', note: 'asdfghj', addebito: '12/05/2019', nome: 'satispay' }
+    const payment = new PaymentsModel(paymentTestData)
+    const payment2 = new PaymentsModel(paymentTestData2)
+    kart.build(kartdata)
+    const mocker= new MockPaymentService()
+    mocker.pushMockItem(payment)
+    mocker.pushMockItem(payment2)
+    const xkart = new ExtendedShoppingKartModel({data:kartdata,paymentsService:mocker})
+    it('shoppingKart data are ok', () => {
+        expect(xkart.payments.length).toEqual(2)
+        expect(xkart.totale).toBe(kartdata.totale)
+        expect(xkart.payments[0].nome).toEqual(paymentTestData.nome)
+        expect(xkart.payments[1].nome).toEqual(paymentTestData2.nome)
+        expect(xkart.isFullyPayed()).toBeFalse()
+        expect(xkart.payedAmount()).toEqual(90)
     })
 })
