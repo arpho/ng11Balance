@@ -21,34 +21,34 @@ export class Puller {
     }
 
 
-     entitiesRestore = (items: RawItem[]) =>/**
+    entitiesRestore = (items: RawItem[]) =>/**
         initializes the entities inside the changes
         */ {
-            this.changes = []
-            items.forEach(item => {
-                const Service = this.services.filter(service => service.entityLabel == item.item['entity'])[0]
-                if(Service){
+        this.changes = []
+        items.forEach(item => {
+            const Service = this.services.filter(service => service.entityLabel == item.item['entity'])[0]
+            if (Service) {
                 const entity = Service.getDummyItem().initialize((item.item))
-           
+
                 const change = new Items2Update(item.item['owner'], entity, item.item['operation']).setItem(entity)
                 change.date = new DateModel(new Date(item.item['date']))
                 this.changes.push(change)
-            
+
             }
-            })
-            return this
-        }
+        })
+        return this
+    }
 
     async restoreEntities() {
 
-        
+
         this.Changes.fetchItemsFromCloud(this.entitiesRestore)
         return this
     }
 
     async applyChangesnotOwnedByMe() {
-        this.changes.filter(change=>!change.isSignedBy(this.signature)).forEach(async change => {// store only not signeed changes
- 
+        this.changes.filter(change => !change.isSignedBy(this.signature)).forEach(async change => {// store only not signeed changes
+
             if (change.operationKey == OperationKey.create) {
 
                 await this.localDb.set(change.item.key, change.item.serialize4OfflineDb())
@@ -64,23 +64,23 @@ export class Puller {
         return this
     }
 
-    async updateChanges(){
-        this.changes.forEach(async change=>{
-          await  this.Changes.updateItem(change)
+    async updateChanges() {
+        this.changes.forEach(async change => {
+            await this.Changes.updateItem(change)
         })
 
         return this
     }
 
-    async removeOldChanges()/**rremove older than a month changes */
-    {const oneMonth= 60*60 // secs in a minute
-        *60 //secs in one hour
-        *24 // secs in day
-        *30 // secs in a month
-        *1000 // msecs in a month
+    async removeOldChanges()/**rremove older than a month changes */ {
+        const oneMonth = 60 * 60 // secs in a minute
+            * 60 //secs in one hour
+            * 24 // secs in day
+            * 30 // secs in a month
+            * 1000 // msecs in a month
         const today = new Date()
-        this.changes.filter(change=>today.getTime()-change.date.getTime()>oneMonth).forEach(async change=>{
-         await    this.Changes.deleteItem(change.key)
+        this.changes.filter(change => today.getTime() - change.date.getTime() > oneMonth).forEach(async change => {
+            await this.Changes.deleteItem(change.key)
         })
         return this
     }

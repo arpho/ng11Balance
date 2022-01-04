@@ -20,7 +20,7 @@ export class MockPaymentService implements ItemServiceInterface {
         // tslint:disable:semicolon
         // return { val: () => { title: this.data[key] } }
         // tslint:disable-next-line: only-arrow-functions
-        const val = function() {
+        const val = function () {
             return data
         }
         const cat = { val }
@@ -45,7 +45,7 @@ export class MockPaymentService implements ItemServiceInterface {
         throw new Error('Method not implemented.');
     }
 
-    pushMockItem(item:PaymentsModel){
+    pushMockItem(item: PaymentsModel) {
         this.items_list.push(item)
         this._items.next(this.items_list)
     }

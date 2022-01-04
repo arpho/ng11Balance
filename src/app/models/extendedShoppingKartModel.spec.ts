@@ -2,11 +2,11 @@ import { DateModel } from "../modules/user/models/birthDateModel"
 import { ExtendedShoppingKartModel } from "./extendedShoppingKart"
 import { MockPaymentService } from "./mockers/mockPaymentService"
 import { ShoppingKartModel } from "./shoppingKartModel"
-import {ItemServiceInterface} from '../modules/item/models/ItemServiceInterface'
+import { ItemServiceInterface } from '../modules/item/models/ItemServiceInterface'
 import { PaymentsModel } from "./paymentModel"
 import { PurchaseModel } from "./purchasesModel"
 
-describe('we instatiate an extended shoppingkart with reglar shoppingkart without items',()=>{
+describe('we instatiate an extended shoppingkart with reglar shoppingkart without items', () => {
 
     const kartdata = {
         archived: false,
@@ -21,7 +21,7 @@ describe('we instatiate an extended shoppingkart with reglar shoppingkart withou
     const paymentService = new MockPaymentService()
     const kart = new ShoppingKartModel()
     kart.build(kartdata)
-    const xkart = new ExtendedShoppingKartModel({data:kart,paymentsService:paymentService})
+    const xkart = new ExtendedShoppingKartModel({ data: kart, paymentsService: paymentService })
     it('shoppingKart data are ok', () => {
         expect(kart.dataAcquisto).toBe(kartdata.dataAcquisto)
         expect(xkart.fornitoreId).toBe(kartdata.fornitoreId)
@@ -39,7 +39,7 @@ describe('we instatiate an extended shoppingkart with reglar shoppingkart withou
     })
 })
 
-describe('we instatiate an extended shoppingkart with regular shoppingkart with only one item',()=>{
+describe('we instatiate an extended shoppingkart with regular shoppingkart with only one item', () => {
 
     const purchaseData = {
         barcode: '123456', key: '0', descrizione: 'questo è un test', picture: 'picture', prezzo: '100',
@@ -54,17 +54,17 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         title: 'title',
         note: 'note',
         key: 'zxcvbnm',
-        payments:[{paymentKey:'123',amount:100,paymentDate:new DateModel(new Date()).formatDate()}],
-        items:[purchaseData]
+        payments: [{ paymentKey: '123', amount: 100, paymentDate: new DateModel(new Date()).formatDate() }],
+        items: [purchaseData]
     }
     const kart = new ShoppingKartModel()
 
     const paymentTestData = { key: '123', title: 'qwerty', note: 'asdfghj', addebito: '12/05/2019', nome: 'cash' }
     const payment = new PaymentsModel(paymentTestData)
     kart.build(kartdata)
-    const mocker= new MockPaymentService()
+    const mocker = new MockPaymentService()
     mocker.pushMockItem(payment)
-    const xkart = new ExtendedShoppingKartModel({data:kartdata,paymentsService:mocker})
+    const xkart = new ExtendedShoppingKartModel({ data: kartdata, paymentsService: mocker })
     it('shoppingKart data are ok', () => {
         expect(kart.dataAcquisto).toBe(kartdata.dataAcquisto)
         expect(xkart.fornitoreId).toBe(kartdata.fornitoreId)
@@ -81,7 +81,7 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
 
 
 
-describe('we instatiate an extended shoppingkart with regular shoppingkart with only one item and two payments',()=>{
+describe('we instatiate an extended shoppingkart with regular shoppingkart with only one item and two payments', () => {
 
     const purchaseData = {
         barcode: '123456', key: '0', descrizione: 'questo è un test', picture: 'picture', prezzo: '100',
@@ -96,8 +96,8 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         title: 'title',
         note: 'note',
         key: 'zxcvbnm',
-        payments:[{paymentKey:'123',amount:80,paymentDate:new DateModel(new Date()).formatDate()},{paymentKey:'124',amount:20,paymentDate:new DateModel(new Date()).formatDate()}],
-        items:[purchaseData]
+        payments: [{ paymentKey: '123', amount: 80, paymentDate: new DateModel(new Date()).formatDate() }, { paymentKey: '124', amount: 20, paymentDate: new DateModel(new Date()).formatDate() }],
+        items: [purchaseData]
     }
     const kart = new ShoppingKartModel()
 
@@ -106,10 +106,10 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
     const payment = new PaymentsModel(paymentTestData)
     const payment2 = new PaymentsModel(paymentTestData2)
     kart.build(kartdata)
-    const mocker= new MockPaymentService()
+    const mocker = new MockPaymentService()
     mocker.pushMockItem(payment)
     mocker.pushMockItem(payment2)
-    const xkart = new ExtendedShoppingKartModel({data:kartdata,paymentsService:mocker})
+    const xkart = new ExtendedShoppingKartModel({ data: kartdata, paymentsService: mocker })
     it('shoppingKart data are ok', () => {
         expect(xkart.payments.length).toEqual(2)
         expect(kart.dataAcquisto).toBe(kartdata.dataAcquisto)
@@ -128,7 +128,7 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
     })
 })
 
-describe('we instatiate an extended shoppingkart with regular shoppingkart with only one item and two payments only partly payed',()=>{
+describe('we instatiate an extended shoppingkart with regular shoppingkart with only one item and two payments only partly payed', () => {
 
     const purchaseData = new PurchaseModel({
         barcode: '123456', key: '0', descrizione: 'questo è un test', picture: 'picture', prezzo: '100',
@@ -143,8 +143,8 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         title: 'title',
         note: 'note',
         key: 'zxcvbnm',
-        payments:[{paymentKey:'123',amount:80,paymentDate:new DateModel(new Date()).formatDate()},{paymentKey:'124',amount:10,paymentDate:new DateModel(new Date()).formatDate()}],
-        items:[purchaseData]
+        payments: [{ paymentKey: '123', amount: 80, paymentDate: new DateModel(new Date()).formatDate() }, { paymentKey: '124', amount: 10, paymentDate: new DateModel(new Date()).formatDate() }],
+        items: [purchaseData]
     }
     const kart = new ShoppingKartModel()
 
@@ -153,10 +153,10 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
     const payment = new PaymentsModel(paymentTestData)
     const payment2 = new PaymentsModel(paymentTestData2)
     kart.build(kartdata)
-    const mocker= new MockPaymentService()
+    const mocker = new MockPaymentService()
     mocker.pushMockItem(payment)
     mocker.pushMockItem(payment2)
-    const xkart = new ExtendedShoppingKartModel({data:kartdata,paymentsService:mocker})
+    const xkart = new ExtendedShoppingKartModel({ data: kartdata, paymentsService: mocker })
     it('shoppingKart data are ok', () => {
         expect(xkart.payments.length).toEqual(2)
         expect(xkart.totale).toBe(kartdata.totale)

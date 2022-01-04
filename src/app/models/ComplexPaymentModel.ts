@@ -13,7 +13,7 @@ export class ComplexPaymentModel extends PaymentsModel {
 
     initialize(data) {
         super.initialize(data)
-        this.paymentDate = data?.paymentDate?new DateModel(data.paymentDate):undefined
+        this.paymentDate = data?.paymentDate ? new DateModel(data.paymentDate) : undefined
         console.log('#@ payment date again', this.paymentDate, data)
         this.key = data?.paymentKey || data?.key
         return this

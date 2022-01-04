@@ -108,7 +108,7 @@ export class ShoppingKartModel implements OfflineItemModelInterface {
         Object.assign(this, item)
         this.fornitore = new SupplierModel()
         this.pagamento = new PaymentsModel()
-        this.totale=item['totale']
+        this.totale = item['totale']
         this.fornitore.key = this.fornitore.key || this.fornitoreId
         this.pagamento.key = this.pagamento.key || this.pagamentoId
         this.items = (this.items) ? this.items.map(Item => new PurchaseModel(Item)) : []
@@ -134,7 +134,7 @@ export class ShoppingKartModel implements OfflineItemModelInterface {
 
     setSupplier(supplier: SupplierModel) {
         this.fornitore = supplier
-         this.fornitoreId = supplier?.key
+        this.fornitoreId = supplier?.key
     }
 
     setPayment(pay: PaymentsModel) {

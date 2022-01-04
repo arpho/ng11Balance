@@ -9,7 +9,7 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
     payments: ComplexPaymentModel[] = []
     pagamenti: ComplexPaymentModel[] = []
     Payments: ItemServiceInterface
-    _total:number
+    _total: number
     constructor(args?: { data?: any, paymentsService: ItemServiceInterface }) {
         super(args.data)
         console.log('*** inizializzato super', this)
@@ -63,7 +63,7 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         const reducer: (acc: number, curr: ComplexPaymentModel) => number = (acc: number, curr: ComplexPaymentModel) => {
             return (curr && curr.amount) ? acc + curr.amount : acc
         }
-        return this._total||this.payments.reduce(reducer, 0)
+        return this._total || this.payments.reduce(reducer, 0)
 
     }
     set totale(total: number) {
