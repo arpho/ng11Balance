@@ -12,11 +12,8 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
     total: number
     constructor(args?: { data?: any, paymentsService: ItemServiceInterface }) {
         super(args.data)
-        console.log('*** inizializzato super', this)
         this.Payments = args.paymentsService
-        console.log('*** data', args.data)
         this.initialize(args.data)
-        console.log('inizializzato *** exte', this)
 
     }
 
