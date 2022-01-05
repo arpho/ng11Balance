@@ -5,7 +5,7 @@ import { PaymentsModel } from "./paymentModel"
 describe('testing complexPaymentModel', () => {
 
     it('model instantiated from shoppingKart.payments with payment.key', () => {
-        const payment = new ComplexPaymentModel({ 'amount': 10, paymentKey: '1',nome:'test', paymentDate: new DateModel(new Date()).formatDate(),cpid:'123456' })
+        const payment = new ComplexPaymentModel({ 'amount': 10, paymentKey: '1', nome: 'test', paymentDate: new DateModel(new Date()).formatDate(), cpid: '123456' })
         expect(payment.amount).toEqual(10)
         expect(payment.key)
         expect(payment.paymentDate.formatDate()).toEqual(new DateModel(new Date()).formatDate())
@@ -14,11 +14,11 @@ describe('testing complexPaymentModel', () => {
         expect(payment.serialize4ShoppingKart().paymentDate).toEqual(new DateModel(new Date()).formatDate())
         expect(payment.cpid).toBeTruthy
         expect(payment.cpid).toEqual(123456)
-        expect(payment.serialize4ShoppingKart().cpid).toEqual('123456')
+        expect(payment.serialize4ShoppingKart().cpid).toEqual(123456)
     })
 
     it('model instantiated with payment model', () => {
-        const TestData = { key: '123', title: 'qwertyu', note: 'asdfghj', addebito: '12/05/2019', nome: 'cash',cpid:'123456' }
+        const TestData = { key: '123', title: 'qwertyu', note: 'asdfghj', addebito: '12/05/2019', nome: 'cash', cpid: '123456' }
         const Payment = new PaymentsModel(TestData)
         const complexPayment = new ComplexPaymentModel(Payment)
         complexPayment.setAmount(10)

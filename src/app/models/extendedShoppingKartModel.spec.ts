@@ -143,12 +143,13 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         title: 'title',
         note: 'note',
         key: 'zxcvbnm',
-        payments: [{ paymentKey: '123', amount: 80, paymentDate: new DateModel(new Date()).formatDate() }, { paymentKey: '124', amount: 10, paymentDate: new DateModel(new Date()).formatDate() }],
+        payments: [{ paymentKey: '123', amount: 80, paymentDate: new DateModel(new Date('05/31/2019')).formatDate() },
+        { paymentKey: '124', amount: 10, paymentDate: new DateModel(new Date('05/12/2019')).formatDate() }],
         items: [purchaseData]
     }
     const kart = new ShoppingKartModel()
 
-    const paymentTestData = { key: '123', title: 'qwerty', note: 'asdfghj', addebito: '12/05/2019', nome: 'cash' }
+    const paymentTestData = { key: '123', title: 'qwerty', note: 'asdfghj', addebito: '31/05/2019', nome: 'cash' }
     const paymentTestData2 = { key: '124', title: 'qwerty', note: 'asdfghj', addebito: '12/05/2019', nome: 'satispay' }
     const payment = new PaymentsModel(paymentTestData)
     const payment2 = new PaymentsModel(paymentTestData2)
@@ -168,5 +169,6 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         expect(xkart.ispayedWith('123')).toBeTrue()
         expect(xkart.ispayedWith('124')).toBeTrue()
         expect(xkart.ispayedWith('125')).toBeFalse()
+        expect(xkart.payedUntil(new Date('05/13/2019'))).toEqual(10)
     })
 })
