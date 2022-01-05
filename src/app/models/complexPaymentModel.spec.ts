@@ -14,6 +14,7 @@ describe('testing complexPaymentModel', () => {
         expect(payment.serialize4ShoppingKart().paymentDate).toEqual(new DateModel(new Date()).formatDate())
         expect(payment.cpid).toBeTruthy
         expect(payment.cpid).toEqual(123456)
+        expect(payment.serialize4ShoppingKart().cpid).toEqual('123456')
     })
 
     it('model instantiated with payment model', () => {
