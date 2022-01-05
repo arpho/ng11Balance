@@ -5,16 +5,18 @@ export class ComplexPaymentModel extends PaymentsModel {
     amount = 0
     paymentDate: DateModel
     paymentKey: string
-    constructor(data?: { paymentDate: string, paymentKey: string, amount: number } | PaymentsModel) {
+    cpid:number // unique id in kart
+    constructor(data?: { paymentDate: string, paymentKey: string, amount: number,cpid?:string } | PaymentsModel) {
         super()
         this.initialize(data)
+        this.cpid= Number(data['cpid'])
+        this.cpid = Number(this.cpid)||new Date().getTime()
 
     }
 
     initialize(data) {
         super.initialize(data)
         this.paymentDate = data?.paymentDate ? new DateModel(data.paymentDate) : undefined
-        console.log('#@ payment date again', this.paymentDate, data)
         this.key = data?.paymentKey || data?.key
         return this
     }
