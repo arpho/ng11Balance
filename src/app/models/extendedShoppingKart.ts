@@ -62,4 +62,10 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         return super.totale <= this.payedAmount()
     }
 
+    payedUntil(to: Date) {
+        const mapper = (p: ComplexPaymentModel) => p.paymentDate.getTime() <= to.getTime() ? p.amount : 0
+        const reducer = (pv: number, cv: number) => cv + pv
+        return this.payments.map(mapper).reduce(reducer, 0)
+    }
+
 }
