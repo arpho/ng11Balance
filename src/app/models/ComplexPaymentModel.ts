@@ -5,12 +5,14 @@ export class ComplexPaymentModel extends PaymentsModel {
     amount = 0
     paymentDate: DateModel
     paymentKey: string
-    cpid:number // unique id in kart
-    constructor(data?: { paymentDate: string, paymentKey: string, amount: number,cpid?:string } | PaymentsModel) {
+    cpid: number // unique id in kart
+    constructor(data?: { paymentDate: string, paymentKey: string, amount: number, cpid?: string } | PaymentsModel) {
         super()
         this.initialize(data)
-        this.cpid= Number(data['cpid'])
-        this.cpid = Number(this.cpid)||new Date().getTime()
+        if (data && data?.cpid) {
+            this.cpid = Number(data['cpid'])
+        }
+        this.cpid = Number(this.cpid) || new Date().getTime()
 
     }
 
@@ -31,12 +33,13 @@ export class ComplexPaymentModel extends PaymentsModel {
     }
 
     setDate(date: DateModel) {
+        console.log('**#setting payment date', date)
         this.paymentDate = date
         return this
 
     }
     serialize4ShoppingKart() {// serialize 4 shoppingkart
-        return { paymentKey: this.key, amount: this.amount, paymentDate: this.paymentDate.formatDate(),cpid:this.cpid }
+        return { paymentKey: this.key, amount: this.amount, paymentDate: this.paymentDate.formatDate(), cpid: this.cpid }
     }
 
 }

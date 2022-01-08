@@ -54,7 +54,6 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         title: 'title',
         note: 'note',
         key: 'zxcvbnm',
-        payments: [{ paymentKey: '123', amount: 100, paymentDate: new DateModel(new Date()).formatDate() }],
         items: [purchaseData]
     }
     const kart = new ShoppingKartModel()
@@ -76,6 +75,9 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         expect(xkart.title).toBe(kartdata.title)
         expect(xkart.totale).toBe(kartdata.totale)
         expect(xkart.payments[0].nome).toEqual(paymentTestData.nome)
+        expect(xkart.howManyInstallments()).toEqual(1)
+        console.log('**# xkart',xkart)
+        expect(xkart.paymentsInPeriod(new DateModel(new Date('14/03/1977'))).length).toEqual(1)
     })
 })
 

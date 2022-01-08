@@ -13,6 +13,7 @@ export class PaymentsModel implements OfflineItemModelInterface, WidgetitemIntef
     note: string;
     addebito: string;
     key: string;
+    cpid:number
     quickActions: Array<QuickAction>
     archived: boolean;
     constructor(

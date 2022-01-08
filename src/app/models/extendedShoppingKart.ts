@@ -32,10 +32,11 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
             });
             this.payments = pagamenti
         }
-        else {// retro compatibilità
+        else {// retro compatibilità unico pagamento 
             const payment = new ComplexPaymentModel(this.pagamento)
-            payment.setKey(this.pagamento.key)
+            payment.setKey(this.pagamentoId)
             payment.setAmount(this.totale)
+            console.log('**# instantied xkart',this)
             payment.setDate(this.purchaseDate)
             this.payments = [payment]
         }
