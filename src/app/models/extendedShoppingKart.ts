@@ -68,7 +68,7 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         return this.payments.map(mapper).reduce(reducer, 0)
     }
 
-    paymentInPeriod(fromDate?:DateModel,toDate?:DateModel):ComplexPaymentModel[]{
+    paymentsInPeriod(fromDate?:DateModel,toDate?:DateModel):ComplexPaymentModel[]{
         const paymentAfter=fromDate? (p:ComplexPaymentModel)=>p.paymentDate.getTime()>=fromDate.getTime(): (p:ComplexPaymentModel)=>true // se non c'è il limite inferiore la funzione è neutra
         const paymentBefore = toDate? (p:ComplexPaymentModel)=> p.paymentDate.getTime()<= toDate.getTime():(p:ComplexPaymentModel)=>true 
         const paymentInTheMiddle = (p:ComplexPaymentModel)=>paymentAfter(p)&&paymentBefore(p)
