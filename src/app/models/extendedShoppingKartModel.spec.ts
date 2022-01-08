@@ -171,4 +171,40 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         expect(xkart.ispayedWith('125')).toBeFalse()
         expect(xkart.payedUntil(new Date('05/13/2019'))).toEqual(10)
     })
+    it('filter extended kart by date payment',()=>{
+        const purchaseData = new PurchaseModel({
+            barcode: '123456', key: '0', descrizione: 'questo è un test', picture: 'picture', prezzo: '100',
+            categorieId: ['a', 'b', 'c']
+        })
+        const kartdata = {
+            archived: false,
+            dataAcquisto: '1977-03-16',
+            fornitoreId: 'qwerty',
+            pagamentoId: '123',
+            totale: 100,
+            title: 'title',
+            note: 'note',
+            key: 'zxcvbnm',
+            payments: [{ paymentKey: '123', amount: 80, paymentDate: new DateModel(new Date('05/31/2019')).formatDate() },
+            { paymentKey: '124', amount: 10, paymentDate: new DateModel(new Date('05/12/2019')).formatDate() }],
+            items: [purchaseData]
+        }
+        const log = console.log.bind(document)
+        const kart = new ShoppingKartModel()
+    
+        const paymentTestData = { key: '123', title: 'qwerty', note: 'asdfghj', addebito: '31/05/2019', nome: 'cash' }
+        const paymentTestData2 = { key: '124', title: 'qwerty', note: 'asdfghj', addebito: '12/05/2019', nome: 'satispay' }
+        const payment = new PaymentsModel(paymentTestData)
+        const payment2 = new PaymentsModel(paymentTestData2)
+        kart.build(kartdata)
+        const mocker = new MockPaymentService()
+        mocker.pushMockItem(payment)
+        mocker.pushMockItem(payment2)
+        const xkart = new ExtendedShoppingKartModel({ data: kartdata, paymentsService: mocker })
+        expect(xkart.paymentInPeriod(new DateModel( new Date('05/30/2019'))).length).toEqual(1)
+        expect(xkart.paymentInPeriod(new DateModel( new Date('05/30/2019')))[0].key).toEqual('123')
+        expect(xkart.paymentInPeriod(undefined,new DateModel( new Date('05/13/2019')))[0].key).toEqual('124')
+        expect(xkart.paymentInPeriod(new DateModel( new Date('05/10/2019')),new DateModel(new Date('05/13/2019')))[0]).toEqual('124')
+        expect(xkart.paymentInPeriod(new DateModel( new Date('05/10/2019')),new DateModel(new Date('05/13/2019'))).length).toEqual(1)
+    })
 })
