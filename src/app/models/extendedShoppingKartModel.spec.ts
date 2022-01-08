@@ -76,8 +76,7 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         expect(xkart.totale).toBe(kartdata.totale)
         expect(xkart.payments[0].nome).toEqual(paymentTestData.nome)
         expect(xkart.howManyInstallments()).toEqual(1)
-        console.log('**# xkart',xkart)
-        expect(xkart.paymentsInPeriod(new DateModel(new Date('14/03/1977'))).length).toEqual(1)
+        expect(xkart.paymentsInPeriod(new DateModel(new Date('03/14/1977'))).length).toEqual(1)
     })
 })
 
@@ -104,7 +103,7 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
     const kart = new ShoppingKartModel()
 
     const paymentTestData = { key: '123', title: 'qwerty', note: 'asdfghj', addebito: '12/05/2019', nome: 'cash' }
-    const paymentTestData2 = { key: '124', title: 'qwerty', note: 'asdfghj', addebito: '12/05/2019', nome: 'satispay' }
+    const paymentTestData2 = { key: '124', title: 'qwerty', note: 'asdfghj', addebito: '14/05/2019', nome: 'satispay' }
     const payment = new PaymentsModel(paymentTestData)
     const payment2 = new PaymentsModel(paymentTestData2)
     kart.build(kartdata)
@@ -126,6 +125,7 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         expect(xkart.payments[0].nome).toEqual(paymentTestData.nome)
         expect(xkart.payments[1].nome).toEqual(paymentTestData2.nome)
         expect(xkart.isFullyPayed()).toBeTrue()
+        expect(xkart.howManyInstallments()).toEqual(1)
         expect(xkart.payedAmount()).toEqual(100)
     })
 })
@@ -172,6 +172,7 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         expect(xkart.ispayedWith('124')).toBeTrue()
         expect(xkart.ispayedWith('125')).toBeFalse()
         expect(xkart.payedUntil(new Date('05/13/2019'))).toEqual(10)
+        expect(xkart.howManyInstallments()).toEqual(2)
     })
     it('filter extended kart by date payment', () => {
         const purchaseData = new PurchaseModel({

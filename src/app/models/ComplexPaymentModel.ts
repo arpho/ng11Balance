@@ -33,7 +33,6 @@ export class ComplexPaymentModel extends PaymentsModel {
     }
 
     setDate(date: DateModel) {
-        console.log('**#setting payment date', date)
         this.paymentDate = date
         return this
 

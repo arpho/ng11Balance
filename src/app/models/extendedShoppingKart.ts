@@ -33,12 +33,15 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
             this.payments = pagamenti
         }
         else {// retro compatibilità unico pagamento 
-            const payment = new ComplexPaymentModel(this.pagamento)
-            payment.setKey(this.pagamentoId)
-            payment.setAmount(this.totale)
-            console.log('**# instantied xkart',this)
-            payment.setDate(this.purchaseDate)
-            this.payments = [payment]
+            var payment
+            this.Payments.items.subscribe(payments => {
+                payment = payments.filter(p => p.key == this.pagamentoId)[0]
+            })
+            const pagamentoComplesso = new ComplexPaymentModel(payment)
+            pagamentoComplesso.setKey(this.pagamentoId)
+            pagamentoComplesso.setAmount(this.totale)
+            pagamentoComplesso.setDate(this.purchaseDate)
+            this.payments = [pagamentoComplesso]
         }
         return this
     }
@@ -69,15 +72,15 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         return this.payments.map(mapper).reduce(reducer, 0)
     }
 
-    paymentsInPeriod(fromDate?:DateModel,toDate?:DateModel):ComplexPaymentModel[]{
-        const paymentAfter=fromDate? (p:ComplexPaymentModel)=>p.paymentDate.getTime()>=fromDate.getTime(): (p:ComplexPaymentModel)=>true // se non c'è il limite inferiore la funzione è neutra
-        const paymentBefore = toDate? (p:ComplexPaymentModel)=> p.paymentDate.getTime()<= toDate.getTime():(p:ComplexPaymentModel)=>true 
-        const paymentInTheMiddle = (p:ComplexPaymentModel)=>paymentAfter(p)&&paymentBefore(p)
+    paymentsInPeriod(fromDate?: DateModel, toDate?: DateModel): ComplexPaymentModel[] {
+        const paymentAfter = fromDate ? (p: ComplexPaymentModel) => p.paymentDate.getTime() >= fromDate.getTime() : (p: ComplexPaymentModel) => true // se non c'è il limite inferiore la funzione è neutra
+        const paymentBefore = toDate ? (p: ComplexPaymentModel) => p.paymentDate.getTime() <= toDate.getTime() : (p: ComplexPaymentModel) => true
+        const paymentInTheMiddle = (p: ComplexPaymentModel) => paymentAfter(p) && paymentBefore(p)
         return this.payments.filter(paymentInTheMiddle)
     }
-    
-    howManyInstallments(){
-        return new Set(this.payments.map((p:ComplexPaymentModel)=>p.paymentDate.formatDate())).size
+
+    howManyInstallments() {
+        return new Set(this.payments.map((p: ComplexPaymentModel) => p.paymentDate.formatDate())).size
     }
 
 }
