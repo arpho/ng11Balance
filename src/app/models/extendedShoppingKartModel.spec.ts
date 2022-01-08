@@ -206,5 +206,6 @@ describe('we instatiate an extended shoppingkart with regular shoppingkart with 
         expect(xkart.paymentsInPeriod(undefined, new DateModel(new Date('05/13/2019')))[0].key).toEqual('124')
         expect(xkart.paymentsInPeriod(new DateModel(new Date('05/10/2019')), new DateModel(new Date('05/13/2019')))[0].key).toEqual('124')
         expect(xkart.paymentsInPeriod(new DateModel(new Date('05/10/2019')), new DateModel(new Date('05/13/2019'))).length).toEqual(1)
+        expect(xkart.howManyInstallments()).toEqual(2)
     })
 })

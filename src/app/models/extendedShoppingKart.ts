@@ -75,7 +75,7 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         return this.payments.filter(paymentInTheMiddle)
     }
     
-    howManyInstallment(){
+    howManyInstallments(){
         return new Set(this.payments.map((p:ComplexPaymentModel)=>p.paymentDate.formatDate())).size
     }
 
