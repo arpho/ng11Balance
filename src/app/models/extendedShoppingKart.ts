@@ -74,5 +74,9 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         const paymentInTheMiddle = (p:ComplexPaymentModel)=>paymentAfter(p)&&paymentBefore(p)
         return this.payments.filter(paymentInTheMiddle)
     }
+    
+    howManyInstallment(){
+        return new Set(this.payments.map((p:ComplexPaymentModel)=>p.paymentDate.formatDate())).size
+    }
 
 }
