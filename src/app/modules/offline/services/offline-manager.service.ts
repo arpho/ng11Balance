@@ -37,6 +37,23 @@ export class OfflineManagerService {
   }
 
 
+  createWorker(){
+
+    if (typeof Worker !== 'undefined') {
+      // Create a new
+      console.log('url',import.meta.url)
+       new URL('offline-db.service',)
+    //  const worker = new Worker(new URL('../webworker/offlineWebworker', import.meta.url));
+   /*    worker.onmessage = ({ data }) => {
+        console.log(`page got message: ${data}`);
+      };
+      worker.postMessage('hello'); */
+    } else {
+      // Web workers are not supported in this environment.
+      // You should add a fallback so that your program still executes correctly.
+    }
+
+  }
 
 
   constructor(public localDb: OfflineDbService,
@@ -44,6 +61,7 @@ export class OfflineManagerService {
     public changes: ChangesService,
     connection: ConnectionStatusService) {
     if (this.isDbPresent()) { //Db offline is present I can synchronize it
+      this.createWorker()
       this.pullChangesFromCloud()
       connection.monitor(async status => {
         console.log('monitor', status)
