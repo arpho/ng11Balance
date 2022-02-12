@@ -41,13 +41,15 @@ export class OfflineManagerService {
 
     if (typeof Worker !== 'undefined') {
       // Create a new
-      console.log('url',import.meta.url)
-       new URL('offline-db.service',)
-    //  const worker = new Worker(new URL('../webworker/offlineWebworker', import.meta.url));
-   /*    worker.onmessage = ({ data }) => {
+      console.log('ciao')
+     // console.log('url',import.meta.url)
+       //new URL('offline-db.service',)
+      const worker = new Worker('../webworker/offlineWebworker', {type:'module'});
+      console.log('ciao webw',worker)
+      worker.onmessage = ({ data }) => {
         console.log(`page got message: ${data}`);
       };
-      worker.postMessage('hello'); */
+      worker.postMessage('hello'); 
     } else {
       // Web workers are not supported in this environment.
       // You should add a fallback so that your program still executes correctly.
