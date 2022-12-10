@@ -65,7 +65,9 @@ export class Puller {
     }
 
     async updateChanges() {
+        console.log('changes',this.changes.length)
         this.changes.forEach(async change => {
+            //console.log('change',change)
             await this.Changes.updateItem(change)
         })
 
