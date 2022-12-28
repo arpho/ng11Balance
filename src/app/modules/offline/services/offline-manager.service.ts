@@ -15,7 +15,6 @@ import { ConnectionStatusService } from './connection-status.service';
 import { Push2Cloud } from '../business/push2Cloud';
 import { Puller } from '../business/puller';
 import { configs } from 'src/app/configs/configs';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { RebaseEntity } from '../business/rebaseEntity';
 import { UserModel } from '../../user/models/userModel';
 
