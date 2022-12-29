@@ -91,8 +91,9 @@ export class OfflineManagerService {
      * signs he db
      */
     this.makeSignature(async sign => {
+      const user = await this.users.loggedUser.pipe(take(1)).toPromise()
 
-      await new StoreSignature(this.localDb, sign).execute()
+      //await new StoreSignature(this.localDb, sign,user.uid).execute()
     })
 
 
@@ -138,15 +139,30 @@ export class OfflineManagerService {
       }))
   }
 
-  sign(uid: string) {
-    return `${uid}_${navigator.platform}_${this.getBrowserName()}`
-  }
+async fetchSignature(uid: string) {
+  var sign=''
+    const signatures = await this.localDb.fetchAllRawItems4Entity("signatures")
+ const o = signatures.filter(s=>s.item['uid']==uid)
+ if(o.length==0){
+  sign= String(new  Date().getTime())
+  new StoreSignature(this.localDb,sign,uid).execute()
+ }
+ else{
+  sign = o[0].item["signature"]
 
+ }
+    return `${sign}`
+  }
+/**
+ * recupera la firma dal db locale o la crea se non esiste
+ * @param next 
+ */
   makeSignature(next) {
 
-    this.users.loggedUser.subscribe(user => {
+    this.users.loggedUser.subscribe(async user  => {
       if (user.uid) {
-        next(this.sign(user.uid))
+        const signatures = await this.localDb.fetchAllRawItems4Entity("signatures")
+        next(await this.fetchSignature(user.uid))
       }
     })
 
@@ -154,8 +170,8 @@ export class OfflineManagerService {
   }
 
   async asyncSignature() {
-    const user = await this.users.loggedUser.pipe(take(1)).toPromise()
-    return this.sign(user.uid)
+    const user = await this.users.loggedUser.pipe(take(2)).toPromise()
+    return await this.fetchSignature(user.uid)
   }
 
   getBrowserName() {
@@ -227,8 +243,8 @@ export class OfflineManagerService {
     await this.push2Cloud() // upload not synched changes
     await this.localDb.clear()
     this.makeSignature(async sign => {
-
-      await new StoreSignature(this.localDb, sign).execute()
+      const user = await this.users.loggedUser.pipe(take(1)).toPromise()
+      await new StoreSignature(this.localDb, await sign,user.uid).execute()
     })
     const refreshStatus = () => { OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus()) }
     const synchonizer = new RebaseEntity(this.localDb, refreshStatus)
