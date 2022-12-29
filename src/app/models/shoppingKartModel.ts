@@ -57,7 +57,7 @@ export class ShoppingKartModel implements OfflineItemModelInterface {
     entityLabel = "Shoppingkart"
     serialize4OfflineDb(): offlineSerializer<{ entityLabel: string; }> {
         const entityLabel = this.entityLabel
-        return { ...this.serialize(), entityLabel }
+        return { ...this.serialize(), entityLabel:this.entityLabel }
     }
     service?: ItemServiceInterface;
     aggregateAction?() {
