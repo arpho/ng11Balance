@@ -22,14 +22,14 @@ export class ChangesService {
   constructor() {
   }
 
-  fetchChanges(servicesList:OfflineItemServiceInterface[]){
-    
+  fetchChanges(servicesList: OfflineItemServiceInterface[]) {
+
     if (firebase.default.apps.length != 0) {
       firebase.default.auth().onAuthStateChanged(user => {
         if (user) {
           this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
           this.fetchItemsFromCloud(items => {
-            const changes = this.initializeChanges(items,servicesList)
+            const changes = this.initializeChanges(items, servicesList)
             this._items.next(changes)
           })
         }
@@ -70,7 +70,7 @@ export class ChangesService {
           items.forEach(snap => {
             const change = new Items2Update(snap.val()['owner'])
             change.initialize(snap.val())
-          
+
             rawItems.push({ item: snap.val(), key: snap.key })
 
           })
@@ -89,11 +89,11 @@ export class ChangesService {
   }
 
 
-  initializeChanges = (raw_items: RawItem[],servicesList:OfflineItemServiceInterface[]) => {
+  initializeChanges = (raw_items: RawItem[], servicesList: OfflineItemServiceInterface[]) => {
     var items: Items2Update[] = []
 
     raw_items.forEach(item => {
-      const service:OfflineItemServiceInterface = servicesList.filter(s=>s.entityLabel==item.item['entity'])[0]
+      const service: OfflineItemServiceInterface = servicesList.filter(s => s.entityLabel == item.item['entity'])[0]
       const change = new Items2Update(item.item['owner'], item.item['item'], item.item['operation']).setKey(item.key).setEntityLabel2Update(item.item['entity'])
       items.push(change) //changes to Be defined from offlineManager
 

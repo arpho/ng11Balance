@@ -36,19 +36,19 @@ export class OfflineManagerService {
   }
 
 
-  createWorker(){
+  createWorker() {
 
     if (typeof Worker !== 'undefined') {
       // Create a new
       console.log('ciao')
-     // console.log('url',import.meta.url)
-       /*new URL('offline-db.service',)
-      const worker = new Worker('../webworker/offlineWebworker', {type:'module'});
-      console.log('ciao webw',worker)
-      worker.onmessage = ({ data }) => {
-        console.log(`page got message: ${data}`);
-      };
-      worker.postMessage('hello');  */
+      // console.log('url',import.meta.url)
+      /*new URL('offline-db.service',)
+     const worker = new Worker('../webworker/offlineWebworker', {type:'module'});
+     console.log('ciao webw',worker)
+     worker.onmessage = ({ data }) => {
+       console.log(`page got message: ${data}`);
+     };
+     worker.postMessage('hello');  */
     } else {
       // Web workers are not supported in this environment.
       // You should add a fallback so that your program still executes correctly.
@@ -139,27 +139,27 @@ export class OfflineManagerService {
       }))
   }
 
-async fetchSignature(uid: string) {
-  var sign=''
+  async fetchSignature(uid: string) {
+    var sign = ''
     const signatures = await this.localDb.fetchAllRawItems4Entity("signatures")
- const o = signatures.filter(s=>s.item['uid']==uid)
- if(o.length==0){
-  sign= String(new  Date().getTime())
-  new StoreSignature(this.localDb,sign,uid).execute()
- }
- else{
-  sign = o[0].item["signature"]
+    const o = signatures.filter(s => s.item['uid'] == uid)
+    if (o.length == 0) {
+      sign = String(new Date().getTime())
+      new StoreSignature(this.localDb, sign, uid).execute()
+    }
+    else {
+      sign = o[0].item["signature"]
 
- }
+    }
     return `${sign}`
   }
-/**
- * recupera la firma dal db locale o la crea se non esiste
- * @param next 
- */
+  /**
+   * recupera la firma dal db locale o la crea se non esiste
+   * @param next 
+   */
   makeSignature(next) {
 
-    this.users.loggedUser.subscribe(async user  => {
+    this.users.loggedUser.subscribe(async user => {
       if (user.uid) {
         const signatures = await this.localDb.fetchAllRawItems4Entity("signatures")
         next(await this.fetchSignature(user.uid))
@@ -244,7 +244,7 @@ async fetchSignature(uid: string) {
     await this.localDb.clear()
     this.makeSignature(async sign => {
       const user = await this.users.loggedUser.pipe(take(1)).toPromise()
-      await new StoreSignature(this.localDb, await sign,user.uid).execute()
+      await new StoreSignature(this.localDb, await sign, user.uid).execute()
     })
     const refreshStatus = () => { OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus()) }
     const synchonizer = new RebaseEntity(this.localDb, refreshStatus)
