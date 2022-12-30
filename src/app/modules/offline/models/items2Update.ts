@@ -14,11 +14,12 @@ export class Items2Update {
     signatures: Set<string> = new Set([])
     constructor(owner: string,item?: OfflineItemModelInterface, operationKey?: OperationKey, ) {
         this.entityLabel2Update = item?.entityLabel
-        this.item = item 
+        this.item = item
         this.operationKey = operationKey
         this.date = new DateModel(new Date())
-        this.key = new Date().getTime() + '' // +'' cast to a string
+        this.key = String( new Date().getTime())
         this.owner=owner
+        console.log("#* created change",this)
     }
 
     setItem(entity:OfflineItemModelInterface){
