@@ -9,7 +9,7 @@ describe('storing signature', () => {
         db = new LocalForageMocker()
     }))
     it('no previous signature', async () => {
-        const store = new StoreSignature(db, 'Qfe9bcGcUxTIKmL9ccn76z12gzE2_Linux x86_64_Chrome')
+        const store = new StoreSignature(db, 'Qfe9bcGcUxTIKmL9ccn76z12gzE2_Linux x86_64_Chrome','test')
         await store.execute()
         const signs = await db.fetchAllRawItems4Entity('signatures')
         expect(signs.length).toEqual(1)
@@ -21,7 +21,7 @@ describe('storing signature', () => {
     it('previous signatures', async () => {
         await db.set("signature_0", { signature: 'Qfe9bcGcUxTIKmL9ccn76z12gzE2_Linux x86_64_Chrome', entityLabel: 'signatures', lastLogged: false })// setto una firma precedente con uguale firma e lastused falso
         await db.set("signature_1", { signature: 'qwertygggggggggggggggggggggc_Linux x86_64_Chrome', entityLabel: 'signatures', lastLogged: true })// setto una firma precedente con  firma diversa ma lastused vero
-        const store = new StoreSignature(db, 'Qfe9bcGcUxTIKmL9ccn76z12gzE2_Linux x86_64_Chrome')
+        const store = new StoreSignature(db, 'Qfe9bcGcUxTIKmL9ccn76z12gzE2_Linux x86_64_Chrome','test')
         await store.execute()
         const signaturesList = await db.fetchAllRawItems4Entity('signatures')
 
