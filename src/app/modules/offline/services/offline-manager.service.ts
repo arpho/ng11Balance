@@ -27,7 +27,7 @@ export class OfflineManagerService {
   static staticLocalDb
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
-   signature:string
+  signature: string
   _msg: BehaviorSubject<string> = new BehaviorSubject('')
   readonly msg: Observable<string> = this._msg.asObservable()
 
@@ -60,7 +60,7 @@ export class OfflineManagerService {
     public users: UsersService,
     public changes: ChangesService,
     connection: ConnectionStatusService) {
-    if (this.isDbPresent())  { //Db offline is present I can synchronize it
+    if (this.isDbPresent()) { //Db offline is present I can synchronize it
       this.createWorker()
       this.getSignature()
 
@@ -123,13 +123,13 @@ export class OfflineManagerService {
     })
   }
 
-  async getSignature(){
+  async getSignature() {
     console.log("getting signature")
     var signature = this.signature
-    if(!this.signature){
-    signature = await this.asyncSignature()
-    console.log("got from get signature",signature)
-    this.signature= signature
+    if (!this.signature) {
+      signature = await this.asyncSignature()
+      console.log("got from get signature", signature)
+      this.signature = signature
     }
     return signature
 
@@ -138,8 +138,8 @@ export class OfflineManagerService {
   async pullChangesFromCloud() {
     console.log('pulling changes')
     const signature = await this.asyncSignature()
-    console.log("got signature",signature)
-    if(!this.signature){
+    console.log("got signature", signature)
+    if (!this.signature) {
     }
     const puller = new Puller(this.localDb, await this.getSignature(), this.servicesList, this.changes)
     this.changes.fetchItemsFromCloud(changes => puller.// download changes
@@ -163,14 +163,14 @@ export class OfflineManagerService {
     const o = signatures.filter(s => s.item['uid'] == uid)
     if (o.length == 0) {
       sign = String(new Date().getTime())
-      console.log("created signature",sign)
+      console.log("created signature", sign)
       new StoreSignature(this.localDb, sign, uid).execute()
     }
     else {
       sign = o[0].item["signature"]
 
     }
-    console.log("signature",sign)
+    console.log("signature", sign)
     return `${sign}`
   }
   /**
@@ -193,7 +193,7 @@ export class OfflineManagerService {
 
     console.log("asking signature")
     const user = await this.users.loggedUser.pipe(take(2)).toPromise()
-    console.log("async sign ",user)
+    console.log("async sign ", user)
     return await this.fetchSignature(user.uid)
   }
 
