@@ -34,12 +34,17 @@ export class offlineCrudOperation{
     }
 
    async  createsChange(){
-       const change = new Items2Update(this.signature,this.item,OperationKey.create)
+    console.log("creating change on local db for ",this.signature)
+       const change = new Items2Update(this.signature,this.item.serialize(),OperationKey.create)
        await this.changes.createItem(change)
+       change.owner= this.signature
+       console.log("created change",change)
        return this
    }
 
    async runOperations(){
+  
+    
      (await this.applyOnLocalDb()).createsChange()
        return this.item
    }
