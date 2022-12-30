@@ -27,7 +27,7 @@ export class OfflineManagerService {
   static staticLocalDb
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
   static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
-
+   signature:string
   _msg: BehaviorSubject<string> = new BehaviorSubject('')
   readonly msg: Observable<string> = this._msg.asObservable()
 
@@ -56,13 +56,14 @@ export class OfflineManagerService {
 
   }
 
-
   constructor(public localDb: OfflineDbService,
     public users: UsersService,
     public changes: ChangesService,
     connection: ConnectionStatusService) {
-    if (this.isDbPresent()) { //Db offline is present I can synchronize it
+    if (this.isDbPresent())  { //Db offline is present I can synchronize it
       this.createWorker()
+      this.getSignature()
+
       this.pullChangesFromCloud()
       connection.monitor(async status => {
         console.log('monitor', status)
@@ -122,9 +123,25 @@ export class OfflineManagerService {
     })
   }
 
+  async getSignature(){
+    console.log("getting signature")
+    var signature = this.signature
+    if(!this.signature){
+    signature = await this.asyncSignature()
+    console.log("got from get signature",signature)
+    this.signature= signature
+    }
+    return signature
+
+  }
+
   async pullChangesFromCloud() {
     console.log('pulling changes')
-    const puller = new Puller(this.localDb, await this.asyncSignature(), this.servicesList, this.changes)
+    const signature = await this.asyncSignature()
+    console.log("got signature",signature)
+    if(!this.signature){
+    }
+    const puller = new Puller(this.localDb, await this.getSignature(), this.servicesList, this.changes)
     this.changes.fetchItemsFromCloud(changes => puller.// download changes
       entitiesRestore(changes).// resdtore entities in changes
       applyChangesnotOwnedByMe().// apply the changes on local db
@@ -140,17 +157,20 @@ export class OfflineManagerService {
   }
 
   async fetchSignature(uid: string) {
+    console.log("fetching signature")
     var sign = ''
     const signatures = await this.localDb.fetchAllRawItems4Entity("signatures")
     const o = signatures.filter(s => s.item['uid'] == uid)
     if (o.length == 0) {
       sign = String(new Date().getTime())
+      console.log("created signature",sign)
       new StoreSignature(this.localDb, sign, uid).execute()
     }
     else {
       sign = o[0].item["signature"]
 
     }
+    console.log("signature",sign)
     return `${sign}`
   }
   /**
@@ -170,30 +190,14 @@ export class OfflineManagerService {
   }
 
   async asyncSignature() {
+
+    console.log("asking signature")
     const user = await this.users.loggedUser.pipe(take(2)).toPromise()
+    console.log("async sign ",user)
     return await this.fetchSignature(user.uid)
   }
 
-  getBrowserName() {
-    if ((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1) {
-      return 'Opera';
-    } else if (window.navigator.userAgent.indexOf("Edge") != -1) {
-      return "Edge";
-    }
-    else if (navigator.userAgent.indexOf("Chrome") != -1) {
-      return 'Chrome';
-    } else if (navigator.userAgent.indexOf("Safari") != -1) {
-      return 'Safari';
-    } else if (navigator.userAgent.indexOf("Firefox") != -1) {
-      return 'Firefox';
 
-    } else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.DOCUMENT_NODE == true)) {
-      1
-      return 'Internet Explorer';
-    } else {
-      return 'Not sure!';
-    }
-  }
 
 
   static evaluateDbStatus() {

@@ -92,8 +92,10 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   }
 
   async deleteItem(key: string) {
+    console.log("deleting item",key)
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    const signature = await this.manager.asyncSignature()
+    const signature = await this.manager.getSignature()
+    console.log("signature",signature)
     const dummy = new ShoppingKartModel().setKey(key)
     await new OfflineDeleteOperation(signature, dummy, this.localDb, this.changes, enabled,this).runOperations()
     return this.shoppingKartsListRef.child(key).remove();
@@ -104,13 +106,18 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   }
 
   async createItem(item: ItemModelInterface) {
-    var Kart = this.getDummyItem().initialize(item)
+    console.log("creatind kart",item)
+    var kart = this.getDummyItem().initialize(item)
+    console.log("initialized kart",kart)
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    const signature = await this.manager.asyncSignature()
-    Kart = await new OfflineCreateOperation(Kart, this.changes, signature, this.localDb, enabled,this).runOperations()
-
-    await this.shoppingKartsListRef.push(Kart.serialize()).catch(e=>{console.log('trouble pushing kart',e)})
-    return Kart;
+    const signature = await this.manager.getSignature()
+    console.log("signature 4 creatingItem",signature)
+    const result =await this.shoppingKartsListRef.push(kart.serialize())
+    this.changes.items['key']= result.key
+    kart = await new OfflineCreateOperation(kart, this.changes, signature, this.localDb, enabled,this).runOperations()
+    console.log("operations executed",kart,kart.serialize())
+    console.log("kart",kart)
+    return kart;
   }
 
 

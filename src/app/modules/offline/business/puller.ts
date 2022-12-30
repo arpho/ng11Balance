@@ -34,14 +34,17 @@ export class Puller {
                 try {
                     const parsedItem = JSON.parse(item.item['item'])
                     console.log("#* parsed item", parsedItem)
-                }
-                catch (e) {
-                }
                 const entity = Service.getDummyItem().initialize((item.item)).setKey(item.item['key']) as OfflineItemModelInterface
                 console.log("#* parsed restored", entity)
                 const change = new Items2Update(item.item['owner'], entity, item.item['operation']).setItem(entity)
+                console.log("`* change",change)
                 change.date = new DateModel(new Date(item.item['date']))
+
                 this.changes.push(change)
+                }
+                catch (e) {
+                    console.log("#* errore",e)
+                }
 
             }
         })
