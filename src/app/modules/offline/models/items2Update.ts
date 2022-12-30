@@ -59,9 +59,9 @@ export class Items2Update {
         return {
             'entityLabel': '2BeUpdate',
             'operation': this.operationKey,
-            item: `${this.item.serialize()}`,
+            item: this.item,
             'date': this.date.formatFullDate(),
-            'entity': this.entityLabel2Update,
+            'entity': this.entityLabel2Update?this.entityLabel2Update:'',
             'owner': this.owner,
             'signatures': Array.from(this.signatures)
         }
