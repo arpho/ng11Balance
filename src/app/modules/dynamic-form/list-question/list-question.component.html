@@ -1,3 +1,5 @@
-<p>
-  list-question works!
-</p>
+<ion-list>
+<ion-item *ngFor="let item of itemsList" >
+{{item.title}}:{{item.field2}}--{{item.field3}}
+</ion-item>
+  </ion-list>
