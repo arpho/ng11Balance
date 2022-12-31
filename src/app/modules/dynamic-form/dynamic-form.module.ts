@@ -8,6 +8,7 @@ import { QuestionControlService } from './services/question-control.service';
 import { GeoLocationModule } from '../geo-location/geo-location.module';
 import { ItemModule } from '../item/item.module';
 import { BarcodeModule } from '../barcode/barcode.module';
+import { ListQuestionComponent } from './list-question/list-question.component';
 
 @NgModule({
   declarations: [QuestionFormComponent, DynamicFormComponent],
@@ -19,7 +20,7 @@ import { BarcodeModule } from '../barcode/barcode.module';
     ItemModule,
     BarcodeModule
   ],
-  exports: [QuestionFormComponent, DynamicFormComponent],
+  exports: [QuestionFormComponent, DynamicFormComponent,ListQuestionComponent],
   providers: [QuestionControlService]
 })
 export class DynamicFormModule { }

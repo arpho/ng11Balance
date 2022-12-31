@@ -52,7 +52,14 @@
       ></ion-toggle>
     </div>
     
- 
+    <div *ngSwitchCase="'listQuestion'"
+    class="question"
+    [formControlName]="question?.key"
+    [id]="question?.key"
+    ngDefaultControl
+    >
+    <app-list-question></app-list-question>
+    </div>
     <div *ngSwitchCase="'itemSelector'"
     class="question"
     [formControlName]="question?.key"
