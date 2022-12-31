@@ -6,7 +6,7 @@ import { ItemModelInterface } from './itemModelInterface';
 export interface SelectorProperties extends QuestionProperties<CategoryModel> {
     service: ItemServiceInterface;
     text: string;
-    createPopup
+    createPopup:unknown
     filterFunction?: (item: ItemModelInterface, value: ItemModelInterface | any) => boolean
     ItemsFilterFunction?: (item: ItemModelInterface) => boolean
     sorterFunction?: (a: ItemModelInterface, b: ItemModelInterface) => number
