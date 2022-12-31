@@ -52,6 +52,7 @@ export class DetailShoppingKartPage implements OnInit {
     public geo: GeoService,
     public modalCtrl: ModalController,
     public navParams: NavParams,
+    private roundPipe:RoundPipe,
     public service: ShoppingKartsService
   ) {
 
@@ -115,8 +116,8 @@ export class DetailShoppingKartPage implements OnInit {
       new listQuestion({label:"pagamento multiplo",
     createPopup:{},
     editPopup:{},
-    key:"pagamenti",
-    value:this.kart.payments
+    key:"payments",
+    itemsList:this.kart.payments.map(item=>{return {"title":item.title,"field2":this.roundPipe.transform( item.amount),"field3":item.paymentDate.formatDate()}}) //converts the data in Itemslist
     })
     ];
 
