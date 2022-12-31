@@ -32,14 +32,14 @@ export class Puller {
             if (Service) {
                 try {
                     const parsedItem = item.item
-                const entity = Service.getDummyItem().initialize((item.item)).setKey(item.item['key']) as OfflineItemModelInterface
-                const change = new Items2BeSynced(item.item['owner'], entity, item.item['operation']).setItem(entity)
-                change.date = new DateModel(new Date(item.item['date']))
+                    const entity = Service.getDummyItem().initialize((item.item)).setKey(item.item['key']) as OfflineItemModelInterface
+                    const change = new Items2BeSynced(item.item['owner'], entity, item.item['operation']).setItem(entity)
+                    change.date = new DateModel(new Date(item.item['date']))
 
-                this.changes.push(change)
+                    this.changes.push(change)
                 }
                 catch (e) {
-                    console.log("#* errore",e)
+                    console.log("#* errore", e)
                 }
 
             }
@@ -47,10 +47,10 @@ export class Puller {
         return this
     }
 
-    async restoreEntities(owner:string) {
+    async restoreEntities(owner: string) {
 
 
-        this.Changes.fetchItemsFromCloud(owner,this.entitiesRestore)
+        this.Changes.fetchItemsFromCloud(owner, this.entitiesRestore)
         return this
     }
 

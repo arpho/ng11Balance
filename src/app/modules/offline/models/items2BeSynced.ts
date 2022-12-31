@@ -12,16 +12,16 @@ export class Items2BeSynced {
     date: DateModel
     owner: string
     signatures: Set<string> = new Set([])
-    constructor(owner: string,item?: OfflineItemModelInterface, operationKey?: OperationKey, ) {
+    constructor(owner: string, item?: OfflineItemModelInterface, operationKey?: OperationKey,) {
         this.entityLabel2Update = item?.entityLabel
         this.item = item
         this.operationKey = operationKey
         this.date = new DateModel(new Date())
-        this.key = String( new Date().getTime())
-        this.owner=owner
+        this.key = String(new Date().getTime())
+        this.owner = owner
     }
 
-    setItem(entity:OfflineItemModelInterface){
+    setItem(entity: OfflineItemModelInterface) {
         this.item = entity
         return this
     }
@@ -29,8 +29,8 @@ export class Items2BeSynced {
     initialize(args: {}) {
         Object.assign(this, args)
         this.signatures = new Set(this.signatures)
-        this.operationKey = this.operationKey|args['operation']
-                                  
+        this.operationKey = this.operationKey | args['operation']
+
         return this
     }
     setKey(key: string) {
@@ -38,7 +38,7 @@ export class Items2BeSynced {
         return this
     }
 
-    setEntityLabel2Update(label:string){
+    setEntityLabel2Update(label: string) {
         this.entityLabel2Update = label
         return this
     }
@@ -51,7 +51,7 @@ export class Items2BeSynced {
     }
 
     isSignedBy(signature: string) {
-        return this.signatures.has(signature)|| this.owner==signature
+        return this.signatures.has(signature) || this.owner == signature
     }
 
     serialize() {
@@ -60,7 +60,7 @@ export class Items2BeSynced {
             'operation': this.operationKey,
             item: this.item,
             'date': this.date.formatFullDate(),
-            'entity': this.entityLabel2Update?this.entityLabel2Update:'',
+            'entity': this.entityLabel2Update ? this.entityLabel2Update : '',
             'owner': this.owner,
             'signatures': Array.from(this.signatures)
         }

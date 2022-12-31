@@ -136,7 +136,7 @@ export class OfflineManagerService {
   async pullChangesFromCloud() {
     const signature = await this.asyncSignature()
     const puller = new Puller(this.localDb, await this.getSignature(), this.servicesList, this.changes)
-    this.changes.fetchItemsFromCloud(signature,changes => puller.// download changes
+    this.changes.fetchItemsFromCloud(signature, changes => puller.// download changes
       entitiesRestore(changes).// resdtore entities in changes
       applyChangesnotOwnedByMe().// apply the changes on local db
       finally(() => {

@@ -22,13 +22,13 @@ export class ChangesService {
   constructor() {
   }
 
-  fetchChanges(owner:string,servicesList: OfflineItemServiceInterface[]) {
+  fetchChanges(owner: string, servicesList: OfflineItemServiceInterface[]) {
 
     if (firebase.default.apps.length != 0) {
       firebase.default.auth().onAuthStateChanged(user => {
         if (user) {
           this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
-          this.fetchItemsFromCloud(owner,items => {
+          this.fetchItemsFromCloud(owner, items => {
             const changes = this.initializeChanges(items, servicesList)
             this._items.next(changes)
           })
@@ -61,7 +61,7 @@ export class ChangesService {
   }
 
 
-  fetchItemsFromCloud(owner:string,callback?:(items:RawItem[])=>void) {
+  fetchItemsFromCloud(owner: string, callback?: (items: RawItem[]) => void) {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
@@ -69,13 +69,14 @@ export class ChangesService {
           const rawItems: RawItem[] = []
           items.forEach(snap => {
 
-            const change = new Items2BeSynced(owner,snap.val())
+            const change = new Items2BeSynced(owner, snap.val())
 
             rawItems.push({ item: snap.val(), key: snap.key })
 
           })
-          if(callback){
-          callback(rawItems)}
+          if (callback) {
+            callback(rawItems)
+          }
         })
       }
     })
