@@ -58,7 +58,7 @@
     [id]="question?.key"
     ngDefaultControl
     >
-    <app-list-question></app-list-question>
+    <app-list-question [itemsList]="question?.itemsList"></app-list-question>
     </div>
     <div *ngSwitchCase="'itemSelector'"
     class="question"

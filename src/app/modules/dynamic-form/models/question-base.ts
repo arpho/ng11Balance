@@ -5,6 +5,7 @@ import { ItemModelInterface } from '../../item/models/itemModelInterface';
 import { QuestionProperties } from './questionproperties';
 import { ItemServiceInterface } from '../../item/models/ItemServiceInterface';
 import { ComboValue } from './ComboValueinterface';
+import { ItemsList } from './itemsList';
 //import { Options } from 'selenium-webdriver';
 
 export class QuestionBase<T> {
@@ -16,11 +17,13 @@ export class QuestionBase<T> {
   type: string | ItemModelInterface
   controlType: string;
   iconTrue: string;
+
   iconFalse: string;
   labelTrue: string;
   service: ItemServiceInterface
   labelFalse: string;
   text: string;
+  itemsList:ItemsList[] // elements for ListQuestion
   disabled: boolean
   options: ComboValue[]
   onChange: any = () => { };
@@ -38,8 +41,9 @@ export class QuestionBase<T> {
     this.type = options['type'] || ''
     this.label = options.label || "";
     this.required = !!options['required'];
-    this.value = options['value']
-    this.filterFunction = options['filterFunction']
+    this.value = options['value'];
+    this.itemsList= options['itemsList'];
+    this.filterFunction = options['filterFunction'];
     this.order = options['order'] === undefined ? 1 : options['order'];
     this.controlType = options['controlType'] || "";
     // tslint:disable-next-line: prefer-const
