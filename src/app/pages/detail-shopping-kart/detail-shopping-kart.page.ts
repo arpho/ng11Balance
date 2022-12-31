@@ -151,7 +151,7 @@ export class DetailShoppingKartPage implements OnInit {
 
     if (this.kart) {
       this.kart.load().finally(() => {
-        this.title = `${this.kart.title} ${this.kart.moneta} ${this.kart.totale}`
+        this.title = `${this.kart.title} ${this.kart.moneta} ${this.rounderPipe.transform( this.kart.totale)}`
 
       })
     }
