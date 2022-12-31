@@ -7,11 +7,10 @@ import { ShoppingKartModel } from "./shoppingKartModel";
 
 export class ExtendedShoppingKartModel extends ShoppingKartModel {
     payments: ComplexPaymentModel[] = []
-    pagamenti: ComplexPaymentModel[] = []
     Payments: ItemServiceInterface
     total: number
     constructor(args?: { data?: any, paymentsService: ItemServiceInterface }) {
-        super(args.data)
+        super(args?.data)
         this.Payments = args.paymentsService
         this.initialize(args.data)
 
