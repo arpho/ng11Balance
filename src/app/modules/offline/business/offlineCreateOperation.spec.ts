@@ -56,7 +56,8 @@ it('changes should be created properly', async () => {
     expect(Changes.changesList.length).toEqual(1)
     expect(Changes.changesList[0].operationKey).toEqual(OperationKey.create)
     expect(Changes.changesList[0].owner).toEqual('test')
-    expect(Changes.changesList[0].item).toBeInstanceOf(CategoryModel)
+    console.log("#* item",Changes.changesList[0].item.entityLabel)
+    expect(Changes.changesList[0].item.entityLabel).toBe("Categoria")
     expect(Changes.changesList[0].item.title).toEqual(categoryTest.title)
 })
 
