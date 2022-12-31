@@ -124,11 +124,9 @@ export class OfflineManagerService {
   }
 
   async getSignature() {
-    console.log("getting signature")
     var signature = this.signature
     if (!this.signature) {
       signature = await this.asyncSignature()
-      console.log("got from get signature", signature)
       this.signature = signature
     }
     return signature
@@ -136,13 +134,9 @@ export class OfflineManagerService {
   }
 
   async pullChangesFromCloud() {
-    console.log('pulling changes')
     const signature = await this.asyncSignature()
-    console.log("got signature", signature)
-    if (!this.signature) {
-    }
     const puller = new Puller(this.localDb, await this.getSignature(), this.servicesList, this.changes)
-    this.changes.fetchItemsFromCloud(changes => puller.// download changes
+    this.changes.fetchItemsFromCloud(signature,changes => puller.// download changes
       entitiesRestore(changes).// resdtore entities in changes
       applyChangesnotOwnedByMe().// apply the changes on local db
       finally(() => {
@@ -157,20 +151,17 @@ export class OfflineManagerService {
   }
 
   async fetchSignature(uid: string) {
-    console.log("fetching signature")
     var sign = ''
     const signatures = await this.localDb.fetchAllRawItems4Entity("signatures")
     const o = signatures.filter(s => s.item['uid'] == uid)
     if (o.length == 0) {
       sign = String(new Date().getTime())
-      console.log("created signature", sign)
       new StoreSignature(this.localDb, sign, uid).execute()
     }
     else {
       sign = o[0].item["signature"]
 
     }
-    console.log("signature", sign)
     return `${sign}`
   }
   /**
@@ -190,10 +181,7 @@ export class OfflineManagerService {
   }
 
   async asyncSignature() {
-
-    console.log("asking signature")
     const user = await this.users.loggedUser.pipe(take(2)).toPromise()
-    console.log("async sign ", user)
     return await this.fetchSignature(user.uid)
   }
 
