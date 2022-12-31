@@ -1,5 +1,5 @@
 import { CategoryModel } from "src/app/models/CategoryModel"
-import { Items2BeSynced } from "./items2Update"
+import { Items2BeSynced } from "./items2BeSynced"
 import { OperationKey } from "./operationKey"
 
 describe('testing class Items2UPdate', () => {

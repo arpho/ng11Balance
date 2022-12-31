@@ -1,6 +1,6 @@
 import { first } from "rxjs/operators";
 import { ItemModelInterface } from "../../item/models/itemModelInterface";
-import { Items2BeSynced } from "../models/items2Update";
+import { Items2BeSynced } from "../models/items2BeSynced";
 import { OfflineItemModelInterface } from "../models/offlineItemModelInterface";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
 import { OperationKey } from "../models/operationKey";

@@ -1,5 +1,5 @@
 import { isThisTypeNode } from "typescript";
-import { Items2BeSynced } from "../models/items2Update";
+import { Items2BeSynced } from "../models/items2BeSynced";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
 import { ChangesService } from "../services/changes.service";
 import { OfflineDbService } from "../services/offline-db.service";

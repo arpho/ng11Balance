@@ -1,7 +1,7 @@
 //import { service } from "firebase-functions/v1/analytics";
 import { isTypeNode } from "typescript";
 import { DateModel } from "../../user/models/birthDateModel";
-import { Items2BeSynced } from "../models/items2Update";
+import { Items2BeSynced } from "../models/items2BeSynced";
 import { OfflineItemModelInterface } from "../models/offlineItemModelInterface";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
 import { OperationKey } from "../models/operationKey";

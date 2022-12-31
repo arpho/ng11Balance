@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Items2BeSynced } from '../models/items2Update';
+import { Items2BeSynced } from '../models/items2BeSynced';
 import * as firebase from 'firebase/app';
 import { RawItem } from '../models/rawItem';
 import { ItemModelInterface } from '../../item/models/itemModelInterface';

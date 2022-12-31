@@ -14,7 +14,7 @@ import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.se
 import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
 import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
 import { ChangesService } from 'src/app/modules/offline/services/changes.service';
-import { Items2BeSynced } from 'src/app/modules/offline/models/items2Update';
+import { Items2BeSynced } from 'src/app/modules/offline/models/items2BeSynced';
 import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
 import { DeleteEntityOffline } from 'src/app/modules/offline/business/deleteEntityOffline';

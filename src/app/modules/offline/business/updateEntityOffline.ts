@@ -1,5 +1,5 @@
 import { ItemModelInterface } from "../../item/models/itemModelInterface";
-import { Items2BeSynced } from "../models/items2Update";
+import { Items2BeSynced } from "../models/items2BeSynced";
 import { OfflineItemModelInterface } from "../models/offlineItemModelInterface";
 import { OperationKey } from "../models/operationKey";
 import { ChangesService } from "../services/changes.service";

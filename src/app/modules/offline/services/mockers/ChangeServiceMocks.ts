@@ -1,4 +1,4 @@
-import { Items2BeSynced } from "../../models/items2Update";
+import { Items2BeSynced } from "../../models/items2BeSynced";
 import { ChangesService } from "../changes.service";
 
 export class ChangesServiceMockers extends ChangesService{

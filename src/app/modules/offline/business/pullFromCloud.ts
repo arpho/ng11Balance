@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable } from "rxjs";
-import { Items2BeSynced } from "../models/items2Update";
+import { Items2BeSynced } from "../models/items2BeSynced";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
 import { OperationKey } from "../models/operationKey";
 import { ChangesService } from "../services/changes.service";
