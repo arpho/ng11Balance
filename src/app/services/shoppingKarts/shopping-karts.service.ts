@@ -218,7 +218,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
       return Purchase
     }
-    const kart = new ShoppingKartModel({ key: item.key }).initialize(item.item)
+    const kart = new ExtendedShoppingKartModel({data:item.item,paymentsService:this.payments}).initialize(item.item)
 
     kart.key = item.key
 
