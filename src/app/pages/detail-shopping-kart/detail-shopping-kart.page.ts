@@ -5,7 +5,7 @@ import { GeoService } from 'src/app/modules/geo-location/services/geo-service';
 import { PaymentsService } from 'src/app/services/payments/payments.service';
 import { SuppliersService } from 'src/app/services/suppliers/suppliers.service';
 import { ShoppingKartsService } from 'src/app/services/shoppingKarts/shopping-karts.service';
-import { ShoppingKartModel } from 'src/app/models/shoppingKartModel';
+//import { ShoppingKartModel } from 'src/app/models/shoppingKartModel';
 import { SupplierModel } from 'src/app/models/supplierModel';
 import { PaymentsModel } from 'src/app/models/paymentModel';
 import { ItemModelInterface } from 'src/app/modules/item/models/itemModelInterface';
@@ -23,6 +23,8 @@ import { CreatePaymentPage } from '../create-payment/create-payment.page';
 import { CreateSupplierPage } from '../create-supplier/create-supplier.page'
 import { TextAreaBox } from 'src/app/modules/dynamic-form/models/question-textArea';
 import { RoundPipe } from 'src/app/modules/utilities/pipes/round.pipe';
+import { listQuestion } from 'src/app/modules/dynamic-form/models/listQuestion';
+import { ExtendedShoppingKartModel } from 'src/app/models/extendedShoppingKart';
 
 @Component({
   selector: 'app-detail-shopping-kart',
@@ -33,7 +35,7 @@ export class DetailShoppingKartPage implements OnInit {
   showSpinner = false
   supplierFilterFunction: (item: ItemModelInterface) => boolean
   supplierSorterFunction: (a: ItemModelInterface, b: ItemModelInterface) => number
-  kart: ShoppingKartModel
+  kart: ExtendedShoppingKartModel
   kartFields: Array<any>
   textSelectSupplier = 'Fornitore'
   textSelectPayment = 'Pagamento'
@@ -109,7 +111,13 @@ export class DetailShoppingKartPage implements OnInit {
           value: this.kart ? this.kart.fornitore : new SupplierModel()
 
         }
-      )
+      ),
+      new listQuestion({label:"pagamento multiplo",
+    createPopup:{},
+    editPopup:{},
+    key:"pagamenti",
+    value:this.kart.payments
+    })
     ];
 
 
@@ -130,6 +138,7 @@ export class DetailShoppingKartPage implements OnInit {
      */
     this.paymentsService.items.subscribe(payments => {
       if (this.kart) {
+        console.log("kart",this.kart)
         this.kart.setPayment(payments.filter(pay => pay.key == this.kart.pagamentoId)[0])
         this.setKartFields()
         console.log('kart',this.kart)
