@@ -1,5 +1,5 @@
 import { threadId } from "worker_threads";
-import { Items2Update } from "../models/items2Update";
+import { Items2BeSynced } from "../models/items2Update";
 import { OfflineItemModelInterface } from "../models/offlineItemModelInterface";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
 import { OperationKey } from "../models/operationKey";
@@ -36,7 +36,7 @@ export class offlineCrudOperation {
 
     async createsChange() {
         console.log("creating change on local db for ", this.signature)
-        const change = new Items2Update(this.signature, this.item.serialize(), OperationKey.create)
+        const change = new Items2BeSynced(this.signature, this.item.serialize(), OperationKey.create)
         await this.changes.createItem(change)
         change.owner = this.signature
         console.log("created change", change)

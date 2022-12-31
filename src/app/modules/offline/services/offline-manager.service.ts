@@ -9,7 +9,7 @@ import { ChangesService } from './changes.service';
 import { OfflineDbService } from './offline-db.service';
 import { take, first } from 'rxjs/operators';
 import { of, pipe } from 'rxjs'
-import { Items2Update } from '../models/items2Update';
+import { Items2BeSynced } from '../models/items2Update';
 import { pullChangesFromCloud } from '../business/pullFromCloud';
 import { ConnectionStatusService } from './connection-status.service';
 import { Push2Cloud } from '../business/push2Cloud';

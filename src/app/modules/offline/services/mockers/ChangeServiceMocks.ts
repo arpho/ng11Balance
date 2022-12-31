@@ -1,18 +1,18 @@
-import { Items2Update } from "../../models/items2Update";
+import { Items2BeSynced } from "../../models/items2Update";
 import { ChangesService } from "../changes.service";
 
 export class ChangesServiceMockers extends ChangesService{
-    changesList: Items2Update[]=[]
+    changesList: Items2BeSynced[]=[]
     constructor(){
         super()
     }
 
-    setChanges(changes:Items2Update[]){
+    setChanges(changes:Items2BeSynced[]){
         this.changesList= changes
         this._items.next(changes)
     }
 
-    async updateItem(item:Items2Update):Promise<any>{
+    async updateItem(item:Items2BeSynced):Promise<any>{
         const key = item.key
         const index = this.changesList.findIndex(obj=>obj.key==key)
         this.changesList[index]= item

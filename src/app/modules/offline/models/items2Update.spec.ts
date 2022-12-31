@@ -1,5 +1,5 @@
 import { CategoryModel } from "src/app/models/CategoryModel"
-import { Items2Update } from "./items2Update"
+import { Items2BeSynced } from "./items2Update"
 import { OperationKey } from "./operationKey"
 
 describe('testing class Items2UPdate', () => {
@@ -12,7 +12,7 @@ describe('testing class Items2UPdate', () => {
 
 
     it('instantiating an items2Update  for updating', () => {
-        const update = new Items2Update('key',categoryTest, OperationKey.update)
+        const update = new Items2BeSynced('key',categoryTest, OperationKey.update)
         expect(update.date).toBeTruthy()
         expect(update.operationKey).toEqual(OperationKey.update)
         expect(update.entityLabel2Update).toEqual(categoryTest.entityLabel)
@@ -23,7 +23,7 @@ describe('testing class Items2UPdate', () => {
         expect(update.owner).toEqual('key')
     })
     it('signing works',()=>{
-        const update = new Items2Update('key',categoryTest, OperationKey.update)
+        const update = new Items2BeSynced('key',categoryTest, OperationKey.update)
         update.sign('key')
         expect(update.signatures.size).toEqual(0)
         update.sign('key1')

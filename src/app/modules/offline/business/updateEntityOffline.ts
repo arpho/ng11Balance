@@ -1,5 +1,5 @@
 import { ItemModelInterface } from "../../item/models/itemModelInterface";
-import { Items2Update } from "../models/items2Update";
+import { Items2BeSynced } from "../models/items2Update";
 import { OfflineItemModelInterface } from "../models/offlineItemModelInterface";
 import { OperationKey } from "../models/operationKey";
 import { ChangesService } from "../services/changes.service";
@@ -17,7 +17,7 @@ export class UpdateEntityOffline {
     async execute(isOnline: boolean) {
         await this.db.set(this.entity.key, { ...this.entity.serialize4OfflineDb() })
         if (isOnline) {// se online non serve registrare la modifica sul db locale
-            const Item2Update = new Items2Update(this.owner,this.entity, OperationKey.update)
+            const Item2Update = new Items2BeSynced(this.owner,this.entity, OperationKey.update)
            new  ChangesService().createItem(Item2Update)
         }
         else {

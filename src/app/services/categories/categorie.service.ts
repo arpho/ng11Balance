@@ -18,7 +18,7 @@ import { OfflineManagerService } from 'src/app/modules/offline/services/offline-
 import { UsersService } from 'src/app/modules/user/services/users.service';
 import { OperationKey } from 'src/app/modules/offline/models/operationKey';
 import { ChangesService } from 'src/app/modules/offline/services/changes.service';
-import { Items2Update } from 'src/app/modules/offline/models/items2Update';
+import { Items2BeSynced } from 'src/app/modules/offline/models/items2Update';
 import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
 import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';
 import { OfflineItemModelInterface } from 'src/app/modules/offline/models/offlineItemModelInterface';

@@ -13,7 +13,7 @@ import { RawItem } from 'src/app/modules/offline/models/rawItem';
 import { OfflineDbService } from 'src/app/modules/offline/services/offline-db.service';
 import { OfflineManagerService } from 'src/app/modules/offline/services/offline-manager.service';
 import { OperationKey } from 'src/app/modules/offline/models/operationKey';
-import { Items2Update } from 'src/app/modules/offline/models/items2Update';
+import { Items2BeSynced } from 'src/app/modules/offline/models/items2Update';
 import { ChangesService } from 'src/app/modules/offline/services/changes.service';
 import { CreateEntityOffline } from 'src/app/modules/offline/business/createEntityOffline';
 import { UpdateEntityOffline } from 'src/app/modules/offline/business/updateEntityOffline';

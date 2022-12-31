@@ -4,7 +4,7 @@ import { DateModel } from "../../user/models/birthDateModel";
 import { OfflineItemModelInterface } from "./offlineItemModelInterface";
 import { OperationKey } from "./operationKey";
 
-export class Items2Update {
+export class Items2BeSynced {
     item: OfflineItemModelInterface;
     key: string
     entityLabel2Update: string
@@ -19,7 +19,6 @@ export class Items2Update {
         this.date = new DateModel(new Date())
         this.key = String( new Date().getTime())
         this.owner=owner
-        console.log("#* created change",this)
     }
 
     setItem(entity:OfflineItemModelInterface){

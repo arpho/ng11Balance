@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Items2Update } from '../models/items2Update';
+import { Items2BeSynced } from '../models/items2Update';
 import * as firebase from 'firebase/app';
 import { RawItem } from '../models/rawItem';
 import { ItemModelInterface } from '../../item/models/itemModelInterface';
@@ -14,9 +14,9 @@ export class ChangesService {
   public changesListRef: firebase.default.database.Reference;
   static changesListRef: firebase.default.database.Reference;
 
-  _items: BehaviorSubject<Array<Items2Update>> = new BehaviorSubject([])
-  readonly items: Observable<Array<Items2Update>> = this._items.asObservable()
-  items_list: Array<Items2Update> = []
+  _items: BehaviorSubject<Array<Items2BeSynced>> = new BehaviorSubject([])
+  readonly items: Observable<Array<Items2BeSynced>> = this._items.asObservable()
+  items_list: Array<Items2BeSynced> = []
 
 
   constructor() {
@@ -47,7 +47,7 @@ export class ChangesService {
     return this.changesListRef?.child(key).remove();
   }
 
-  async createItem(item: Items2Update) {
+  async createItem(item: Items2BeSynced) {
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.changesListRef = firebase.default.database().ref(`/changes/${user.uid}/`)
@@ -69,7 +69,7 @@ export class ChangesService {
           const rawItems: RawItem[] = []
           items.forEach(snap => {
 
-            const change = new Items2Update(owner,snap.val())
+            const change = new Items2BeSynced(owner,snap.val())
 
             rawItems.push({ item: snap.val(), key: snap.key })
 
@@ -81,21 +81,21 @@ export class ChangesService {
     })
   }
 
-  static updateItem(updatedItem: Items2Update) {
+  static updateItem(updatedItem: Items2BeSynced) {
     return ChangesService.changesListRef?.child(updatedItem.key).update(updatedItem.serialize());
   }
 
-  updateItem(updatedItem: Items2Update) {
+  updateItem(updatedItem: Items2BeSynced) {
     return ChangesService.changesListRef?.child(updatedItem.key).update(updatedItem.serialize());
   }
 
 
   initializeChanges = (raw_items: RawItem[], servicesList: OfflineItemServiceInterface[]) => {
-    var items: Items2Update[] = []
+    var items: Items2BeSynced[] = []
 
     raw_items.forEach(item => {
       const service: OfflineItemServiceInterface = servicesList.filter(s => s.entityLabel == item.item['entity'])[0]
-      const change = new Items2Update(item.item['owner'], item.item['item'], item.item['operation']).setKey(item.key).setEntityLabel2Update(item.item['entity'])
+      const change = new Items2BeSynced(item.item['owner'], item.item['item'], item.item['operation']).setKey(item.key).setEntityLabel2Update(item.item['entity'])
       items.push(change) //changes to Be defined from offlineManager
 
     })

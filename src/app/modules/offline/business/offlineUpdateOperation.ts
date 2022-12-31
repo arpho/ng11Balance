@@ -1,5 +1,5 @@
 import { first } from "rxjs/operators";
-import { Items2Update } from "../models/items2Update";
+import { Items2BeSynced } from "../models/items2Update";
 import { OfflineItemModelInterface } from "../models/offlineItemModelInterface";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
 import { OperationKey } from "../models/operationKey";
@@ -12,7 +12,7 @@ export class OfflineUpdateOperation extends offlineCrudOperation{
     changes: ChangesService
     signature: string
     item: OfflineItemModelInterface
-    item2Update: Items2Update
+    item2Update: Items2BeSynced
     localDb: OfflineDbService
     constructor(item: OfflineItemModelInterface,  changes: ChangesService, localDb: OfflineDbService,signature:string,userOfflineEnabled,service:OfflineItemServiceInterface) {
       super(changes,localDb,item,userOfflineEnabled,signature,service)
@@ -30,7 +30,7 @@ export class OfflineUpdateOperation extends offlineCrudOperation{
    }
 
    async createsChange(){
-       const change = new Items2Update(this.signature,this.item,OperationKey.update)
+       const change = new Items2BeSynced(this.signature,this.item,OperationKey.update)
        await this.changes.createItem(change)
        return this 
    }

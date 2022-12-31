@@ -1,5 +1,5 @@
 import { isThisTypeNode } from "typescript";
-import { Items2Update } from "../models/items2Update";
+import { Items2BeSynced } from "../models/items2Update";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
 import { ChangesService } from "../services/changes.service";
 import { OfflineDbService } from "../services/offline-db.service";
@@ -21,13 +21,13 @@ export class Changes2Pull{
 
     async fetchChanges(){
 
-        const changes: Items2Update[] = []
+        const changes: Items2BeSynced[] = []
     const pull = new pullChangesFromCloud(this.changes, this.localDb,this.services)
     this.changes.items.subscribe(async items => {
       items.forEach(item => {
         const Service = this.services.filter(service => service.entityLabel == item.entityLabel2Update)[0]
         const entity = Service.getDummyItem().initialize(item.item)
-        const change = new Items2Update(item.owner, entity, item.operationKey)
+        const change = new Items2BeSynced(item.owner, entity, item.operationKey)
         change.item = entity
         changes.push(change)
       })

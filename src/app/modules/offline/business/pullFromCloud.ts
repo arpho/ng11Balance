@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable } from "rxjs";
-import { Items2Update } from "../models/items2Update";
+import { Items2BeSynced } from "../models/items2Update";
 import { OfflineItemServiceInterface } from "../models/offlineItemServiceInterface";
 import { OperationKey } from "../models/operationKey";
 import { ChangesService } from "../services/changes.service";
@@ -9,8 +9,8 @@ import { Changes2Pull } from "./changes2pull";
 export class pullChangesFromCloud {
     Changes: ChangesService
     localDb: OfflineDbService
-    _changes:BehaviorSubject< Array<Items2Update>> = new BehaviorSubject([])
-    readonly changes: Observable<Array<Items2Update>> = this._changes.asObservable()
+    _changes:BehaviorSubject< Array<Items2BeSynced>> = new BehaviorSubject([])
+    readonly changes: Observable<Array<Items2BeSynced>> = this._changes.asObservable()
     signature: string;
     services: OfflineItemServiceInterface[];
     constructor(changes: ChangesService, localDb: OfflineDbService,servicesList:OfflineItemServiceInterface[]) {
@@ -21,8 +21,8 @@ export class pullChangesFromCloud {
             items.forEach(item=>{})
         })
     }
-    async execute(changes: Items2Update[], signature: string) {
-        const changes2BePulled: Items2Update[] =[]
+    async execute(changes: Items2BeSynced[], signature: string) {
+        const changes2BePulled: Items2BeSynced[] =[]
         const pull = new pullChangesFromCloud(this.Changes,this.localDb,this.services)
         this.Changes.items.subscribe(async items=>{
             items.forEach(async item=>{
@@ -37,7 +37,7 @@ export class pullChangesFromCloud {
                 if(item.operationKey==OperationKey.delete){
                    await this.localDb.remove(item.item.key)
                 }
-                const change= new Items2Update(item.owner,entity,item.operationKey).setItem(entity)
+                const change= new Items2BeSynced(item.owner,entity,item.operationKey).setItem(entity)
                 changes2BePulled.push(change)
                 
 
