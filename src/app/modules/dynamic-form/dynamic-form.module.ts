@@ -11,7 +11,7 @@ import { BarcodeModule } from '../barcode/barcode.module';
 import { ListQuestionComponent } from './list-question/list-question.component';
 
 @NgModule({
-  declarations: [QuestionFormComponent, DynamicFormComponent],
+  declarations: [QuestionFormComponent, DynamicFormComponent,ListQuestionComponent],
   imports: [
     CommonModule,
     IonicModule.forRoot(),
