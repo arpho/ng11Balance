@@ -31,6 +31,7 @@ import { OfflineCreateOperation } from 'src/app/modules/offline/business/offline
 import { OfflineItemModelInterface } from 'src/app/modules/offline/models/offlineItemModelInterface';
 import { DateModel } from 'src/app/modules/user/models/birthDateModel';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import { ExtendedShoppingKartModel } from 'src/app/models/extendedShoppingKart';
 // tslint:disable:semicolon
 
 @Injectable({
@@ -39,9 +40,9 @@ import { connectableObservableDescriptor } from 'rxjs/internal/observable/Connec
 export class ShoppingKartsService implements OfflineItemServiceInterface {
   public shoppingKartsListRef: firebase.default.database.Reference;
   static shoppingKartsListRef: firebase.default.database.Reference;
-  _items: BehaviorSubject<Array<ShoppingKartModel>> = new BehaviorSubject([])
-  readonly items: Observable<Array<ShoppingKartModel>> = this._items.asObservable()
-  items_list: Array<ShoppingKartModel> = []
+  _items: BehaviorSubject<Array<ExtendedShoppingKartModel>> = new BehaviorSubject([])
+  readonly items: Observable<Array<ExtendedShoppingKartModel>> = this._items.asObservable()
+  items_list: Array<ExtendedShoppingKartModel> = []
   categoriesService?: ItemServiceInterface;
 
   constructor(categories: CategoriesService,
@@ -121,7 +122,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   }
 
 
-  publish: (items: ItemModelInterface[]) => void = (items: ShoppingKartModel[]) => {
+  publish: (items: ItemModelInterface[]) => void = (items: ExtendedShoppingKartModel[]) => {
     this._items.next(items)
   };
 
@@ -182,7 +183,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
       return Purchase
     }
-    const kart = new ShoppingKartModel({ key: snap.val() }).initialize(snap.val())
+    const kart = new ExtendedShoppingKartModel({ data: snap.val(),paymentsService:this.payments }).initialize(snap.val())
 
     kart.key = snap.key
 
