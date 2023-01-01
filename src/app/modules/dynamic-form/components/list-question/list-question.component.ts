@@ -25,7 +25,9 @@ export class ListQuestionComponent implements OnInit {
   async editItem(item,slide:IonItemSliding,i:number){
     console.log("editing ",item,i)
     console.log("popup",this.editPage)
-    const alert = await this.modalCtrl.create({component:this.editPage})
+    console.log("item",item)
+    const componentProps = {data:item}
+    const alert = await this.modalCtrl.create({component:this.editPage,componentProps:componentProps})
     await alert.present()
     slide.close()
   }
