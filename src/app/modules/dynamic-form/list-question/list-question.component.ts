@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IonItemSliding } from '@ionic/angular';
+import {  IonItemSliding, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-list-question',
@@ -8,8 +8,9 @@ import { IonItemSliding } from '@ionic/angular';
 })
 export class ListQuestionComponent implements OnInit {
   @Input() itemsList:unknown[]
+  @Input() editPage
 
-  constructor() { }
+  constructor(private modalCtrl:ModalController) { }
 
   ngOnInit() {
     
@@ -19,8 +20,11 @@ export class ListQuestionComponent implements OnInit {
     slide.close()
   }
 
-  editItem(item,slide:IonItemSliding,i){
+  async editItem(item,slide:IonItemSliding,i){
     console.log("editing ",item,i)
+    console.log("popup",this.editPage)
+    const alert = await this.modalCtrl.create({component:this.editPage})
+    await alert.present()
     slide.close()
   }
 
