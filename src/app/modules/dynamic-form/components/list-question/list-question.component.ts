@@ -60,14 +60,14 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
 
   async editItem(item,slide:IonItemSliding,i:number){
     const componentProps = {data:item}
-    const alert = await this.modalCtrl.create({component:this.editPage,componentProps:componentProps})
-    await alert.present()
+    const modal = await this.modalCtrl.create({component:this.editPage,componentProps:componentProps})
+    await modal.present()
     slide.close()
   }
 
   async create(){
-    const alert = await this.modalCtrl.create({component:this.editPage})
-    await alert.present()
+    const modal = await this.modalCtrl.create({component:this.editPage})
+    await modal.present()
   }
 
 }
