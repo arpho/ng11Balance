@@ -9,23 +9,30 @@ import {  IonItemSliding, ModalController } from '@ionic/angular';
 export class ListQuestionComponent implements OnInit {
   @Input() itemsList:unknown[]
   @Input() editPage
+  @Input() createPage
 
   constructor(private modalCtrl:ModalController) { }
 
   ngOnInit() {
     
   }
-  deleteItem(item,slide:IonItemSliding,i){
+  deleteItem(item,slide:IonItemSliding,i:number){
     console.log("deleting ",item,i)
     slide.close()
   }
 
-  async editItem(item,slide:IonItemSliding,i){
+  async editItem(item,slide:IonItemSliding,i:number){
     console.log("editing ",item,i)
     console.log("popup",this.editPage)
     const alert = await this.modalCtrl.create({component:this.editPage})
     await alert.present()
     slide.close()
+  }
+
+  async createItem(){
+    console.log("popup",this.createPage)
+    const alert = await this.modalCtrl.create({component:this.editPage})
+    await alert.present()
   }
 
 }

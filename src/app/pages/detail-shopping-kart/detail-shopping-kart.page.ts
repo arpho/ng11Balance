@@ -115,7 +115,7 @@ export class DetailShoppingKartPage implements OnInit {
         }
       ),
       new listQuestion({label:"pagamento multiplo",
-    createPage:{},
+    createPage:CreatePaymentPage,
     editPage:EditPaymentPage,
     key:"payments",
     itemsList:this.kart.payments.map(item=>{return {"title":item.title,"field2":this.roundPipe.transform( item.amount),"field3":item.paymentDate.formatDate(),itemkey:item.paymentKey}}) //converts the data in Itemslist
