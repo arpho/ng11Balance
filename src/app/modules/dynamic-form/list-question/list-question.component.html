@@ -1,20 +1,27 @@
 <ion-list>
 <ion-item-sliding 
-*ngFor="let item of itemsList"
+*ngFor="let item of itemsList; let i=index"
 #sliding_item >
 <ion-item>
 {{item.title}}:{{item.field2}}--{{item.field3}}
 </ion-item>
 <ion-item-options side="start">
-  <button
-    ion-button
-    danger
-    class="danger"
-    (click)="deleteItem(item, sliding_item)"
+  <ion-button
+  danger
+    color="danger"
+    (click)="deleteItem(item,sliding_item, i)"
   >
     <ion-icon name="trash"></ion-icon>
     Elimina
-  </button>
-</ion-item-options>
+  </ion-button>
+  </ion-item-options>
+  <ion-item-options side="end">
+<ion-button
+(click)="editItem(purchase,sliding_item,i)"
+>
+    <ion-icon name="eye" ></ion-icon>
+    Edit
+    </ion-button>
+  </ion-item-options>
 </ion-item-sliding>
   </ion-list>
