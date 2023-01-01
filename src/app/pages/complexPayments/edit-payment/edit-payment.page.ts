@@ -2,8 +2,12 @@ import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { ComplexPaymentModel } from 'src/app/models/ComplexPaymentModel';
 import { ItemsList } from 'src/app/modules/dynamic-form/models/itemsList';
+import { QuestionBase } from 'src/app/modules/dynamic-form/models/question-base';
+import { DateQuestion } from 'src/app/modules/dynamic-form/models/question-date';
 import { SelectorQuestion } from 'src/app/modules/dynamic-form/models/question-selector';
+import { TextAreaBox } from 'src/app/modules/dynamic-form/models/question-textArea';
 import { TextboxQuestion } from 'src/app/modules/dynamic-form/models/question-textbox';
+import { DateModel } from 'src/app/modules/user/models/birthDateModel';
 import { PaymentsService } from 'src/app/services/payments/payments.service';
 import {CreatePaymentPage} from '../../create-payment/create-payment.page'
 
@@ -33,7 +37,21 @@ payment:ComplexPaymentModel
       service:this.payments,
       text:"il canale di pagamento",
       value:this.payment,
-      createPopup:CreatePaymentPage})
+      createPopup:CreatePaymentPage}),
+      new DateQuestion({
+        key:"date",
+        label:"data del pagameto",
+        value:new DateModel(new Date(data.field3)).formatDate()
+      }),
+      new TextboxQuestion({
+        key:"amount",
+      label:"importo",
+      type:'number'
+    }),
+    new TextAreaBox({
+      key:"note",
+      label:"note"
+    })
     ]
       
     })
