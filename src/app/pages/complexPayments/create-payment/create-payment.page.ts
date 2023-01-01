@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-create-payment',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreatePaymentPage implements OnInit {
 
-  constructor() { }
+  constructor(private modalCtrl:ModalController) { }
 
   ngOnInit() {
+  }
+
+  dismiss(value?:unknown){
+    this.modalCtrl.dismiss(value)
   }
 
 }

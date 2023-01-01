@@ -7,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditPaymentPage implements OnInit {
 
-  constructor() { }
+  constructor(private modalCtrl) { }
 
   ngOnInit() {
+  }
+  dismiss(value?:unknown){
+    this.modalCtrl.dismiss(value)
   }
 
 }
