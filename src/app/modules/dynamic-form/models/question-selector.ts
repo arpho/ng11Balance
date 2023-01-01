@@ -6,9 +6,9 @@ import { ItemModelInterface } from '../../item/models/itemModelInterface';
 // tslint:disable:semicolon
 
 
-export class SelectorQuestion extends QuestionBase<CategoryModel> {
+export class SelectorQuestion extends QuestionBase<string> {
     controlType = 'itemSelector';
-    type: CategoryModel;
+    type: any;
     constructor(options: SelectorProperties) {
         super(options);
     }
