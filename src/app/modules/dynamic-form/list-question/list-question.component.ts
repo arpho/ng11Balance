@@ -29,7 +29,7 @@ export class ListQuestionComponent implements OnInit {
     slide.close()
   }
 
-  async createItem(){
+  async create(){
     console.log("popup",this.createPage)
     const alert = await this.modalCtrl.create({component:this.editPage})
     await alert.present()

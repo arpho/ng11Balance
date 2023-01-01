@@ -1,4 +1,9 @@
 <ion-list>
+  <ion-fab mini slot="fixed" horizontal="end" vertical="bottom">
+    <ion-fab-button size="small">
+      <ion-icon name="add" (click)="create()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 <ion-item-sliding 
 *ngFor="let item of itemsList; let i=index"
 #sliding_item >
