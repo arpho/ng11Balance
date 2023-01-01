@@ -28,13 +28,14 @@ const routes: Routes = [
 {path:'fidelityCards',loadChildren:()=>import('./pages/fidelity-cards/fidelity-cards.module').then(m=>m.FidelityCardsPageModule),canActivate:[AuthGuard]},
 { path: 'fornitori', loadChildren:()=>import( './pages/fornitori/fornitori.module').then(m=>m.FornitoriPageModule), canActivate: [AuthGuard] },
 
-  {
-    path: 'create',
-    loadChildren: () => import('./pages/complexPayments/create/create.module').then( m => m.CreatePageModule)
-  },
+
   {
     path: 'edit-payment',
     loadChildren: () => import('./pages/complexPayments/edit-payment/edit-payment.module').then( m => m.EditPaymentPageModule)
+  },
+  {
+    path: 'create-payment',
+    loadChildren: () => import('./pages/complexPayments/create-payment/create-payment.module').then( m => m.CreatePaymentPageModule)
   },
   
 ];
