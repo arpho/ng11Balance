@@ -4,6 +4,7 @@ import { PaymentsModel } from "./paymentModel";
 export class ComplexPaymentModel extends PaymentsModel {
     amount = 0
     paymentDate: DateModel
+    payment:PaymentsModel
     paymentKey: string
     cpid: number // unique id in kart
     constructor(data?: { paymentDate: string, paymentKey: string, amount: number, cpid?: string } | PaymentsModel) {
@@ -24,6 +25,11 @@ export class ComplexPaymentModel extends PaymentsModel {
     }
     setPaymentKey(key: string) {
         this.paymentKey = key
+        return this
+    }
+    setPayment(p:PaymentsModel){
+        this.payment=p 
+        this.title= p.title
         return this
     }
 
