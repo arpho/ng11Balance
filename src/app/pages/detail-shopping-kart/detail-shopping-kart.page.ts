@@ -25,6 +25,7 @@ import { TextAreaBox } from 'src/app/modules/dynamic-form/models/question-textAr
 import { RoundPipe } from 'src/app/modules/utilities/pipes/round.pipe';
 import { listQuestion } from 'src/app/modules/dynamic-form/models/listQuestion';
 import { ExtendedShoppingKartModel } from 'src/app/models/extendedShoppingKart';
+import { EditPaymentPage } from '../complexPayments/edit-payment/edit-payment.page';
 
 @Component({
   selector: 'app-detail-shopping-kart',
@@ -115,9 +116,9 @@ export class DetailShoppingKartPage implements OnInit {
       ),
       new listQuestion({label:"pagamento multiplo",
     createPopup:{},
-    editPopup:{},
+    editPopup:EditPaymentPage,
     key:"payments",
-    itemsList:this.kart.payments.map(item=>{return {"title":item.title,"field2":this.roundPipe.transform( item.amount),"field3":item.paymentDate.formatDate()}}) //converts the data in Itemslist
+    itemsList:this.kart.payments.map(item=>{return {"title":item.title,"field2":this.roundPipe.transform( item.amount),"field3":item.paymentDate.formatDate(),itemkey:item.paymentKey}}) //converts the data in Itemslist
     })
     ];
 
