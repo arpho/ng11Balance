@@ -140,10 +140,8 @@ export class DetailShoppingKartPage implements OnInit {
      */
     this.paymentsService.items.subscribe(payments => {
       if (this.kart) {
-        console.log("kart",this.kart)
         this.kart.setPayment(payments.filter(pay => pay.key == this.kart.pagamentoId)[0])
         this.setKartFields()
-        console.log('kart',this.kart)
       }
     })
     /**

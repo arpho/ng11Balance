@@ -26,7 +26,6 @@ payment:ComplexPaymentModel
     this.payment = new ComplexPaymentModel().setKey(data.itemKey)
     this.payments.items.subscribe(items=>{
      this.payment.build( items.filter(p=>p.key== this.payment.key)[0])
-    console.log("data",data,this.payment)
     this.questions = [
       new SelectorQuestion({
         label:"canale di pagamento",

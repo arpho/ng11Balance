@@ -5,7 +5,6 @@ export class listQuestion extends QuestionBase<Object[]>{
     controlType: string="listQuestion";
     constructor(data:ListQuestionProperties){
         super(data)
-        console.log("pagamenti",this.value)
     }
 
 }

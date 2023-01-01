@@ -19,13 +19,11 @@ export class ListQuestionComponent implements OnInit {
   }
   deleteItem(item,slide:IonItemSliding,i:number){
     console.log("deleting ",item,i)
+    delete this.itemsList[i]
     slide.close()
   }
 
   async editItem(item,slide:IonItemSliding,i:number){
-    console.log("editing ",item,i)
-    console.log("popup",this.editPage)
-    console.log("item",item)
     const componentProps = {data:item}
     const alert = await this.modalCtrl.create({component:this.editPage,componentProps:componentProps})
     await alert.present()
@@ -33,7 +31,6 @@ export class ListQuestionComponent implements OnInit {
   }
 
   async create(){
-    console.log("popup",this.createPage)
     const alert = await this.modalCtrl.create({component:this.editPage})
     await alert.present()
   }
