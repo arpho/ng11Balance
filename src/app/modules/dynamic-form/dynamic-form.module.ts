@@ -8,7 +8,7 @@ import { QuestionControlService } from './services/question-control.service';
 import { GeoLocationModule } from '../geo-location/geo-location.module';
 import { ItemModule } from '../item/item.module';
 import { BarcodeModule } from '../barcode/barcode.module';
-import { ListQuestionComponent } from './list-question/list-question.component';
+import { ListQuestionComponent } from './components/list-question/list-question.component';
 
 @NgModule({
   declarations: [QuestionFormComponent, DynamicFormComponent,ListQuestionComponent],

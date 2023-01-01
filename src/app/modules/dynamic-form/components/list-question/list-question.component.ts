@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {  IonItemSliding, ModalController } from '@ionic/angular';
-import { ItemsList } from '../models/itemsList';
+import { ItemsList } from '../../models/itemsList';
 
 @Component({
   selector: 'app-list-question',
