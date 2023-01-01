@@ -10,5 +10,7 @@
 </ion-header>
 
 <ion-content>
+  <app-dynamic-form [questions]="questions" (interactiveSubmit)="filter($event)" (singleSubmit)="submit($event)">
+  </app-dynamic-form>
 
 </ion-content>
