@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {  IonItemSliding, ModalController } from '@ionic/angular';
+import { ItemsList } from '../models/itemsList';
 
 @Component({
   selector: 'app-list-question',
@@ -7,7 +8,7 @@ import {  IonItemSliding, ModalController } from '@ionic/angular';
   styleUrls: ['./list-question.component.scss'],
 })
 export class ListQuestionComponent implements OnInit {
-  @Input() itemsList:unknown[]
+  @Input() itemsList:ItemsList[]
   @Input() editPage
   @Input() createPage
 

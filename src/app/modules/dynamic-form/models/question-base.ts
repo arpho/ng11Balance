@@ -17,7 +17,8 @@ export class QuestionBase<T> {
   type: string | ItemModelInterface
   controlType: string;
   iconTrue: string;
-
+  createPage
+  editPage
   iconFalse: string;
   labelTrue: string;
   service: ItemServiceInterface
