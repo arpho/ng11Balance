@@ -1,5 +1,6 @@
 import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
+import { database } from 'firebase-admin';
 import { ComplexPaymentModel } from 'src/app/models/ComplexPaymentModel';
 import { ItemsList } from 'src/app/modules/dynamic-form/models/itemsList';
 import { QuestionBase } from 'src/app/modules/dynamic-form/models/question-base';
@@ -65,6 +66,12 @@ payment:ComplexPaymentModel
 
   submit(ev){
     console.log("submit",ev)
+    const payment = new ComplexPaymentModel({paymentDate:ev.date,paymentKey:String(new Date().getTime()),amount:Number(ev.amount)}).setPayment(ev.payment)
+    payment.note= ev.note
+    
+    console.log("complex",payment)
+    this.dismiss(payment)
+    
   }
 
 }
