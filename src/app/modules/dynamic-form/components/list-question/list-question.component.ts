@@ -54,6 +54,7 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
   deleteItem(item,slide:IonItemSliding,i:number){
     console.log("deleting ",item,i)
     delete this.itemsList[i]
+    this.writeValue([...this.itemsList])
     slide.close()
   }
 
