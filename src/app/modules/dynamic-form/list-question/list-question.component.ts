@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IonItemSliding } from '@ionic/angular';
 
 @Component({
   selector: 'app-list-question',
@@ -12,6 +13,15 @@ export class ListQuestionComponent implements OnInit {
 
   ngOnInit() {
     
+  }
+  deleteItem(item,slide:IonItemSliding,i){
+    console.log("deleting ",item,i)
+    slide.close()
+  }
+
+  editItem(item,slide:IonItemSliding,i){
+    console.log("editing ",item,i)
+    slide.close()
   }
 
 }
