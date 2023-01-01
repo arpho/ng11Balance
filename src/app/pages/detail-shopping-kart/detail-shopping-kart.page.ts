@@ -240,6 +240,7 @@ export class DetailShoppingKartPage implements OnInit {
   }
 
   filter(ev: {}) {
+    console.log("editing",ev)
     // tslint:disable: no-string-literal
     if (ev['payment']) {
       this.selectedPayment(ev['payment'])
