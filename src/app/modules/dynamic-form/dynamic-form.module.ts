@@ -9,9 +9,10 @@ import { GeoLocationModule } from '../geo-location/geo-location.module';
 import { ItemModule } from '../item/item.module';
 import { BarcodeModule } from '../barcode/barcode.module';
 import { ListQuestionComponent } from './components/list-question/list-question.component';
+import { ItemHostDirective } from './directives/item-host.directive';
 
 @NgModule({
-  declarations: [QuestionFormComponent, DynamicFormComponent,ListQuestionComponent],
+  declarations: [QuestionFormComponent, DynamicFormComponent,ListQuestionComponent, ItemHostDirective],
   imports: [
     CommonModule,
     IonicModule.forRoot(),
