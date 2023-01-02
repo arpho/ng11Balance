@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavParams } from '@ionic/angular';
 
 import { EditPaymentPage } from './edit-payment.page';
 
@@ -10,7 +10,8 @@ describe('EditPaymentPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ EditPaymentPage ],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot()],
+      providers:[NavParams]
     }).compileComponents();
 
     fixture = TestBed.createComponent(EditPaymentPage);
