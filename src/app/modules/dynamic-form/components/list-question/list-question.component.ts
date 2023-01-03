@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, forwardRef, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, forwardRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {  IonItemSliding, ModalController } from '@ionic/angular';
+import { ItemHostDirective } from '../../directives/item-host.directive';
 import { ItemsList } from '../../models/itemsList';
+//import {} from '../../../../components/payment-item/payment-item.component'
 
 @Component({
   selector: 'app-list-question',
@@ -18,6 +20,7 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
   @Input() itemsList:ItemsList[]
   @Input() editPage
   @Input() createPage
+  @Input() itemComponentPath
   disabled= false
 
   // tslint:disable-next-line: ban-types
@@ -27,8 +30,9 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
   get value() {
     return this.itemsList;
   }
-
-  constructor(private modalCtrl:ModalController) { }
+@ViewChild(ItemHostDirective, {static:true}) itemHost:ItemHostDirective
+  constructor(private modalCtrl:ModalController,
+    private componentFactoryResolver:ComponentFactoryResolver) { }
   writeValue(obj: any): void {
     throw new Error('Method not implemented.');
   }
@@ -49,6 +53,9 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit() {
+    const vcr =this.componentFactoryResolver.resolveComponentFactory(this.itemComponentPath)
+    console.log("init",vcr,this.itemComponentPath)
+    const viewContainerRef =this.itemHost.viewContainerRef
     
   }
   deleteItem(item,slide:IonItemSliding,i:number){
