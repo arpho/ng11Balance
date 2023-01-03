@@ -33,9 +33,10 @@ import { WidgetModule } from './modules/widget/widget.module';
 import { DecoratorService } from './modules/offline/services/decorator-service.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { PaymentItemComponent } from './components/payment-item/payment-item.component';
 
 @NgModule({
-  entryComponents: [],
+  entryComponents: [PaymentItemComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ItemModule,UserModule,DynamicFormModule,WidgetModule, ServiceWorkerModule.register('ngsw-worker.js', {
   enabled: environment.production,
   // Register the ServiceWorker as soon as the app is stable
@@ -68,6 +69,9 @@ import { environment } from '../environments/environment';
       CategoriesSelectorComponent,
       CategoriesSelectorPage,
       CategoryComponent,
+      PaymentItemComponent,
       CategoriesViewerComponent],
+    
+      
 })
 export class AppModule {}
