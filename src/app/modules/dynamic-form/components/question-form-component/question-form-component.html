@@ -58,7 +58,7 @@
     [id]="question?.key"
     ngDefaultControl
     >
-    <app-list-question [itemsList]="question?.itemsList" [editPage]="question.editPage" [createPage]="question.createPage"[itemComponentPath]="question.itemComponentPath"></app-list-question>
+    <app-list-question [itemsList]="question?.itemsList" [editPage]="question.editPage" [createPage]="question.createPage"[itemComponent]="question.itemComponent"></app-list-question>
     </div>
     <div *ngSwitchCase="'itemSelector'"
     class="question"

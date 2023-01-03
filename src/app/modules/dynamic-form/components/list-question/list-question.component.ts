@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, forwardRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {  IonItemSliding, ModalController } from '@ionic/angular';
+import { PaymentItemComponent } from 'src/app/components/payment-item/payment-item.component';
 import { ItemHostDirective } from '../../directives/item-host.directive';
+import { ItemsListInterface } from '../../models/itemlistInterface';
 import { ItemsList } from '../../models/itemsList';
 //import {} from '../../../../components/payment-item/payment-item.component'
 
@@ -20,8 +23,9 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
   @Input() itemsList:ItemsList[]
   @Input() editPage
   @Input() createPage
-  @Input() itemComponentPath
+  @Input() itemComponent
   disabled= false
+  @ViewChild(ItemHostDirective, {static: true}) itemHost!: ItemHostDirective;
 
   // tslint:disable-next-line: ban-types
   onChange: any = () => { };
@@ -30,9 +34,17 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
   get value() {
     return this.itemsList;
   }
-@ViewChild(ItemHostDirective, {static:true}) itemHost:ItemHostDirective
+
+  loadItemComponent(itemValue:unknown){
+    const _viewContainerRef = this.itemHost.viewContainerRef;
+    //removes all views in that container
+    _viewContainerRef.clear();
+    //Create an instance of the component
+    const itemRef = _viewContainerRef.createComponent<ItemsListInterface>(this.itemComponent) 
+    itemRef['item']=itemValue // pass data to the component
+  }
   constructor(private modalCtrl:ModalController,
-    private componentFactoryResolver:ComponentFactoryResolver) { }
+    private resolver:ComponentFactoryResolver) { }
   writeValue(obj: any): void {
     throw new Error('Method not implemented.');
   }
@@ -52,10 +64,13 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
     this.onTouched();
   }
 
+
+  loaditemComponent(viewContainerRef: ViewContainerRef, itemComponent:any,data:unknown){
+    const _viewContainerRef = this.itemHost.viewContainerRef;
+     //removes all views in that container
+    _viewContainerRef.clear();
+  }
   ngOnInit() {
-    const vcr =this.componentFactoryResolver.resolveComponentFactory(this.itemComponentPath)
-    console.log("init",vcr,this.itemComponentPath)
-    const viewContainerRef =this.itemHost.viewContainerRef
     
   }
   deleteItem(item,slide:IonItemSliding,i:number){

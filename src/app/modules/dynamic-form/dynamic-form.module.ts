@@ -10,9 +10,10 @@ import { ItemModule } from '../item/item.module';
 import { BarcodeModule } from '../barcode/barcode.module';
 import { ListQuestionComponent } from './components/list-question/list-question.component';
 import { ItemHostDirective } from './directives/item-host.directive';
+import { ItemsHostComponent } from './components/items-host/items-host.component';
 
 @NgModule({
-  declarations: [QuestionFormComponent, DynamicFormComponent,ListQuestionComponent, ItemHostDirective],
+  declarations: [QuestionFormComponent, DynamicFormComponent,ListQuestionComponent, ItemHostDirective,ItemsHostComponent],
   imports: [
     CommonModule,
     IonicModule.forRoot(),
@@ -21,7 +22,7 @@ import { ItemHostDirective } from './directives/item-host.directive';
     ItemModule,
     BarcodeModule
   ],
-  exports: [QuestionFormComponent, DynamicFormComponent,ListQuestionComponent],
+  exports: [QuestionFormComponent, DynamicFormComponent,ListQuestionComponent,ItemsHostComponent],
   providers: [QuestionControlService]
 })
 export class DynamicFormModule { }

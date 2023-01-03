@@ -119,7 +119,7 @@ export class DetailShoppingKartPage implements OnInit {
     createPage:CreatePaymentPage,
     editPage:EditPaymentPage,
     key:"payments",
-    itemComponentPath:PaymentItemComponent,
+    itemComponent:PaymentItemComponent,
     itemsList:this.kart.payments.map(item=>{return {"title":item.title,"field2":this.roundPipe.transform( item.amount),"field3":item.paymentDate.formatDate(),itemKey:item.key}}) //converts the data in Itemslist
     })
     ];

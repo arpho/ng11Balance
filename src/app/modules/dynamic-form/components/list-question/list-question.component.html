@@ -4,9 +4,8 @@
 *ngFor="let item of itemsList; let i=index"
 #sliding_item >
 <ion-item>
-{{item?.title}}:{{item?.field2}}--{{item?.field3}}
+<app-items-host [item]="item" [itemComponent]="itemComponent"></app-items-host>
 </ion-item>
-<ng-template itemHost></ng-template>
 <ion-item-options side="start">
   <ion-button
   danger

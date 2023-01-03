@@ -24,7 +24,7 @@ export class QuestionBase<T> {
   service: ItemServiceInterface
   labelFalse: string;
   text: string;
-  itemcomponentPath:unknown
+  itemcomponent:unknown
   itemsList:ItemsList[] // elements for ListQuestion
   disabled: boolean
   options: ComboValue[]
@@ -44,7 +44,7 @@ export class QuestionBase<T> {
     this.label = options.label || "";
     this.required = !!options['required'];
     this.value = options['value'];
-    this.itemcomponentPath= options["itemComponentPath"]
+    this.itemcomponent= options["itemComponentPath"]
     this.itemsList= options['itemsList'];
     this.filterFunction = options['filterFunction'];
     this.order = options['order'] === undefined ? 1 : options['order'];
