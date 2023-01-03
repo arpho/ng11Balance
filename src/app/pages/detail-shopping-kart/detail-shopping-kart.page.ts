@@ -26,6 +26,7 @@ import { RoundPipe } from 'src/app/modules/utilities/pipes/round.pipe';
 import { listQuestion } from 'src/app/modules/dynamic-form/models/listQuestion';
 import { ExtendedShoppingKartModel } from 'src/app/models/extendedShoppingKart';
 import { EditPaymentPage } from '../complexPayments/edit-payment/edit-payment.page';
+import {PaymentItemComponent} from '../../components/payment-item/payment-item.component'
 
 @Component({
   selector: 'app-detail-shopping-kart',
@@ -118,6 +119,7 @@ export class DetailShoppingKartPage implements OnInit {
     createPage:CreatePaymentPage,
     editPage:EditPaymentPage,
     key:"payments",
+    itemComponentPath:PaymentItemComponent,
     itemsList:this.kart.payments.map(item=>{return {"title":item.title,"field2":this.roundPipe.transform( item.amount),"field3":item.paymentDate.formatDate(),itemKey:item.key}}) //converts the data in Itemslist
     })
     ];
