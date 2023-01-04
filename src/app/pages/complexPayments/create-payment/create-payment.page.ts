@@ -22,24 +22,26 @@ export class CreatePaymentPage implements OnInit {
     private payments:PaymentsService) { }
 
   ngOnInit() {
-    this.payment = new ComplexPaymentModel()
+    this.payment = new ComplexPaymentModel().setKey(String(new Date().getTime()))
     this.questions = [
       new SelectorQuestion({
         label:"canale di pagamento",
       key:"payment",
       service:this.payments,
       text:"il canale di pagamento",
-      value:this.payment,
+      value:this.payment.payment,
       createPopup:CreatePaymentPage}),
       new DateQuestion({
         key:"paymentDate",
         label:"data del pagameto",
-        value:this.payment.paymentDate.formatDate()}
+        value:new DateModel(new Date()).formatDate()
+      }
       ),
       new TextboxQuestion({
         key:"amount",
       label:"importo",
-      type:'number'
+      type:'number',
+      value:this.payment.amount
     }),
     new TextAreaBox({
       key:"note",
@@ -51,11 +53,12 @@ export class CreatePaymentPage implements OnInit {
     console.log("typing",ev)
   }
   submit(ev){
-    console.log("submit",ev)
     this.payment.initialize(ev)
+  
+    this.dismiss(this.payment)
   }
 
-  dismiss(value?:unknown){
+  dismiss(value?:ComplexPaymentModel){
     this.modalCtrl.dismiss(value)
   }
 
