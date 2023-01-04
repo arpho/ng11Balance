@@ -11,17 +11,15 @@ export class ItemsHostComponent implements OnInit {
 @Input() item:unknown
 @Input() itemComponent
 @ViewChildren('itemHost', { read: ViewContainerRef }) itemHost!: ItemHostDirective;
-  constructor() { }
+  constructor(public  cdRef:ChangeDetectorRef) { }
    async load(){
     const _viewContainerRef = this.itemHost['_results'][0]
       //removes all views in that container
       _viewContainerRef.clear();
-      console.log("itemComponent",this.itemComponent)
       const itemRef = _viewContainerRef.createComponent<ItemsListInterface>(this.itemComponent);
-      console.log("item created")
       // pass data to the component
     itemRef.instance.item= this.item
-    console.log("loaded",itemRef)
+    this.cdRef.detectChanges()
   }
 
    delay(ms: number) {
