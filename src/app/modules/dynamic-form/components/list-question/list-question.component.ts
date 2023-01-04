@@ -88,7 +88,7 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
   }
 
   async create(){
-    const modal = await this.modalCtrl.create({component:this.editPage})
+    const modal = await this.modalCtrl.create({component:this.createPage})
     await modal.present()
   }
 
