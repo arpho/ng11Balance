@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, Input, OnInit, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import {  ChangeDetectorRef, Component, ComponentFactoryResolver, Input, OnInit, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { ItemHostDirective } from '../../directives/item-host.directive';
 import { ItemsListInterface } from '../../models/itemlistInterface';
 
@@ -29,7 +29,6 @@ export class ItemsHostComponent implements OnInit {
   ngAfterViewInit() {
     console.log('on after view init', this.itemHost,this.item);
     const ref = this.itemHost['_results'][0]
-    console.log("ref",ref,this.item)
     
 this.load()
   }
