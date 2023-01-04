@@ -35,6 +35,15 @@ export class DateModel extends Date {
       "-"
     );
   }
+
+  italianFormat(){
+    const mm = this.month + 1;
+    const dd = this.day;
+    return [(dd > 9 ? "" : "0") + dd, (mm > 9 ? "" : "0") + mm, this.year].join(
+      "-"
+    );
+
+  }
   /**
    * 
    * @param days  number numbers of days to shift the date 
