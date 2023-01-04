@@ -40,7 +40,7 @@ payment:ComplexPaymentModel
       value:this.payment,
       createPopup:CreatePaymentPage}),
       new DateQuestion({
-        key:"date",
+        key:"paymentDate",
         label:"data del pagameto",
         value:new DateModel(new Date(data.field3)).formatDate()
       }),
