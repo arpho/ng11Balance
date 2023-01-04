@@ -1,3 +1,4 @@
+import { Coordinates } from '../../geo-location/models/coordinates';
 import { QuestionBase } from './question-base';
 import { QuestionProperties } from './questionproperties';
 
