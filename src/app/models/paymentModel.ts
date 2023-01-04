@@ -59,11 +59,11 @@ export class PaymentsModel implements OfflineItemModelInterface, WidgetitemIntef
     }
 
     build(item) {
-        this.key = item.key
-        this.nome = item.nome
-        this.title = item.title || item.nome
-        this.addebito = item.addebito
-        this.note = item.note
+        this.key = item?.key
+        this.nome = item?.nome
+        this.title = item?.title || item?.nome
+        this.addebito = item?.addebito
+        this.note = item?.note
         return this
     }
 
