@@ -6,7 +6,6 @@ import { Genere } from '../modules/item/models/itemModelInterface';
 import { Value } from '../modules/item/models/value';
 import { ItemServiceInterface } from '../modules/item/models/ItemServiceInterface';
 import { ItemFilterOPtions } from '../modules/item/models/ItemFIlterOptions';
-import { GeneratedFile } from '@angular/compiler';
 import { CategoriesService } from '../services/categories/categorie.service';
 import { WidgetitemInteface } from '../modules/widget/models/widgetItemIterface';
 import { QuickAction } from '../modules/item/models/QuickAction';
