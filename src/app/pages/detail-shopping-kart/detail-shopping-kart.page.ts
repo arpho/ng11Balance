@@ -19,7 +19,7 @@ import { DateModel } from 'src/app/modules/user/models/birthDateModel';
 import { CreatePurchasePage } from '../create-purchase/create-purchase.page';
 import { QuestionBase } from '../../modules/dynamic-form/models/question-base';
 import { SelectorQuestion } from 'src/app/modules/dynamic-form/models/question-selector';
-import { CreatePaymentPage } from '../create-payment/create-payment.page';
+import { CreatePaymentPage } from '../complexPayments/create-payment/create-payment.page';
 import { CreateSupplierPage } from '../create-supplier/create-supplier.page'
 import { TextAreaBox } from 'src/app/modules/dynamic-form/models/question-textArea';
 import { RoundPipe } from 'src/app/modules/utilities/pipes/round.pipe';
