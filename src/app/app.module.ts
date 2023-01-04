@@ -36,42 +36,40 @@ import { environment } from '../environments/environment';
 import { PaymentItemComponent } from './components/payment-item/payment-item.component';
 
 @NgModule({
-  entryComponents: [PaymentItemComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ItemModule,UserModule,DynamicFormModule,WidgetModule, ServiceWorkerModule.register('ngsw-worker.js', {
-  enabled: environment.production,
-  // Register the ServiceWorker as soon as the app is stable
-  // or after 30 seconds (whichever comes first).
-  registrationStrategy: 'registerWhenStable:30000'
-})],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },DecoratorService],
-  bootstrap: [AppComponent,
+    imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ItemModule, UserModule, DynamicFormModule, WidgetModule, ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: environment.production,
+            // Register the ServiceWorker as soon as the app is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: 'registerWhenStable:30000'
+        })],
+    providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, DecoratorService],
+    bootstrap: [AppComponent,
     ],
     declarations: [
-      AppComponent,
-       CreateWidgetPage,
-       EditWidgetPage,
-       SelectorItemsPage,
-      CreateSupplierPage,
-      CreateShoppingKartPage,
-      ViewSupplierPage,
-      FilterPopupPage,
-      SelectorItemsPage,
-      CreatePurchasePage,
-      DetailPurchasePage,
-      DetailCategoryPage,
-      EditUserPage,
-      DetailPaymentPage,
-      UpdateFidelityCardPage,
-      CreateFidelityCardPage,
-      DetailShoppingKartPage,
-      ScannerPopupPage,
-      CreatePaymentPage,
-      CategoriesSelectorComponent,
-      CategoriesSelectorPage,
-      CategoryComponent,
-      PaymentItemComponent,
-      CategoriesViewerComponent],
-    
-      
+        AppComponent,
+        CreateWidgetPage,
+        EditWidgetPage,
+        SelectorItemsPage,
+        CreateSupplierPage,
+        CreateShoppingKartPage,
+        ViewSupplierPage,
+        FilterPopupPage,
+        SelectorItemsPage,
+        CreatePurchasePage,
+        DetailPurchasePage,
+        DetailCategoryPage,
+        EditUserPage,
+        DetailPaymentPage,
+        UpdateFidelityCardPage,
+        CreateFidelityCardPage,
+        DetailShoppingKartPage,
+        ScannerPopupPage,
+        CreatePaymentPage,
+        CategoriesSelectorComponent,
+        CategoriesSelectorPage,
+        CategoryComponent,
+        PaymentItemComponent,
+        CategoriesViewerComponent
+    ]
 })
 export class AppModule {}
