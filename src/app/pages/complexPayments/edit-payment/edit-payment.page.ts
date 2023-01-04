@@ -18,7 +18,7 @@ import {CreatePaymentPage} from '../../create-payment/create-payment.page'
   styleUrls: ['./edit-payment.page.scss'],
 })
 export class EditPaymentPage implements OnInit {
-  questions=[new TextboxQuestion({key:"title",label:"test"})]
+  questions = []
 payment:ComplexPaymentModel
   constructor(
     private modalCtrl:ModalController,
@@ -27,8 +27,9 @@ payment:ComplexPaymentModel
     ) { }
 
   ngOnInit() {
-    const data  = this.navParams.get("data") as ItemsList
-    this.payment = new ComplexPaymentModel().setKey(data.itemKey)
+    const data  = this.navParams.get("data") as ComplexPaymentModel
+    this.payment = new ComplexPaymentModel(data).setKey(data.key)
+    console.log("data",data,this.payment)
     this.payments.items.subscribe(items=>{
      this.payment.build( items.filter(p=>p.key== this.payment.key)[0])
     this.questions = [
@@ -37,12 +38,12 @@ payment:ComplexPaymentModel
       key:"payment",
       service:this.payments,
       text:"il canale di pagamento",
-      value:this.payment,
+      value:this.payment.payment,
       createPopup:CreatePaymentPage}),
       new DateQuestion({
         key:"paymentDate",
         label:"data del pagameto",
-        value:new DateModel(new Date(data.field3)).formatDate()
+        value:data.paymentDate.formatDate()
       }),
       new TextboxQuestion({
         key:"amount",
