@@ -34,15 +34,17 @@ import { DecoratorService } from './modules/offline/services/decorator-service.s
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { PaymentItemComponent } from './components/payment-item/payment-item.component';
+import { RoundPipe } from './modules/utilities/pipes/round.pipe';
+import {UtilitiesModule} from './modules/utilities/utilities.module'
 
 @NgModule({
-    imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ItemModule, UserModule, DynamicFormModule, WidgetModule, ServiceWorkerModule.register('ngsw-worker.js', {
+    imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, UtilitiesModule, ItemModule, UserModule, DynamicFormModule, WidgetModule, ServiceWorkerModule.register('ngsw-worker.js', {
             enabled: environment.production,
             // Register the ServiceWorker as soon as the app is stable
             // or after 30 seconds (whichever comes first).
             registrationStrategy: 'registerWhenStable:30000'
         })],
-    providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, DecoratorService],
+    providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, DecoratorService,RoundPipe],
     bootstrap: [AppComponent,
     ],
     declarations: [
