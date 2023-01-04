@@ -11,7 +11,7 @@ export class ItemsHostComponent implements OnInit {
 @Input() item:unknown
 @Input() itemComponent
 @ViewChildren('itemHost', { read: ViewContainerRef }) itemHost!: ItemHostDirective;
-  constructor(private resolver:ComponentFactoryResolver) { }
+  constructor() { }
    load(){
 
     const _viewContainerRef = this.itemHost['_results'][0]
