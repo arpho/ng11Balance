@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { RoundPipe } from 'src/app/modules/utilities/pipes/round.pipe';
 
 import { PaymentItemComponent } from './payment-item.component';
 
@@ -9,7 +10,7 @@ describe('PaymentItemComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PaymentItemComponent ],
+      declarations: [ PaymentItemComponent,RoundPipe],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
