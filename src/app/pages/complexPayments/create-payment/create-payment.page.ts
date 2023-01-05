@@ -54,6 +54,8 @@ export class CreatePaymentPage implements OnInit {
   }
   submit(ev){
     this.payment.initialize(ev)
+    console.log("submitted",ev)
+    console.log("dismissing",this.payment)
   
     this.dismiss(this.payment)
   }
