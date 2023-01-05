@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ComplexPaymentModel } from 'src/app/models/ComplexPaymentModel';
+import { PaymentsModel } from 'src/app/models/paymentModel';
 import { QuestionBase } from 'src/app/modules/dynamic-form/models/question-base';
 import { DateQuestion } from 'src/app/modules/dynamic-form/models/question-date';
 import { SelectorQuestion } from 'src/app/modules/dynamic-form/models/question-selector';
@@ -53,9 +54,10 @@ export class CreatePaymentPage implements OnInit {
     console.log("typing",ev)
   }
   submit(ev){
-    this.payment.initialize(ev)
-    console.log("submitted",ev)
-    console.log("dismissing",this.payment)
+    this.payment = new ComplexPaymentModel(new PaymentsModel(ev)).setKey(String( new Date().getTime()))
+    this.payment.paymentDate=new DateModel(new Date(ev.paymentDate))
+    console.log(" crea submitted",ev)
+    console.log("crea dismissing",this.payment)
   
     this.dismiss(this.payment)
   }
