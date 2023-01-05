@@ -58,7 +58,7 @@ payment:ComplexPaymentModel
       
     })
   }
-  dismiss(value?:unknown){
+  dismiss(value?:ComplexPaymentModel){
     this.modalCtrl.dismiss(value)
   }
   filter(ev){
