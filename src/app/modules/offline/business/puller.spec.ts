@@ -88,6 +88,7 @@ describe('testing puller', () => {
 
         puller.entitiesRestore(items).applyChangesnotOwnedByMe()
         expect((await db.get(cat.key)).item).toBeTruthy()
+        console.log("get key #*",cat.key,await db.get(cat.key))
         expect((await db.get(cat.key)).item['title']).toEqual(cat.title)
 
     })
