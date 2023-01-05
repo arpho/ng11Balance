@@ -79,6 +79,7 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
     console.log("deleting ",item,i)
     delete this.itemsList[i]
     this.writeValue([...this.itemsList])
+    console.log("items list after delete",this.itemsList)
     slide.close()
   }
 
@@ -98,8 +99,9 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
     modal.onDidDismiss().then((result)=>{ 
       console.log("result",result)
       if(result.data){
+        console.log("new payment",result.data)
       this.itemsList.push(result.data)
-    console.log("items ist",this.itemsList)
+    console.log("items ist on create",this.itemsList)
     }
       this.writeValue(this.itemsList)
   
