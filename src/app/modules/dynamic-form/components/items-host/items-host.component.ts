@@ -16,10 +16,11 @@ export class ItemsHostComponent implements OnInit {
     const _viewContainerRef = this.itemHost['_results'][0]
       //removes all views in that container
       _viewContainerRef.clear();
+      if(this.itemComponent){
       const itemRef = _viewContainerRef.createComponent<ItemsListInterface>(this.itemComponent);
       // pass data to the component
     itemRef.instance.item= this.item
-    this.cdRef.detectChanges()
+    this.cdRef.detectChanges()}
   }
 
    delay(ms: number) {
