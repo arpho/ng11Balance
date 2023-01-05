@@ -28,7 +28,9 @@ payment:ComplexPaymentModel
     ) { }
 
   ngOnInit() {
+    
     const data  = this.navParams.get("data") as ComplexPaymentModel
+    if(data &&data.key){
     this.payment = new ComplexPaymentModel(data).setKey(data.key)
     console.log("data",data,this.payment)
     this.payments.items.subscribe(items=>{
@@ -57,7 +59,7 @@ payment:ComplexPaymentModel
     })
     ]
       
-    })
+    })}
   }
   dismiss(value?:ComplexPaymentModel){
     this.modalCtrl.dismiss(value)
