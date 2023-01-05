@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, forwardRe
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {  IonItemSliding, ModalController } from '@ionic/angular';
 import { PaymentItemComponent } from 'src/app/components/payment-item/payment-item.component';
+import { ComplexPaymentModel } from 'src/app/models/ComplexPaymentModel';
 import { ItemHostDirective } from '../../directives/item-host.directive';
 import { ItemsListInterface } from '../../models/itemlistInterface';
 import { ItemsList } from '../../models/itemsList';
@@ -43,10 +44,11 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
     const itemRef = _viewContainerRef.createComponent<ItemsListInterface>(this.itemComponent) 
     itemRef['item']=itemValue // pass data to the component
   }
-  constructor(private modalCtrl:ModalController,
-    private resolver:ComponentFactoryResolver) { }
-  writeValue(obj: any): void {
-    throw new Error('Method not implemented.');
+  constructor(private modalCtrl:ModalController) { }
+  writeValue(val: any): void {
+    this.itemsList = val;
+    this.onChange(val);
+    this.onTouched();
   }
   registerOnChange(fn: any): void {
     throw new Error('Method not implemented.');
@@ -83,12 +85,25 @@ export class ListQuestionComponent implements OnInit, ControlValueAccessor {
   async editItem(item,slide:IonItemSliding,i:number){
     const componentProps = {data:item}
     const modal = await this.modalCtrl.create({component:this.editPage,componentProps:componentProps})
+    modal.onDidDismiss().then(result=>{
+      this.itemsList[i]= result.data as ComplexPaymentModel
+      this.writeValue(this.itemsList)
+    })
     await modal.present()
     slide.close()
   }
 
   async create(){
     const modal = await this.modalCtrl.create({component:this.createPage})
+    modal.onDidDismiss().then((result)=>{ 
+      console.log("result",result)
+      if(result.data){
+      this.itemsList.push(result.data)
+    console.log("items ist",this.itemsList)
+    }
+      this.writeValue(this.itemsList)
+  
+  })
     await modal.present()
   }
 
