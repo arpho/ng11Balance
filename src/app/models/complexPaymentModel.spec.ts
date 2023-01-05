@@ -38,13 +38,15 @@ describe('testing complexPaymentModel', () => {
         const TestData = { key: '123', title: 'qwertyu', note: 'asdfghj', addebito: '12/05/2019', nome: 'cash', cpid: '123456' }
         const Payment = new PaymentsModel(TestData)
         const complexPayment = new ComplexPaymentModel().initialize(Payment)
+        complexPayment.setAmount(10)
         complexPayment.paymentDate =new DateModel(new Date(TestData.addebito)) // paymentsModel does not have a date field
+        //console.log("#* cp",complexPayment)
         expect(complexPayment.key).toEqual('123')
         expect(complexPayment.title).toEqual(TestData.title)
         expect(complexPayment.nome).toEqual(TestData.nome)
         expect(complexPayment.serialize4ShoppingKart().paymentKey).toEqual('123')
         expect(complexPayment.serialize4ShoppingKart().amount).toEqual(10)
-        expect(complexPayment.serialize4ShoppingKart().paymentDate).toEqual(new DateModel(new Date()).formatDate())
+        expect(complexPayment.serialize4ShoppingKart().paymentDate).toEqual(new DateModel(new Date(TestData.addebito)).formatDate())
 
 
     })
