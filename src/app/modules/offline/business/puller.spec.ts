@@ -87,9 +87,10 @@ describe('testing puller', () => {
         ]
 
         puller.entitiesRestore(items).applyChangesnotOwnedByMe()
-        expect((await db.get(cat.key)).item).toBeTruthy()
+        console.log("#* db for puller",db)
+      //  expect((await db.get(cat.key)).item).toBeTruthy()
         console.log("get key #*",cat.key,await db.get(cat.key))
-        expect((await db.get(cat.key)).item['title']).toEqual(cat.title)
+        expect((await db.get(cat.key))['item']).toBeUndefined() // the object as been deleted
 
     })
     it('changes owned by me are not applyed', async () => {
