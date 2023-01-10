@@ -38,6 +38,7 @@ describe('testing complexPaymentModel', () => {
         const TestData = { key: '123', title: 'qwertyu', note: 'asdfghj', addebito: '12/05/2019', nome: 'cash', cpid: '123456' }
         const Payment = new PaymentsModel(TestData)
         const complexPayment = new ComplexPaymentModel().initialize(Payment)
+        expect(complexPayment.payment).toBeInstanceOf(PaymentsModel)
         complexPayment.setAmount(10)
         complexPayment.paymentDate =new DateModel(new Date(TestData.addebito)) // paymentsModel does not have a date field
         //console.log("#* cp",complexPayment)

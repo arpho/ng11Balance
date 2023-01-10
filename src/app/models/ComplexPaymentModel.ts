@@ -19,6 +19,9 @@ export class ComplexPaymentModel extends PaymentsModel {
 
     initialize(data) {
         super.initialize(data)
+        if(data instanceof PaymentsModel){
+            this.payment=data
+        }
         this.paymentDate = data?.paymentDate ? new DateModel(data.paymentDate) : undefined
         this.key = data?.paymentKey || data?.key
         return this
