@@ -30,10 +30,8 @@ export class Puller {
         items.forEach(item => {
             const Service = this.services.filter(service => service.entityLabel == item.item['entity'])[0]
             if (Service) {
-                    console.log("#* rawItem item to be restored",item)
                 try {
                     const parsedItem = item.item
-                    console.log("item to be restored #*",parsedItem)
                     const entity = Service.getDummyItem().initialize((item.item)).setKey(item.item['key']) as OfflineItemModelInterface
                     const change = new Items2BeSynced(item.item['owner'], entity, item.item['operation']).setItem(entity)
                     change.date = new DateModel(new Date(item.item['date']))
@@ -61,8 +59,6 @@ export class Puller {
 
             console.log("#* aplying change",change)
             if (change.operationKey == OperationKey.create) {
-                console.log("crated #*",change.item.serialize4OfflineDb())
-                console.log("local db #*",this.localDb)
                 await this.localDb.set(change.item['item'].key, change.item.serialize4OfflineDb())
             }
             if (change.operationKey == OperationKey.update) {

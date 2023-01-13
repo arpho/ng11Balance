@@ -50,7 +50,8 @@ describe('testing puller', () => {
         ]
 
         puller.entitiesRestore(items)
-
+        console.log("#* changes",puller.changes)
+        //console.log("#* changes[1]",puller.changes[1].date)
         expect(puller.changes.length).toEqual(items.length)
         expect(puller.changes[0].item).toBeInstanceOf(CategoryModel)
         expect(puller.changes[0].isSignedBy('me')).toBeTrue()
@@ -87,9 +88,7 @@ describe('testing puller', () => {
         ]
 
         puller.entitiesRestore(items).applyChangesnotOwnedByMe()
-        console.log("#* db for puller",db)
       //  expect((await db.get(cat.key)).item).toBeTruthy()
-        console.log("get key #*",cat.key,await db.get(cat.key))
         expect((await db.get(cat.key))['item']).toBeUndefined() // the object as been deleted
 
     })
