@@ -17,6 +17,7 @@ import { Puller } from '../business/puller';
 import { configs } from 'src/app/configs/configs';
 import { RebaseEntity } from '../business/rebaseEntity';
 import { UserModel } from '../../user/models/userModel';
+import { fstat } from 'fs';
 
 @Injectable({
   providedIn: 'root'
@@ -89,7 +90,7 @@ export class OfflineManagerService {
 
 
     /**
-     * signs he db
+     * signs he db and store the signature for future uses
      */
     this.makeSignature(async sign => {
       const user = await this.users.loggedUser.pipe(take(1)).toPromise()
@@ -126,7 +127,7 @@ export class OfflineManagerService {
   async getSignature() {
     var signature = this.signature
     if (!this.signature) {
-      signature = await this.asyncSignature()
+      signature = // await this.asyncSignature()
       this.signature = signature
     }
     return signature
@@ -149,7 +150,11 @@ export class OfflineManagerService {
           })
       }))
   }
-
+/**
+ * @description recupera la firma dell'utente loggato, se non esiste la crea
+ * @param uid 
+ * @returns 
+ */
   async fetchSignature(uid: string) {
     var sign = ''
     const signatures = await this.localDb.fetchAllRawItems4Entity("signatures")
@@ -165,15 +170,17 @@ export class OfflineManagerService {
     return `${sign}`
   }
   /**
-   * recupera la firma dal db locale o la crea se non esiste
+   *@description  e' un wrapper di fetchSignature setta signature
    * @param next 
    */
-  makeSignature(next) {
+  makeSignature(next?) {
 
     this.users.loggedUser.subscribe(async user => {
       if (user.uid) {
-        const signatures = await this.localDb.fetchAllRawItems4Entity("signatures")
-        next(await this.fetchSignature(user.uid))
+        const signature =await this.fetchSignature(user.uid)
+        this.signature = signature
+                if(next){
+        next(signature)}
       }
     })
 
@@ -181,9 +188,25 @@ export class OfflineManagerService {
   }
 
   async asyncSignature() {
-    const user = await this.users.loggedUser.pipe(take(2)).toPromise()
-    return await this.fetchSignature(user.uid)
+    this.users.loggedUser.subscribe(user=>{
+      console.log("logged user",user)
+    })
+    const user = await this.users.loggedUser
+    return await this.fetchSignature(/* user.uid */"test")
+  }/**
+   * 
+   * @param back callback function che riceve la firma dell'utente loggato
+   */
+  getLoggedUserSignature(back:(signature:string)=>void){
+
+    this.users.loggedUser.subscribe(async user=>{
+      console.log("logged user",user.uid)
+      const fSignature = await this.fetchSignature(user.uid)
+      back(fSignature)
+
+    })
   }
+
 
 
 
