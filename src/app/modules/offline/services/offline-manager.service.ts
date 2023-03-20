@@ -27,7 +27,7 @@ export class OfflineManagerService {
   servicesList: Array<OfflineItemServiceInterface> = []
   static staticLocalDb
   static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
-  static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
+  static offlineDbStatus: Observable<offLineDbStatus> //= OfflineManagerService._offlineDbStatus.asObservable()
   signature: string
   _msg: BehaviorSubject<string> = new BehaviorSubject('')
   readonly msg: Observable<string> = this._msg.asObservable()
@@ -97,6 +97,7 @@ export class OfflineManagerService {
 
       //await new StoreSignature(this.localDb, sign,user.uid).execute()
     })
+    OfflineManagerService.offlineDbStatus = OfflineManagerService._offlineDbStatus.asObservable()
 
 
   }
