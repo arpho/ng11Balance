@@ -29,7 +29,7 @@
     "@ionic-native/firebase": "^5.31.1",
     "@ionic-native/native-audio": "^5.31.1",
     "@ionic-native/splash-screen": "^5.31.1",
-    "@ionic/angular": "^5.5.2",
+    "@ionic/angular": "^6.6.2",
     "@schematics/angular": "^11.2.3",
     "@typescript-eslint/parser": "^4.22.0",
     "cordova-plugin-firebase": "^2.0.5",
