@@ -11,10 +11,10 @@ import {
   // tslint:disable: quotemark
 } from "@angular/core";
 import {
-  FormGroup,
+  UntypedFormGroup,
   AbstractControl,
   Validators,
-  FormControl
+  UntypedFormControl
 } from "@angular/forms";
 
 import { QuestionBase } from "../../models/question-base";
@@ -31,12 +31,12 @@ export class DynamicFormComponent implements OnInit,OnChanges {
   @Output() interactiveSubmit: EventEmitter<{}> = new EventEmitter();
   @Output() singleSubmit: EventEmitter<{}> = new EventEmitter();
   // the page could need to observe the form
-  @Output() Form: EventEmitter<FormGroup> = new EventEmitter()
+  @Output() Form: EventEmitter<UntypedFormGroup> = new EventEmitter()
   @Output() changes:EventEmitter<SimpleChanges> = new EventEmitter()
   @Input() questions: QuestionBase<any>[] = [];
   @Input() submitText: string;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   payLoad
 
   constructor(private qcs: QuestionControlService) { }
@@ -50,7 +50,7 @@ export class DynamicFormComponent implements OnInit,OnChanges {
       this.changes.emit(data)
     })
     if (this.questions.filter(v => v.key === "location").length > 0) {
-      this.form.addControl("address", new FormControl()); // input-geolocation usa un control in più
+      this.form.addControl("address", new UntypedFormControl()); // input-geolocation usa un control in più
     }
     this.form.valueChanges.subscribe(v => {
       this.interactiveSubmit.emit(v);
