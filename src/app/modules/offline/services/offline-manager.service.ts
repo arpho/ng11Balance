@@ -23,11 +23,10 @@ import { fstat } from 'fs';
   providedIn: 'root'
 })
 export class OfflineManagerService {
-  static servicesList: Array<OfflineItemServiceInterface> = []
   servicesList: Array<OfflineItemServiceInterface> = []
-  static staticLocalDb
-  static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
-  static offlineDbStatus: Observable<offLineDbStatus> //= OfflineManagerService._offlineDbStatus.asObservable()
+   staticLocalDb
+   _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
+   offlineDbStatus: Observable<offLineDbStatus> = this._offlineDbStatus.asObservable()
   signature: string
   _msg: BehaviorSubject<string> = new BehaviorSubject('')
   readonly msg: Observable<string> = this._msg.asObservable()
@@ -97,7 +96,6 @@ export class OfflineManagerService {
 
       //await new StoreSignature(this.localDb, sign,user.uid).execute()
     })
-    OfflineManagerService.offlineDbStatus = OfflineManagerService._offlineDbStatus.asObservable()
 
 
   }
@@ -212,8 +210,9 @@ export class OfflineManagerService {
 
 
 
-  static evaluateDbStatus() {
-    const statusList = OfflineManagerService.servicesList.map((service: OfflineItemServiceInterface) => {
+   evaluateDbStatus() {
+    
+    const statusList = this.servicesList.map((service: OfflineItemServiceInterface) => {
       return service.offlineDbStatus || 0
     })
     const reducer = (acc: number, value: number, index, array: number[]) => {
@@ -242,8 +241,8 @@ export class OfflineManagerService {
     return this.localDb.get(`${entityLabel}_status_db`)
   }
 
-  static async publishEntity(entity: string) {
-    const service = OfflineManagerService.servicesList.filter((service: OfflineItemServiceInterface) => service.entityLabel == entity)[0]
+   async publishEntity(entity: string) {
+    const service = this.servicesList.filter((service: OfflineItemServiceInterface) => service.entityLabel == entity)[0]
     service?.publish(await service.loadItemFromLocalDb())
 
 
@@ -262,7 +261,7 @@ export class OfflineManagerService {
       const user = await this.users.loggedUser.pipe(take(1)).toPromise()
       await new StoreSignature(this.localDb, await sign, user.uid).execute()
     })
-    const refreshStatus = () => { OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus()) }
+    const refreshStatus = () => { this._offlineDbStatus.next(this.evaluateDbStatus()) }
     const synchonizer = new RebaseEntity(this.localDb, refreshStatus)
     //clones entiites for every service
     this.servicesList.forEach(async service => {
@@ -275,8 +274,8 @@ export class OfflineManagerService {
   }
 
   async registerService(service: OfflineItemServiceInterface) {
-    if (!OfflineManagerService.servicesList.map(service => service.entityLabel).includes(service.entityLabel)) {
-      OfflineManagerService.servicesList.push(service)
+    if (!this.servicesList.map(service => service.entityLabel).includes(service.entityLabel)) {
+      this.servicesList.push(service)
       this.servicesList.push(service)
 
       service.setHref()
@@ -286,7 +285,7 @@ export class OfflineManagerService {
     }
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
     if (entityStatus.item == offLineDbStatus.notInitialized || entityStatus.item == null) {
-      const refreshStatus = () => { OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus()) }
+      const refreshStatus = () => { this._offlineDbStatus.next(this.evaluateDbStatus()) }
       const entitiesNumber = await new RebaseEntity(this.localDb, refreshStatus).synchronizes(service, (data) => {
         this.publishMessage(`synchronized ${data} items for  ${service.entityLabel}`)
         this.publishMessage(`sincronizzati ${entityStatus} items per ${service.entityLabel}`)
