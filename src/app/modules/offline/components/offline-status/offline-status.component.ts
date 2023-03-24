@@ -10,10 +10,14 @@ import { OfflineManagerService } from '../../services/offline-manager.service';
 })
 /**subscribe to offlineStatus field in offlineManager */
 export class OfflineStatusComponent implements OnInit, OnDestroy {
-  status = OfflineManagerService.offlineDbStatus
+  status = this.service.offlineDbStatus
   msgSubscription: Subscription
 
-  constructor(public alertController: AlertController, public manager: OfflineManagerService, public toastController: ToastController) {
+  constructor(public alertController: AlertController, 
+    public manager: OfflineManagerService, 
+    public toastController: ToastController,
+    private service:OfflineManagerService
+    ) {
     this.msgSubscription = manager.msg.subscribe(msg => {
       this.presentToast(msg)
     })

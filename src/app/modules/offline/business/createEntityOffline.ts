@@ -9,7 +9,9 @@ import { OfflineManagerService } from "../services/offline-manager.service";
 export class CreateEntityOffline {
     entity: OfflineItemModelInterface
     db: OfflineDbService
-    constructor(entity: OfflineItemModelInterface, db: OfflineDbService,public owner:string) {
+    constructor(entity: OfflineItemModelInterface, db: OfflineDbService,public owner:string,
+      private service:OfflineManagerService
+      ) {
         this.db = db
         this.entity = entity
     }
@@ -25,6 +27,6 @@ export class CreateEntityOffline {
             // registro la modifica che sarà riportata onLine appena possibile
             await this.db.set(new Date().getTime() + '', { entityLabel: 'update', operation: OperationKey.create, 'entity': this.entity.serialize4OfflineDb() })
         }
-        OfflineManagerService.publishEntity(this.entity.entityLabel)
+        this.service.publishEntity(this.entity.entityLabel)
     }
 }
