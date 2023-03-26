@@ -14,7 +14,6 @@ import { AlertController, ModalController } from "@ionic/angular";
 import { ItemModelInterface } from "../../models/itemModelInterface";
 import { ItemServiceInterface } from "../../models/ItemServiceInterface";
 import { Router } from "@angular/router";
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { ComponentRef } from '@ionic/core';
 
 @Component({

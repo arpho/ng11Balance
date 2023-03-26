@@ -2,7 +2,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavParams, ModalController, NavController, ToastController } from '@ionic/angular';
 import { CategoryModel } from 'src/app/models/CategoryModel';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { QuestionBase } from 'src/app/modules/dynamic-form/models/question-base';
 import { TextboxQuestion } from 'src/app/modules/item/models/question-textbox';
 import { SelectorQuestion } from 'src/app/modules/dynamic-form/models/question-selector';

@@ -8,7 +8,6 @@ import { SwitchQuestion } from 'src/app/modules/item/models/question-switch';
 import { CategoriesService } from 'src/app/services/categories/categorie.service';
 import { SuppliersService } from 'src/app/services/suppliers/suppliers.service';
 import { PaymentsService } from 'src/app/services/payments/payments.service';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { FormGroup } from '@angular/forms';
 
 @Component({

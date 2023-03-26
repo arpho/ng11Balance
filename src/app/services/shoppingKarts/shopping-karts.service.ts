@@ -30,7 +30,6 @@ import { OfflineDeleteOperation } from 'src/app/modules/offline/business/offline
 import { OfflineCreateOperation } from 'src/app/modules/offline/business/offlineCreateOperation';
 import { OfflineItemModelInterface } from 'src/app/modules/offline/models/offlineItemModelInterface';
 import { DateModel } from 'src/app/modules/user/models/birthDateModel';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { ExtendedShoppingKartModel } from 'src/app/models/extendedShoppingKart';
 // tslint:disable:semicolon
 
