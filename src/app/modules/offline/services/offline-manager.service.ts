@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, lastValueFrom  } from 'rxjs';
 import { UsersService } from '../../user/services/users.service';
 import { CloneEntity } from '../business/cloneEntityFromFirebase';
 import { StoreSignature } from '../business/storeSignatureOnLocalDb';
@@ -7,7 +7,6 @@ import { offLineDbStatus } from '../models/offlineDbStatus';
 import { OfflineItemServiceInterface } from '../models/offlineItemServiceInterface';
 import { ChangesService } from './changes.service';
 import { OfflineDbService } from './offline-db.service';
-import { take, first } from 'rxjs/operators';
 import { of, pipe } from 'rxjs'
 import { Items2BeSynced } from '../models/items2BeSynced';
 import { pullChangesFromCloud } from '../business/pullFromCloud';
@@ -17,7 +16,6 @@ import { Puller } from '../business/puller';
 import { configs } from 'src/app/configs/configs';
 import { RebaseEntity } from '../business/rebaseEntity';
 import { UserModel } from '../../user/models/userModel';
-import { fstat } from 'fs';
 
 @Injectable({
   providedIn: 'root'
@@ -92,7 +90,7 @@ export class OfflineManagerService {
      * signs he db and store the signature for future uses
      */
     this.makeSignature(async sign => {
-      const user = await this.users.loggedUser.pipe(take(1)).toPromise()
+       const user = lastValueFrom(this.users.loggedUser)
 
       //await new StoreSignature(this.localDb, sign,user.uid).execute()
     })
@@ -132,6 +130,20 @@ export class OfflineManagerService {
     return signature
 
   }
+
+
+  async retrieveSignature(){
+
+
+   
+      const user = await lastValueFrom (this.users.loggedUser)//.pipe(take(1)).toPromise()
+
+     const signature = await new StoreSignature(this.localDb, await this.fetchSignature(user.uid),user.uid).execute()
+     return signature
+      
+    
+  }
+ 
 
   async pullChangesFromCloud() {
     const signature = await this.asyncSignature()
@@ -250,7 +262,7 @@ export class OfflineManagerService {
   }
 
   async isLoggedUserOflineEnabled() {
-    const user = await this.users.loggedUser.pipe(take(1)).toPromise()
+    const user = await lastValueFrom(this.users.loggedUser)
     return user.isOfflineEnabled()
   }
 
@@ -258,7 +270,7 @@ export class OfflineManagerService {
     await this.push2Cloud() // upload not synched changes
     await this.localDb.clear()
     this.makeSignature(async sign => {
-      const user = await this.users.loggedUser.pipe(take(1)).toPromise()
+      const user = await  lastValueFrom(this.users.loggedUser)
       await new StoreSignature(this.localDb, await sign, user.uid).execute()
     })
     const refreshStatus = () => { this._offlineDbStatus.next(this.evaluateDbStatus()) }
