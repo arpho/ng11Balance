@@ -95,7 +95,6 @@ export class OfflineManagerService {
       //await new StoreSignature(this.localDb, sign,user.uid).execute()
     })
 
-
   }
 
   async isDbPresent() {
