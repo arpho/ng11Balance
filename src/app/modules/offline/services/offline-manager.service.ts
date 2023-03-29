@@ -38,7 +38,7 @@ export class OfflineManagerService {
 
     if (typeof Worker !== 'undefined') {
       // Create a new
-      console.log('ciao')
+      console.log('ciao worker')
       // console.log('url',import.meta.url)
       /*new URL('offline-db.service',)
      const worker = new Worker('../webworker/offlineWebworker', {type:'module'});
@@ -210,6 +210,7 @@ export class OfflineManagerService {
 
     this.users.loggedUser.subscribe(async user=>{
       console.log("logged user",user.uid)
+    
       const fSignature = await this.fetchSignature(user.uid)
       back(fSignature)
 
