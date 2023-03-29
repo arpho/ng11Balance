@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, lastValueFrom  } from 'rxjs';
+import { BehaviorSubject, Observable, lastValueFrom, take  } from 'rxjs';
 import { UsersService } from '../../user/services/users.service';
 import { CloneEntity } from '../business/cloneEntityFromFirebase';
 import { StoreSignature } from '../business/storeSignatureOnLocalDb';
@@ -199,11 +199,9 @@ export class OfflineManagerService {
   }
 
   async asyncSignature() {
-    this.users.loggedUser.subscribe(user=>{
-      console.log("logged user",user)
-    })
-    const user = await this.users.loggedUser
-    return await this.fetchSignature(/* user.uid */"test")
+    const user =  await lastValueFrom(this.users.loggedUser.pipe(take(2)))/**pipe e take servono 
+    per far terminare lo Observable, altrimenti si otterrebbe un errore */
+    return await this.fetchSignature( user.uid )
   }/**
    * 
    * @param back callback function che riceve la firma dell'utente loggato
