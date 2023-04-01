@@ -286,10 +286,10 @@ export class OfflineManagerService {
   async registerService(service: OfflineItemServiceInterface) {
     if (!this.servicesList.map(service => service.entityLabel).includes(service.entityLabel)) {
       this.servicesList.push(service)
-      this.servicesList.push(service)
 
       service.setHref()
       if (this.servicesList.length == configs.offlineEntityNumber) {
+        console.log("ready to fetch items")
         await this.syncChanges()
       }
     }
