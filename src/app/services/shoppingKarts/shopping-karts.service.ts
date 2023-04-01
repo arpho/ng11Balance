@@ -121,7 +121,9 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   }
 
 
-  publish: (items: ItemModelInterface[]) => void = (items: ExtendedShoppingKartModel[]) => {
+  publish: (items: ItemModelInterface[]) => void = async (items: ExtendedShoppingKartModel[]) => {
+    const signature = await this.manager.asyncSignature()
+    console.log("got signature",signature)
     this._items.next(items)
   };
 
