@@ -90,7 +90,7 @@ export class OfflineManagerService {
      * signs he db and store the signature for future uses
      */
     this.makeSignature(async sign => {
-       const user = lastValueFrom(this.users.loggedUser)
+       const user = lastValueFrom(this.users.loggedUser.pipe(take(2)))
 
       //await new StoreSignature(this.localDb, sign,user.uid).execute()
     })
@@ -135,7 +135,7 @@ export class OfflineManagerService {
 
 
    
-      const user = await lastValueFrom (this.users.loggedUser)//.pipe(take(1)).toPromise()
+      const user = await lastValueFrom (this.users.loggedUser.pipe(take(2)))
 
      const signature = await new StoreSignature(this.localDb, await this.fetchSignature(user.uid),user.uid).execute()
      return signature
@@ -260,7 +260,7 @@ export class OfflineManagerService {
   }
 
   async isLoggedUserOflineEnabled() {
-    const user = await lastValueFrom(this.users.loggedUser)
+    const user = await lastValueFrom(this.users.loggedUser.pipe(take(2)))
     return user.isOfflineEnabled()
   }
 
@@ -268,7 +268,7 @@ export class OfflineManagerService {
     await this.push2Cloud() // upload not synched changes
     await this.localDb.clear()
     this.makeSignature(async sign => {
-      const user = await  lastValueFrom(this.users.loggedUser)
+      const user = await  lastValueFrom(this.users.loggedUser.pipe(take(2)))
       await new StoreSignature(this.localDb, await sign, user.uid).execute()
     })
     const refreshStatus = () => { this._offlineDbStatus.next(this.evaluateDbStatus()) }
