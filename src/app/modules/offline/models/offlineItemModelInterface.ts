@@ -7,7 +7,10 @@ export type offlineSerializer<T extends { entityLabel: string }> = {
 
 export interface OfflineItemModelInterface extends ItemModelInterface {
     entityLabel: string
-    schema:{}
+    schema:{primaryKey:string,
+    version:number,
+  title:string,
+properties:{}}
     serialize4OfflineDb(): offlineSerializer<{entityLabel:string}>
     initialize(item:{}):OfflineItemModelInterface
 }
