@@ -96,6 +96,24 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
         }
         return this
     }
+    schema={
+      version:0,
+      title:"category",
+      primaryKey:"key",
+      properties:{
+        key:{
+          type:'string',
+          maxLength:100
+        },
+        title:{
+          type:'string'
+        },
+        fatherkey:{
+          type:'string'
+        },
+        note:{type:'string'}
+      }
+    }
     initialize(cat: any) {
         Object.assign(this, cat)
         this.widgetText = ` per  ${this.title}`
