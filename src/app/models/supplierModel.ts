@@ -98,6 +98,36 @@ export class SupplierModel implements OfflineItemModelInterface, WidgetitemIntef
         throw new Error('Method not implemented.');
     }
     widgetText = `..`
+    schema={
+      version:0,title:"supplier",
+      primaryKey:"key",
+      properties:{
+        key:{
+          type:'string',
+          maxLength:100
+
+        },
+        longitude:{
+          type:'number'
+        },
+        latitude:{
+          type:'number'
+        },
+        note:{
+          type:'string'
+        },
+        fidelity_card:{type:'string'},
+        ecommerce:{
+          type:'boolean'
+        },
+        title:{
+          type:"string"
+        },
+        indirizzo:{
+          type:'string'
+        }
+      }
+    }
     initialize(supplier) {
         Object.assign(this, supplier)
         this.widgetText = ` comprato presso ${this.title}`
