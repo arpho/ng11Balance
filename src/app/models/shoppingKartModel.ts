@@ -259,6 +259,60 @@ export class ShoppingKartModel implements OfflineItemModelInterface {
     getNote() {
         return new Value({ value: this.note, label: 'nota' })
     }
+    schema={
+      title:"shoppingkart",
+      version:0,
+      primaryKey:"key",
+      properties:{
+        key:{
+          type:'string',
+          maxLength:100
+        },
+        fornitoreId:{
+          type:'string'
+        },
+        pagamentoId:{
+          type:'string'},
+          archived:{
+            type:'boolean'
+          },
+          dataAcquisto:{
+            type:'string'
+          },
+          title:{
+            type:'string'
+          },
+          note:{
+            type:'string'
+          },
+          online:{
+            type:'string'
+          },
+          items:{
+            type:'array',
+            items:{type:'object',
+          properties:{
+            barcode: 'string',
+    descrizione: 'string',
+    moneta: 'string',
+    picture: 'string',
+    categorieId:{
+      type:'array',
+      items:{
+        type:'string'
+    },
+    key: {type:'string'},
+    note: {
+      type:'string'
+    },
+    prezzo:{
+      type:'string'
+    }
+          }}
+          }
+        }
+      }
+    }
 
     initialize(cart) {
         Object.assign(this, cart)
