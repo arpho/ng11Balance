@@ -35,6 +35,27 @@ export class PaymentsModel implements OfflineItemModelInterface, WidgetitemIntef
 
 
     }
+    schema ={
+      title:"payment",
+      version:0,
+      primaryKey:"key",
+      properties:{
+        key:{
+          type:'string',
+          maxLength:100
+        },
+        title:{
+          type:"string",
+          
+        },
+        note:{
+          type:'string'
+        },
+         archived:{
+          type:'string'
+         }
+      }
+    }
     entityLabel = "Pagamento"
     serialize4OfflineDb(): offlineSerializer<{ entityLabel: string; }> {
         const out = this.serialize()
