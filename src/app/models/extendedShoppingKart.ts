@@ -77,9 +77,29 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
         const paymentInTheMiddle = (p: ComplexPaymentModel) => paymentAfter(p) && paymentBefore(p)
         return this.payments.filter(paymentInTheMiddle)
     }
-
+/**
+ * 
+ * @returns the number of payments
+ */
     howManyInstallments() {
         return new Set(this.payments.map((p: ComplexPaymentModel) => p.paymentDate.formatDate())).size
+    }
+
+
+    schema={
+      ...super.schema,
+      payments:{
+        type:'array',
+        items:{
+          type:'object',
+          properties:{
+            paymentKey:'string',
+            amount:'number',
+            paymentDate:'string',
+            cpid:'number'
+          }
+        }
+      }
     }
 
 }
