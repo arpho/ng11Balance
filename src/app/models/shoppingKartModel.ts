@@ -283,6 +283,9 @@ export class ShoppingKartModel implements OfflineItemModelInterface {
       title: {
         type: 'string'
       },
+      totale:{
+        type:'number'
+      },
       note: {
         type: 'string'
       },
