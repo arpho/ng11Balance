@@ -79,7 +79,7 @@ export class ExtendedShoppingKartModel extends ShoppingKartModel {
     }
 /**
  * 
- * @returns the number of payments
+ * @returns the number di rate diverse
  */
     howManyInstallments() {
         return new Set(this.payments.map((p: ComplexPaymentModel) => p.paymentDate.formatDate())).size
