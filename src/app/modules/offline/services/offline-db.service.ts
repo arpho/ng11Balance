@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import * as localforage from 'localforage';
 import { LastLoggedUidFetcher } from '../business/LastLoggedUidFetcher';
 import { RawItem } from '../models/rawItem';
-
+import { createRxDatabase,RxDatabase,RxSchema } from 'rxdb';
+import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 @Injectable({
   providedIn: 'root'
 })
@@ -47,6 +48,30 @@ export class OfflineDbService {
   async getLastLoggedUserId() {
     return new LastLoggedUidFetcher(this).execute()
 
+  }
+/**
+ * 
+ * @param dbname :string
+ * @returns RxDatabase
+ * @description create a new offline db
+ */
+  createOfflineDb(dbname:string){
+    return createRxDatabase({
+      name:dbname,
+      storage:getRxStorageDexie()
+    })
+
+
+  }
+
+/**
+ * 
+ * @param db RxDatabase
+ * @param schema RxSchema
+ * @description create a new schema for db
+ */
+  createSchema4Db(db:RxDatabase,schema:RxSchema,collectionName:string){
+    const newSchema
   }
 
   async fetchAllRawItems4Entity(entityLabel: string) {/**
