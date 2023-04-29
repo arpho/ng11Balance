@@ -14,7 +14,8 @@ describe('OfflineManagerService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    OfflineManagerService.servicesList = []
+    const test = new OfflineManagerService(null,null,null,null)
+    test.servicesList = []
     service = TestBed.inject(OfflineManagerService);
   });
 
@@ -24,21 +25,23 @@ describe('OfflineManagerService', () => {
   it('status should be 0', () => {
     const service = new CategoriesService(new OfflineManagerService(new OfflineDbService(),new UsersService(),new ChangesService(),new ConnectionStatusService()),  new OfflineDbService(), new ChangesService())
     service.offlineDbStatus = 0
-    OfflineManagerService.servicesList.push(service)
-    expect(OfflineManagerService.evaluateDbStatus()).toEqual(0)
+    const test = new OfflineManagerService(null,null,null,null)
+    test.servicesList.push(service)
+    expect(test.evaluateDbStatus()).toEqual(0)
   })
   it('status should be 1', () => {
-
-    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(), new UsersService(),new ChangesService(), new ConnectionStatusService()), new OfflineDbService(), new ChangesService()).setOfflineStatus(1))
-    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(), new UsersService(), new ChangesService(),new ConnectionStatusService()), new OfflineDbService(), new ChangesService()).setOfflineStatus(1))
-    expect(OfflineManagerService.evaluateDbStatus()).toEqual(offLineDbStatus.up2Date)
+    const test = new OfflineManagerService(null,null,null,null)
+    test.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(), new UsersService(),new ChangesService(), new ConnectionStatusService()), new OfflineDbService(), new ChangesService()).setOfflineStatus(1))
+    test.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(), new UsersService(), new ChangesService(),new ConnectionStatusService()), new OfflineDbService(), new ChangesService()).setOfflineStatus(1))
+    expect(test.evaluateDbStatus()).toEqual(offLineDbStatus.up2Date)
 
   })
   it('status should be 2', () => {
-    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(), new UsersService(),new ChangesService(),new ConnectionStatusService()),  new OfflineDbService(), new ChangesService()).setOfflineStatus(1))
-    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(), new UsersService(),new ChangesService(),new ConnectionStatusService()),  new OfflineDbService(), new ChangesService()).setOfflineStatus(2))
-    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(), new UsersService(), new ChangesService(), new ConnectionStatusService()),  new OfflineDbService(), new ChangesService()).setOfflineStatus(1))
-    OfflineManagerService.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(), new UsersService(), new ChangesService, new ConnectionStatusService()),  new OfflineDbService(), new ChangesService()).setOfflineStatus(2))
-    expect(OfflineManagerService.evaluateDbStatus()).toEqual(offLineDbStatus.syncing)
+    const test = new OfflineManagerService(null,null,null,null)
+    test.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(), new UsersService(),new ChangesService(),new ConnectionStatusService()),  new OfflineDbService(), new ChangesService()).setOfflineStatus(1))
+    test.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(), new UsersService(),new ChangesService(),new ConnectionStatusService()),  new OfflineDbService(), new ChangesService()).setOfflineStatus(2))
+    test.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(), new UsersService(), new ChangesService(), new ConnectionStatusService()),  new OfflineDbService(), new ChangesService()).setOfflineStatus(1))
+    test.servicesList.push(new CategoriesService(new OfflineManagerService(new OfflineDbService(), new UsersService(), new ChangesService, new ConnectionStatusService()),  new OfflineDbService(), new ChangesService()).setOfflineStatus(2))
+    expect(test.evaluateDbStatus()).toEqual(offLineDbStatus.syncing)
   })
 });
