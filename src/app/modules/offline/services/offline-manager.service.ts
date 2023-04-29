@@ -16,7 +16,7 @@ import { Puller } from '../business/puller';
 import { configs } from 'src/app/configs/configs';
 import { RebaseEntity } from '../business/rebaseEntity';
 import { UserModel } from '../../user/models/userModel';
-
+import { isRxDatabase } from 'rxdb';
 @Injectable({
   providedIn: 'root'
 })
@@ -53,12 +53,26 @@ export class OfflineManagerService {
     }
 
   }
+  
+  /**
+   *@description controlla se esiste il db offline e se esiste lo sincronizza con il db online
+   */
+  async offlineDbOperation(){
+    if (await this.isDbPresent()){
+      console.log("db is present ## must synchronize it")
+    }
+    else{
+      console.log("db is not present ## must create it")
+    }
+
+  }
 
   constructor(public localDb: OfflineDbService,
     public users: UsersService,
     public changes: ChangesService,
     connection: ConnectionStatusService) {
-    if (this.isDbPresent()) { //Db offline is present I can synchronize it
+      this.offlineDbOperation()
+    if ( this.isDbPresent()) { //Db offline is present I can synchronize it
       this.createWorker()
       this.getSignature()
 
@@ -80,6 +94,9 @@ export class OfflineManagerService {
       )
 
     }
+    else{
+      console.log("we must create the db and download the data from firebase ##")
+    }
 
 
 
@@ -96,11 +113,20 @@ export class OfflineManagerService {
     })
 
   }
+  makeDbName(signature: string){
+    return `${configs.dbName}_${signature}`
+  }
 
   async isDbPresent() {
-    const signatures = await this.localDb.fetchAllRawItems4Entity('signatures')
-    return (signatures).length > 0
+    var is: boolean
 
+  const signature = await this.getSignature()
+    console.log("signature ##",signature)
+  const dbname = this.makeDbName(signature)
+  console.log("looking for db ##",dbname)
+   is = isRxDatabase(dbname)
+  console.log("is db present ##",is)
+    return is
   }
   async syncChanges() {
     await this.pullChangesFromCloud()
