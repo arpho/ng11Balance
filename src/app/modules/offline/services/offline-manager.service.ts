@@ -123,7 +123,7 @@ export class OfflineManagerService {
   async getSignature() {
     var signature = this.signature
     if (!this.signature) {
-      signature = // await this.asyncSignature()
+      signature =  await this.asyncSignature()
       this.signature = signature
     }
     return signature
