@@ -23,6 +23,28 @@ export class FidelityCardModel implements OfflineItemModelInterface {
         this.key = key
         return this
     }
+    schema={
+        title: 'fidelityCard',
+        version: 0,
+        primaryKey: 'key',
+        properties:{
+          key:{type:'string',
+          indexed:true,
+          maxLength:20,
+          
+          },
+          title:{type:'string'},
+          note:{
+            type:'string'
+          },
+          barcode:{
+            type:'string'
+          },
+          archived:{
+            type:'boolean'
+          }
+        }
+    }
 
     initialize(item:{}){
         Object.assign(this,item)
