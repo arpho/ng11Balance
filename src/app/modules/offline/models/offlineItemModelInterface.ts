@@ -12,7 +12,7 @@ export interface OfflineItemModelInterface extends ItemModelInterface {
     version:number,
   title:string,
 properties:{}}
-getSchema():RxSchema
+fetchSchema():{}
     serialize4OfflineDb(): offlineSerializer<{entityLabel:string}>
     initialize(item:{}):OfflineItemModelInterface
 }
