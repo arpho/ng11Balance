@@ -4,11 +4,21 @@ import { LastLoggedUidFetcher } from '../business/LastLoggedUidFetcher';
 import { RawItem } from '../models/rawItem';
 import { createRxDatabase,RxDatabase,RxSchema } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
+import { BehaviorSubject, lastValueFrom, Observable, take } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class OfflineDbService {
-  public db: {} // to be compatible with localForageMocker
+  //public db: RxDatabase // to be compatible with localForageMocker
+  _db:BehaviorSubject<RxDatabase>=new BehaviorSubject(null)
+  readonly db:Observable<RxDatabase>=this._db.asObservable()
+  setDb(db:RxDatabase){
+    this._db.next(db)
+  }
+
+   getDb(){
+    return lastValueFrom(this.db.pipe(take(2)))
+  }
 
 
   constructor() {
@@ -55,11 +65,14 @@ export class OfflineDbService {
  * @returns RxDatabase
  * @description create a new offline db
  */
-  createOfflineDb(dbname:string){
-    return createRxDatabase({
+  async createOfflineDb(dbname:string){
+    console.log("creating ##@ db",dbname)
+    //this.db=await 
+   return  createRxDatabase({
       name:dbname,
       storage:getRxStorageDexie()
     })
+    
 
 
   }
@@ -70,9 +83,16 @@ export class OfflineDbService {
  * @param schema RxSchema
  * @description create a new schema for db
  */
-  createSchema4Db(db:RxDatabase,schema:RxSchema,collectionName:string){
-    const newSchema
-  }
+  async createSchema4Db(schema:{}){
+    const db = await this.getDb()
+    console.log("creating schema##@",schema)
+    db.addCollections(schema).then((collection)=>{
+      console.log("success creating schema##@",collection)
+      console.log("##@ db",this.db)
+    }).catch(err=>{
+    console.log("error##@",err)
+  })
+}
 
   async fetchAllRawItems4Entity(entityLabel: string) {/**
    * fetch all items of label
