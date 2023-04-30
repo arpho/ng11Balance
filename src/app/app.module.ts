@@ -46,7 +46,8 @@ import {UtilitiesModule} from './modules/utilities/utilities.module'
         })],
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
        DecoratorService,
-       RoundPipe],
+       RoundPipe
+      ],
     bootstrap: [AppComponent,
     ],
     declarations: [
