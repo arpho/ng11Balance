@@ -13,10 +13,12 @@ import { pullChangesFromCloud } from '../business/pullFromCloud';
 import { ConnectionStatusService } from './connection-status.service';
 import { Push2Cloud } from '../business/push2Cloud';
 import { Puller } from '../business/puller';
-import { configs } from 'src/app/configs/configs';
+import { credentials } from 'src/app/configs/credentials';
 import { RebaseEntity } from '../business/rebaseEntity';
 import { UserModel } from '../../user/models/userModel';
 import { isRxDatabase } from 'rxdb';
+import firebase from "firebase/app";
+import { configs } from 'src/app/configs/configs';
 @Injectable({
   providedIn: 'root'
 })
@@ -57,21 +59,34 @@ export class OfflineManagerService {
   /**
    *@description controlla se esiste il db offline e se esiste lo sincronizza con il db online
    */
-  async offlineDbOperation(){
-    if (await this.isDbPresent()){
-      console.log("db is present ## must synchronize it")
-    }
-    else{
-      console.log("db is not present ## must create it")
-    }
+  async bootOfflineDb(){
+      const signature = await this.getSignature()
+        console.log("signature ##@",signature)
+      const dbname = this.makeDbName(signature)
+      console.log(!"##@ xcreating ",dbname)
+      this.localDb.setDb( await this.localDb.createOfflineDb(dbname))
+    
 
+  }
+  initializeFirebase(){
+    if (firebase.apps.length === 0) {
+      firebase.initializeApp(credentials.firebase);
+   
+ }
+  }
+  async init():Promise<boolean>{
+    console.log('initializing firebase ##')
+    this.initializeFirebase()
+    console.log('initializing db ##')
+    await this.bootOfflineDb()
+    return true
   }
 
   constructor(public localDb: OfflineDbService,
     public users: UsersService,
     public changes: ChangesService,
     connection: ConnectionStatusService) {
-      this.offlineDbOperation()
+      this.bootOfflineDb()
     if ( this.isDbPresent()) { //Db offline is present I can synchronize it
       this.createWorker()
       this.getSignature()
@@ -135,7 +150,7 @@ export class OfflineManagerService {
 
   }
   async push2Cloud() {
-    new Push2Cloud(this.localDb, this.servicesList)
+    //new Push2Cloud(this.localDb, this.servicesList) TOBE refactored
 
   }
 
@@ -312,6 +327,7 @@ export class OfflineManagerService {
   async registerService(service: OfflineItemServiceInterface) {
     if (!this.servicesList.map(service => service.entityLabel).includes(service.entityLabel)) {
       this.servicesList.push(service)
+      this.localDb.createSchema4Db(service.getDummyItem().fetchSchema())
 
       service.setHref()
       if (this.servicesList.length == configs.offlineEntityNumber) {
