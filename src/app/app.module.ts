@@ -46,7 +46,8 @@ import {UtilitiesModule} from './modules/utilities/utilities.module'
         })],
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
        DecoratorService,
-       RoundPipe
+       RoundPipe,
+       {provide:APP_INITIALIZER, useFactory:initFunction, deps:[OfflineManagerService], multi:true}
       ],
     bootstrap: [AppComponent,
     ],
@@ -78,3 +79,7 @@ import {UtilitiesModule} from './modules/utilities/utilities.module'
     ]
 })
 export class AppModule {}
+export function initFunction(config : OfflineManagerService)
+{
+  return ()=> config.init();
+}
