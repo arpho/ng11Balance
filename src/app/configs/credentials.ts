@@ -1,4 +1,4 @@
-export const configs = {
+export const credentials = {
   firebase: {
     apiKey: "AIzaSyCo8vHpRDMa_JsS5J6_vmLTbVNv8eMamgU",
   authDomain: "fir-6062c.firebaseapp.com",

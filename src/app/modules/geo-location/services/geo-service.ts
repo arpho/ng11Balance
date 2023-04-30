@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Plugins, GeolocationOptions, GeolocationPosition } from '@capacitor/core';
 import { HttpClient } from '@angular/common/http';
-import { configs } from '../../../configs/credentials';
+import { credentials } from '../../../configs/credentials';
 
 export enum Status{
   cached = 'cached',
@@ -36,7 +36,7 @@ export class GeoService {
 
   makeUrl(lat, long) {
     return 'https://maps.googleapis.com/maps/api/geocode/json?latlng='
-      .concat(lat).concat(',').concat(long).concat('&key=').concat(configs.google.api_key);
+      .concat(lat).concat(',').concat(long).concat('&key=').concat(credentials.google.api_key);
   }
 
   inverseGeoLocation(lat, long) {
