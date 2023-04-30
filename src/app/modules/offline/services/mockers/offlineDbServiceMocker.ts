@@ -1,14 +1,15 @@
+import { RxDatabase } from "rxdb"
 import { RawItem } from "../../models/rawItem"
 import { OfflineDbService } from "../offline-db.service"
 
 export class LocalForageMocker extends OfflineDbService {
-    public db: {}
+    public db: RxDatabase
     constructor() {
         super()
-        this.db = {}
+       // this.db = {}
     }
     async set(key: string, value: unknown) {
-        this.db[key] = value
+       // this.db[key] = value
 
     }
 
