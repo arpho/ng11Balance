@@ -44,7 +44,9 @@ import {UtilitiesModule} from './modules/utilities/utilities.module'
             // or after 30 seconds (whichever comes first).
             registrationStrategy: 'registerWhenStable:30000'
         })],
-    providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, DecoratorService,RoundPipe],
+    providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+       DecoratorService,
+       RoundPipe],
     bootstrap: [AppComponent,
     ],
     declarations: [
