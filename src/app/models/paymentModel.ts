@@ -104,6 +104,11 @@ export class PaymentsModel implements OfflineItemModelInterface, WidgetitemIntef
         return [out];
     }
 
+    fetchSchema(): {} {
+        return {payment:{
+          schema:this.schema
+        }}
+    }
     initialize(payment) {
         Object.assign(this, payment)
         this.widgetText = `pagata tramite ${this.title}`

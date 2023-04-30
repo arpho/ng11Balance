@@ -319,6 +319,11 @@ export class ShoppingKartModel implements OfflineItemModelInterface {
       }
     }
   }
+  fetchSchema(){
+    return {shoppingkart:{
+      schema:this.schema,
+    }}
+  }
 
   initialize(cart) {
     Object.assign(this, cart)

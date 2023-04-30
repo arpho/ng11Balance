@@ -128,6 +128,11 @@ export class SupplierModel implements OfflineItemModelInterface, WidgetitemIntef
         }
       }
     }
+    fetchSchema(){
+      return {supplier:{
+        schema:this.schema
+      }}
+    }
     initialize(supplier) {
         Object.assign(this, supplier)
         this.widgetText = ` comprato presso ${this.title}`

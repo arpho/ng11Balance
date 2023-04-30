@@ -10,6 +10,7 @@ import { CategoriesService } from '../services/categories/categorie.service';
 import { WidgetitemInteface } from '../modules/widget/models/widgetItemIterface';
 import { QuickAction } from '../modules/item/models/QuickAction';
 import { OfflineItemModelInterface } from '../modules/offline/models/offlineItemModelInterface';
+import { RxSchema } from 'rxdb';
 export class CategoryModel implements FirebaseObject, OfflineItemModelInterface, WidgetitemInteface {
 
     key: string;
@@ -113,6 +114,11 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
         },
         note:{type:'string'}
       }
+    }
+    fetchSchema(): {}{
+        return {category:{
+          schema:this.schema
+        }}
     }
     initialize(cat: any) {
         Object.assign(this, cat)
