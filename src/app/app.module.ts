@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {  APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -36,6 +36,7 @@ import { environment } from '../environments/environment';
 import { PaymentItemComponent } from './components/payment-item/payment-item.component';
 import { RoundPipe } from './modules/utilities/pipes/round.pipe';
 import {UtilitiesModule} from './modules/utilities/utilities.module'
+import { OfflineManagerService } from './modules/offline/services/offline-manager.service';
 
 @NgModule({
     imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, UtilitiesModule, ItemModule, UserModule, DynamicFormModule, WidgetModule, ServiceWorkerModule.register('ngsw-worker.js', {
@@ -47,7 +48,6 @@ import {UtilitiesModule} from './modules/utilities/utilities.module'
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
        DecoratorService,
        RoundPipe,
-       {provide:APP_INITIALIZER, useFactory:initFunction, deps:[OfflineManagerService], multi:true}
       ],
     bootstrap: [AppComponent,
     ],
@@ -79,7 +79,4 @@ import {UtilitiesModule} from './modules/utilities/utilities.module'
     ]
 })
 export class AppModule {}
-export function initFunction(config : OfflineManagerService)
-{
-  return ()=> config.init();
-}
+
