@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router'
-import { configs } from './configs/credentials';
+import { credentials } from './configs/credentials';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
@@ -70,7 +70,8 @@ export class AppComponent {
     ) {
       
       if (firebase.apps.length === 0) {
-        firebase.initializeApp(configs.firebase);
+        console.log('## component initilizeApp')
+        firebase.initializeApp(credentials.firebase);
     }
 
   
