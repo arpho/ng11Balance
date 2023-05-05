@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as localforage from 'localforage';
 import { LastLoggedUidFetcher } from '../business/LastLoggedUidFetcher';
 import { RawItem } from '../models/rawItem';
-import { createRxDatabase,RxDatabase,RxSchema } from 'rxdb';
+import { createRxDatabase,RxCollection,RxDatabase,RxSchema } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { BehaviorSubject, lastValueFrom, Observable, take } from 'rxjs';
 @Injectable({
@@ -81,17 +81,24 @@ export class OfflineDbService {
  * 
  * @param db RxDatabase
  * @param schema RxSchema
- * @description create a new schema for db
+ * @description create a new collection for db
+ * @returns RxCollection the created collection
  */
   async createSchema4Db(schema:{}){
     const db = await this.getDb()
     console.log("creating schema##@",schema)
-    db.addCollections(schema).then((collection)=>{
+    let  rxschema: { [x: string]: RxCollection; } 
+    await db.addCollections(schema).then((collection)=>{
       console.log("success creating schema##@",collection)
+      rxschema= collection
       console.log("##@ db",this.db)
     }).catch(err=>{
     console.log("error##@",err)
   })
+  return rxschema
+}
+fetchAllDocuments4Collection(collection:RxCollection){
+  return collection.find().exec()
 }
 
   async fetchAllRawItems4Entity(entityLabel: string) {/**
