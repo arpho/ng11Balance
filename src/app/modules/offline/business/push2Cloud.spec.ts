@@ -34,7 +34,7 @@ describe('push changes to the cloud', () => {
         const pusher = new Push2Cloud(db, servicesList)
         await pusher.execute()
         // the created cat must be removed
-        const removed = await db.db[key]
+        const removed = await db._db_[key]
         expect(removed).toBeUndefined()
         const createdCat = await servicesList[0].db[cat.key]
         expect(createdCat['title']).toEqual(cat.title)
@@ -68,7 +68,7 @@ describe('push changes to the cloud', () => {
         const cloudUpdatedCat = await servicesList[0].db[cat.key]
         expect(cloudUpdatedCat['title']).toEqual(updatedCat.title)
         expect(cloudUpdatedCat['fatherKey']).toEqual(updatedCat.fatherKey)
-        const removed = await db.db[key]
+        const removed = await db._db_[key]
         expect(removed).toBeUndefined()
 
     })
@@ -88,7 +88,7 @@ describe('push changes to the cloud', () => {
         categories.createItem(cat)
         await pusher.execute()
         expect(categories.db[cat.key]).toBeUndefined()
-        const removed = await db.db[key]
+        const removed = await db._db_[key]
         expect(removed).toBeUndefined()
 
     })

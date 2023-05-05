@@ -3,7 +3,7 @@ import { RawItem } from "../../models/rawItem"
 import { OfflineDbService } from "../offline-db.service"
 
 export class LocalForageMocker extends OfflineDbService {
-    public db: RxDatabase
+ 
     constructor() {
         super()
        // this.db = {}
@@ -13,18 +13,18 @@ export class LocalForageMocker extends OfflineDbService {
 
     }
 
-    async get(key: string) {  return new RawItem({ 'key': key, 'item': this.db[key] })
+    async get(key: string) {  return new RawItem({ 'key': key, 'item': this._db[key] })
     }
 
     iterate(callback: (value: unknown, key: string) => void) {
-        for (const [key, value] of Object.entries(this.db)) {
+        for (const [key, value] of Object.entries(this._db)) {
 
             callback(value, key)
         }
     }
 
     async remove(key: string) {
-        delete this.db[key]
+        delete this._db[key]
     }
 
     async fetchAllRawItems4Entity(entityLabel: string) {
