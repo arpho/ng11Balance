@@ -47,11 +47,9 @@ export class FidelityCardModel implements OfflineItemModelInterface {
     }
 
     fetchSchema(): {} {
-        return {
-          fidelitycard:{
-            schema:this.schema
-          }
-        }
+      const out = {}
+      out[this.entityLabel] = {schema:this.schema}
+        return out
     }
 
     initialize(item:{}){

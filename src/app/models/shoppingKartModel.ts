@@ -320,9 +320,9 @@ export class ShoppingKartModel implements OfflineItemModelInterface {
     }
   }
   fetchSchema(){
-    return {shoppingkart:{
-      schema:this.schema,
-    }}
+    const out = {}
+      out[this.entityLabel] = {schema:this.schema}
+        return out
   }
 
   initialize(cart) {

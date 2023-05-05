@@ -129,9 +129,9 @@ export class SupplierModel implements OfflineItemModelInterface, WidgetitemIntef
       }
     }
     fetchSchema(){
-      return {supplier:{
-        schema:this.schema
-      }}
+      const out = {}
+      out[this.entityLabel] = {schema:this.schema}
+        return out
     }
     initialize(supplier) {
         Object.assign(this, supplier)

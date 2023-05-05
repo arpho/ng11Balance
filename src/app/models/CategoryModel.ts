@@ -116,9 +116,9 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
       }
     }
     fetchSchema(): {}{
-        return {category:{
-          schema:this.schema
-        }}
+      const out = {}
+      out[this.entityLabel] = {schema:this.schema}
+        return out
     }
     initialize(cat: any) {
         Object.assign(this, cat)

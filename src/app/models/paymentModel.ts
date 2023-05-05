@@ -105,9 +105,9 @@ export class PaymentsModel implements OfflineItemModelInterface, WidgetitemIntef
     }
 
     fetchSchema(): {} {
-        return {payment:{
-          schema:this.schema
-        }}
+      const out = {}
+      out[this.entityLabel] = {schema:this.schema}
+        return out
     }
     initialize(payment) {
         Object.assign(this, payment)
