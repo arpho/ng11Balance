@@ -38,8 +38,8 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   constructor(public localDb: OfflineDbService, public manager: OfflineManagerService, public changes: ChangesService) {
 
     this.manager.isLoggedUserOflineEnabled().then(async enabled => {
-      this.setHref()
       if (enabled) {
+        this.setHref()
         this.manager.registerService(this)
       }
       else {
@@ -69,7 +69,6 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
 
     this.manager.isLoggedUserOflineEnabled().then(offlineEnabled => {
       if (offlineEnabled) {
-        manager.registerService(this)
       }
       else {
         this.loadFromFirebase()
