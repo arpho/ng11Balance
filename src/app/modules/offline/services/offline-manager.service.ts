@@ -325,9 +325,23 @@ export class OfflineManagerService {
   }
 
   async registerService(service: OfflineItemServiceInterface) {
+    console.log("registering service ##@",service.entityLabel)
     if (!this.servicesList.map(service => service.entityLabel).includes(service.entityLabel)) {
       this.servicesList.push(service)
-      this.localDb.createSchema4Db(service.getDummyItem().fetchSchema())
+      const collection = await this.localDb.createSchema4Db(service.getDummyItem().fetchSchema())
+      console.log("collection ##@", collection)
+      console.log("new collection ##@",collection[service.entityLabel])
+      const documents = await this.localDb.fetchAllDocuments4Collection(collection[service.entityLabel])
+      console.log("documents ##@",documents)
+      if(documents.length==0){
+        console.log("must download documents ##@")
+        
+        service.fetchItemsFromCloud(items=>{
+        
+        const Items = service.initializeItems(items)
+        console.log("##@ Items",Items)
+        })
+      }
 
       service.setHref()
       if (this.servicesList.length == configs.offlineEntityNumber) {
