@@ -332,6 +332,7 @@ export class OfflineManagerService {
       console.log("collection ##@", collection)
       console.log("new collection ##@",collection[service.entityLabel])
       const documents = await this.localDb.fetchAllDocuments4Collection(collection[service.entityLabel])
+      service.publish(documents)
       console.log("documents ##@",documents)
       if(documents.length==0){
         console.log("must download documents ##@")
