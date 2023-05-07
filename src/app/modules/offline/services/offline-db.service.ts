@@ -82,7 +82,7 @@ export class OfflineDbService {
    * @param documents OfflineItemModelINterface[]
    * @returns Promise
    */
-  async insertDocumentInCollection(collection:RxCollection,documents               :OfflineItemModelInterface[]){
+  async insertDocumentsInCollection(collection:RxCollection,documents               :OfflineItemModelInterface[]){
     return collection.bulkInsert(documents.map(item=>item.serialize()))
 
   }
