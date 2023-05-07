@@ -5,6 +5,7 @@ import { RawItem } from '../models/rawItem';
 import { createRxDatabase,RxCollection,RxDatabase,RxSchema } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { BehaviorSubject, lastValueFrom, Observable, take } from 'rxjs';
+import { OfflineItemModelInterface } from '../models/offlineItemModelInterface';
 @Injectable({
   providedIn: 'root'
 })
@@ -74,6 +75,15 @@ export class OfflineDbService {
     })
     
 
+
+  }/**
+   * @description insert documents in a collection
+   * @param collection RXCollection collection in wich to insert the document
+   * @param documents OfflineItemModelINterface[]
+   * @returns Promise
+   */
+  async insertDocumentInCollection(collection:RxCollection,documents               :OfflineItemModelInterface[]){
+    return collection.bulkInsert(documents.map(item=>item.serialize()))
 
   }
 
