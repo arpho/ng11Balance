@@ -343,7 +343,9 @@ export class OfflineManagerService {
       console.log("new collection ##@",collection[service.entityLabel])
       const documents = await this.localDb.fetchAllDocuments4Collection(collection[service.entityLabel])
       service.publish(documents)
-      await this.localDb.insertDocumentsInCollection(collection[service.entityLabel],documents)
+     this.localDb.insertDocumentsInCollection(collection[service.entityLabel],documents).then(v=>{
+      console.log(`##@ insert successfull for ${service.entityLabel}`,v)
+     })
       this.showToast(`inseriti ${documents.length} documenti in ${service.entityLabel}`)
       console.log("documents ##@",documents)
       if(documents.length==0){
