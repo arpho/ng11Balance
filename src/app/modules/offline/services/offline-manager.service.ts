@@ -19,6 +19,7 @@ import { UserModel } from '../../user/models/userModel';
 import { isRxDatabase } from 'rxdb';
 import firebase from "firebase/app";
 import { configs } from 'src/app/configs/configs';
+import { ToastController } from '@ionic/angular';
 @Injectable({
   providedIn: 'root'
 })
@@ -85,6 +86,7 @@ export class OfflineManagerService {
   constructor(public localDb: OfflineDbService,
     public users: UsersService,
     public changes: ChangesService,
+    private toaster:ToastController,
     connection: ConnectionStatusService) {
       this.bootOfflineDb()
     if ( this.isDbPresent()) { //Db offline is present I can synchronize it
@@ -323,6 +325,14 @@ export class OfflineManagerService {
 
     })
   }
+  async showToast(message: string,position:"top" | "bottom" | "middle"="top",duration=5000) {
+    const toast = await this.toaster.create({
+      message,
+    duration,
+    position})
+    return toast
+   
+  }
 
   async registerService(service: OfflineItemServiceInterface) {
     console.log("registering service ##@",service.entityLabel)
@@ -333,6 +343,8 @@ export class OfflineManagerService {
       console.log("new collection ##@",collection[service.entityLabel])
       const documents = await this.localDb.fetchAllDocuments4Collection(collection[service.entityLabel])
       service.publish(documents)
+      await this.localDb.insertDocumentsInCollection(collection[service.entityLabel],documents)
+      this.showToast(`inseriti ${documents.length} documenti in ${service.entityLabel}`)
       console.log("documents ##@",documents)
       if(documents.length==0){
         console.log("must download documents ##@")
@@ -342,6 +354,9 @@ export class OfflineManagerService {
         const Items = service.initializeItems(items)
         console.log("##@ Items",Items)
         })
+      }
+      else{
+        console.log("documents already exist in collection##@",service.entityLabel)
       }
 
       service.setHref()
