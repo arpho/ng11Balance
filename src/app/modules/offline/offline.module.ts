@@ -6,13 +6,14 @@ import { IonicModule } from '@ionic/angular';
 import { ConnectionStatusService } from './services/connection-status.service';
 import { ChangesService } from './services/changes.service';
 import { PlatformStrategyService } from './services/platform.strategy.service';
+import { StorageService } from './business/db/storageService';
 
 
 
 @NgModule({
   declarations: [OfflineStatusComponent],
   exports: [OfflineStatusComponent],
-  providers: [DecoratorService, ConnectionStatusService,ChangesService,PlatformStrategyService],
+  providers: [DecoratorService, ConnectionStatusService,ChangesService,PlatformStrategyService,StorageService],
   imports: [
     CommonModule,
     IonicModule.forRoot(),
