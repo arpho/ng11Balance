@@ -37,6 +37,7 @@
     "cordova-plugin-firebase": "^2.0.5",
     "cordova-plugin-nativeaudio": "^3.0.9",
     "cordova-plugin-splashscreen": "^6.0.0",
+    "cordova-sqlite-storage": "^6.1.0",
     "d3": "^6.5.0",
     "file-system": "^2.2.2",
     "firebase": "^8.2.7",
