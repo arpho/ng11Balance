@@ -11,6 +11,9 @@ export class StorageSQLiteService extends StorageService {
     super(storage, LoadingController)
 
   }
+  /**
+   * eseguito solo una volta
+   */
   async initDB() {
     console.log('inizializzo db sqlite')
     await this.storage.defineDriver(CordovaSQLiteDriver)
