@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { UntypedFormGroup, Validators, UntypedFormBuilder } from "@angular/forms";
+import { FormGroup as FormGroup, Validators, FormBuilder  } from "@angular/forms";
 import { LoadingController, AlertController } from "@ionic/angular";
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
@@ -11,7 +11,7 @@ import * as firebase from "firebase";
   styleUrls: ["./login.page.scss"]
 })
 export class LoginPage implements OnInit {
-  public loginForm: UntypedFormGroup;
+  public loginForm: FormGroup;
   public loading: HTMLIonLoadingElement;
   ngOnInit() {}
 
@@ -20,7 +20,7 @@ export class LoginPage implements OnInit {
     public alertCtrl: AlertController,
     private authService: AuthService,
     private router: Router,
-    private formBuilder: UntypedFormBuilder
+    private formBuilder: FormBuilder
   ) {
     this.loginForm = this.formBuilder.group({
       email: ["", Validators.compose([Validators.required, Validators.email])],
@@ -32,7 +32,7 @@ export class LoginPage implements OnInit {
   }
   onSubmit() {}
 
-  async loginUser(loginForm: UntypedFormGroup): Promise<void> {
+  async loginUser(loginForm: FormGroup): Promise<void> {
     if (!loginForm.valid) {
       console.log("Form is not valid yet, current value:", loginForm.value);
     } else {

@@ -203,7 +203,7 @@ export class OfflineManagerService {
       console.log("user", u)
     })
     // there is not void user, so we take the first one 
-    const user = await <UserModel> <unknown>this.users.loggedUser.pipe(take(1)).toPromise()
+    const user = await <UserModel> <unknown>this.users.loggedUser.pipe(takeLast(1)).toPromise()
     return await this.fetchSignature(user.uid)
   }
 

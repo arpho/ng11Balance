@@ -1,5 +1,5 @@
 import { Component, OnInit, forwardRef, Input, ChangeDetectionStrategy } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup as FormGroup, FormBuilder  } from '@angular/forms';
 import { Plugins, GeolocationOptions, GeolocationPosition } from '@capacitor/core';
 const { Geolocation } = Plugins;
 import { Coordinates } from '../../models/coordinates';
@@ -25,7 +25,7 @@ export class InputGeolocationComponent implements OnInit, ControlValueAccessor {
   public location: Coordinates;
 
 
-  public addressForm: UntypedFormGroup
+  public addressForm: FormGroup
 
   private disabled = false;
 
@@ -41,7 +41,7 @@ export class InputGeolocationComponent implements OnInit, ControlValueAccessor {
   constructor(
     public service: GeoService,
     private alertCtrl: AlertController,
-    private formBuilder: UntypedFormBuilder) { }
+    private formBuilder: FormBuilder) { }
 
   writeValue(value) {
 
