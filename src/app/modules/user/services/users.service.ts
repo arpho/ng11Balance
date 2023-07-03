@@ -59,8 +59,8 @@ static loggedUser:UserModel
   }
 
   setLoggedUser(user: UserModel) {
-    console.log('setting user', user)
-    this._loggedUser.next(new UserModel(user, user['uid']));
+    console.log('setting logged user', user)
+    this._loggedUser.next(user);
     UsersService.loggedUser=user
     return this.loggedUser;
   }

@@ -124,10 +124,11 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   }
 
   async createItem(item: ItemModelInterface) {
+
     const Supplier = await new OfflineCreateOperation(new SupplierModel().
       initialize(item),
       this.changes,
-      await this.manager.asyncSignature(),
+      this.manager.signature,
       this.localDb, await this.manager.isLoggedUserOflineEnabled(),this).runOperations()
     await this.suppliersListRef.push(Supplier.serialize())
     return Supplier
@@ -145,13 +146,16 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
 
   async updateItem(item: SupplierModel) {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    const signature = await this.manager.asyncSignature()
+    this.manager.getLoggedUserSignature((val)=>{
+      console.log("got user signature",val)
+    })
+    const signature = this.manager.signature
     const Supplier = await new OfflineUpdateOperation(item, this.changes, this.localDb, signature, enabled,this).runOperations()
     return this.suppliersListRef.child(Supplier.key).update(Supplier.serialize());
   }
   async deleteItem(key: string) {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    const signature = await this.manager.asyncSignature()
+    const signature = this.manager.signature
     await new OfflineDeleteOperation(signature, new SupplierModel().setKey(key), this.localDb, this.changes, enabled,this).runOperations()
     return (key) ? this.suppliersListRef.child(key).remove() : undefined;
   }

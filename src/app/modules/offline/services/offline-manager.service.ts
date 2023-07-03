@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, lastValueFrom, take  } from 'rxjs';
 import { UsersService } from '../../user/services/users.service';
 import { CloneEntity } from '../business/cloneEntityFromFirebase';
 import { StoreSignature } from '../business/storeSignatureOnLocalDb';
@@ -7,7 +7,6 @@ import { offLineDbStatus } from '../models/offlineDbStatus';
 import { OfflineItemServiceInterface } from '../models/offlineItemServiceInterface';
 import { ChangesService } from './changes.service';
 import { OfflineDbService } from './offline-db.service';
-import { take, first } from 'rxjs/operators';
 import { of, pipe } from 'rxjs'
 import { Items2BeSynced } from '../models/items2BeSynced';
 import { pullChangesFromCloud } from '../business/pullFromCloud';
@@ -22,11 +21,10 @@ import { UserModel } from '../../user/models/userModel';
   providedIn: 'root'
 })
 export class OfflineManagerService {
-  static servicesList: Array<OfflineItemServiceInterface> = []
   servicesList: Array<OfflineItemServiceInterface> = []
-  static staticLocalDb
-  static _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
-  static offlineDbStatus: Observable<offLineDbStatus> = OfflineManagerService._offlineDbStatus.asObservable()
+   staticLocalDb
+   _offlineDbStatus: BehaviorSubject<offLineDbStatus> = new BehaviorSubject(0)
+   offlineDbStatus: Observable<offLineDbStatus> = this._offlineDbStatus.asObservable()
   signature: string
   _msg: BehaviorSubject<string> = new BehaviorSubject('')
   readonly msg: Observable<string> = this._msg.asObservable()
@@ -40,7 +38,7 @@ export class OfflineManagerService {
 
     if (typeof Worker !== 'undefined') {
       // Create a new
-      console.log('ciao')
+      console.log('ciao worker')
       // console.log('url',import.meta.url)
       /*new URL('offline-db.service',)
      const worker = new Worker('../webworker/offlineWebworker', {type:'module'});
@@ -89,14 +87,13 @@ export class OfflineManagerService {
 
 
     /**
-     * signs he db
+     * signs he db and store the signature for future uses
      */
     this.makeSignature(async sign => {
-      const user = await this.users.loggedUser.pipe(take(1)).toPromise()
+       const user = lastValueFrom(this.users.loggedUser.pipe(take(2)))
 
       //await new StoreSignature(this.localDb, sign,user.uid).execute()
     })
-
 
   }
 
@@ -126,12 +123,26 @@ export class OfflineManagerService {
   async getSignature() {
     var signature = this.signature
     if (!this.signature) {
-      signature = await this.asyncSignature()
+      signature = // await this.asyncSignature()
       this.signature = signature
     }
     return signature
 
   }
+
+
+  async retrieveSignature(){
+
+
+   
+      const user = await lastValueFrom (this.users.loggedUser.pipe(take(2)))
+
+     const signature = await new StoreSignature(this.localDb, await this.fetchSignature(user.uid),user.uid).execute()
+     return signature
+      
+    
+  }
+ 
 
   async pullChangesFromCloud() {
     const signature = await this.asyncSignature()
@@ -149,7 +160,11 @@ export class OfflineManagerService {
           })
       }))
   }
-
+/**
+ * @description recupera la firma dell'utente loggato, se non esiste la crea
+ * @param uid 
+ * @returns 
+ */
   async fetchSignature(uid: string) {
     var sign = ''
     const signatures = await this.localDb.fetchAllRawItems4Entity("signatures")
@@ -165,15 +180,17 @@ export class OfflineManagerService {
     return `${sign}`
   }
   /**
-   * recupera la firma dal db locale o la crea se non esiste
+   *@description  e' un wrapper di fetchSignature setta signature
    * @param next 
    */
-  makeSignature(next) {
+  makeSignature(next?) {
 
     this.users.loggedUser.subscribe(async user => {
       if (user.uid) {
-        const signatures = await this.localDb.fetchAllRawItems4Entity("signatures")
-        next(await this.fetchSignature(user.uid))
+        const signature =await this.fetchSignature(user.uid)
+        this.signature = signature
+                if(next){
+        next(signature)}
       }
     })
 
@@ -192,8 +209,10 @@ export class OfflineManagerService {
 
 
 
-  static evaluateDbStatus() {
-    const statusList = OfflineManagerService.servicesList.map((service: OfflineItemServiceInterface) => {
+
+   evaluateDbStatus() {
+    
+    const statusList = this.servicesList.map((service: OfflineItemServiceInterface) => {
       return service.offlineDbStatus || 0
     })
     const reducer = (acc: number, value: number, index, array: number[]) => {
@@ -222,8 +241,8 @@ export class OfflineManagerService {
     return this.localDb.get(`${entityLabel}_status_db`)
   }
 
-  static async publishEntity(entity: string) {
-    const service = OfflineManagerService.servicesList.filter((service: OfflineItemServiceInterface) => service.entityLabel == entity)[0]
+   async publishEntity(entity: string) {
+    const service = this.servicesList.filter((service: OfflineItemServiceInterface) => service.entityLabel == entity)[0]
     service?.publish(await service.loadItemFromLocalDb())
 
 
@@ -231,7 +250,7 @@ export class OfflineManagerService {
   }
 
   async isLoggedUserOflineEnabled() {
-    const user = await this.users.loggedUser.pipe(take(1)).toPromise()
+    const user = await lastValueFrom(this.users.loggedUser.pipe(take(2)))
     return user.isOfflineEnabled()
   }
 
@@ -239,10 +258,10 @@ export class OfflineManagerService {
     await this.push2Cloud() // upload not synched changes
     await this.localDb.clear()
     this.makeSignature(async sign => {
-      const user = await this.users.loggedUser.pipe(take(1)).toPromise()
+      const user = await  lastValueFrom(this.users.loggedUser.pipe(take(2)))
       await new StoreSignature(this.localDb, await sign, user.uid).execute()
     })
-    const refreshStatus = () => { OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus()) }
+    const refreshStatus = () => { this._offlineDbStatus.next(this.evaluateDbStatus()) }
     const synchonizer = new RebaseEntity(this.localDb, refreshStatus)
     //clones entiites for every service
     this.servicesList.forEach(async service => {
@@ -255,18 +274,18 @@ export class OfflineManagerService {
   }
 
   async registerService(service: OfflineItemServiceInterface) {
-    if (!OfflineManagerService.servicesList.map(service => service.entityLabel).includes(service.entityLabel)) {
-      OfflineManagerService.servicesList.push(service)
+    if (!this.servicesList.map(service => service.entityLabel).includes(service.entityLabel)) {
       this.servicesList.push(service)
 
       service.setHref()
       if (this.servicesList.length == configs.offlineEntityNumber) {
+        console.log("ready to fetch items")
         await this.syncChanges()
       }
     }
     const entityStatus = await this.getOfflineDbStatus(service.entityLabel)
     if (entityStatus.item == offLineDbStatus.notInitialized || entityStatus.item == null) {
-      const refreshStatus = () => { OfflineManagerService._offlineDbStatus.next(OfflineManagerService.evaluateDbStatus()) }
+      const refreshStatus = () => { this._offlineDbStatus.next(this.evaluateDbStatus()) }
       const entitiesNumber = await new RebaseEntity(this.localDb, refreshStatus).synchronizes(service, (data) => {
         this.publishMessage(`synchronized ${data} items for  ${service.entityLabel}`)
         this.publishMessage(`sincronizzati ${entityStatus} items per ${service.entityLabel}`)

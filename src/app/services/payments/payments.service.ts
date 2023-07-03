@@ -3,7 +3,6 @@ import { ItemModelInterface } from '../../modules/item/models/itemModelInterface
 import { PaymentsModel } from 'src/app/models/paymentModel';
 import * as firebase from 'firebase';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { EntityWidgetServiceInterface } from 'src/app/modules/widget/models/EntityWidgetServiceInterface';
 import { ShoppingKartModel } from 'src/app/models/shoppingKartModel';
 import { OfflineItemServiceInterface } from 'src/app/modules/offline/models/offlineItemServiceInterface';

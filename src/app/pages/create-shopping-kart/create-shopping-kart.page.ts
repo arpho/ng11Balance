@@ -17,7 +17,7 @@ import { PurchaseModel } from 'src/app/models/purchasesModel';
 import { DetailPurchasePage } from '../detail-purchase/detail-purchase.page';
 import { ShoppingKartsService } from 'src/app/services/shoppingKarts/shopping-karts.service';
 import { SelectorQuestion } from 'src/app/modules/dynamic-form/models/question-selector';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { CreateSupplierPage } from '../create-supplier/create-supplier.page';
 import { CreatePaymentPage } from '../create-payment/create-payment.page'
 import { TextAreaBox } from 'src/app/modules/dynamic-form/models/question-textArea';
@@ -35,7 +35,7 @@ export class CreateShoppingKartPage implements OnInit {
   supplierSorterFunction: (a: ItemModelInterface, b: ItemModelInterface) => number
   kart: ShoppingKartModel
   kartFields: any
-  Form: FormGroup
+  Form: UntypedFormGroup
   title: string
 
   categoryColor = 'blue'
@@ -188,7 +188,7 @@ export class CreateShoppingKartPage implements OnInit {
     }
   }
 
-  setForm(form: FormGroup) {
+  setForm(form: UntypedFormGroup) {
     this.Form = form
     // tslint:disable-next-line: no-string-literal
     this.Form.controls['ecommerce'].valueChanges.subscribe(ev => {

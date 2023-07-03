@@ -15,7 +15,7 @@ import { SuppliersService } from 'src/app/services/suppliers/suppliers.service';
 import { runInThisContext } from 'vm';
 import { ItemServiceInterface } from 'src/app/modules/item/models/ItemServiceInterface';
 import { thresholdFreedmanDiaconis } from 'd3';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ComboValue } from 'src/app/modules/dynamic-form/models/ComboValueinterface';
 import { WidgetTypes } from '../../models/WidgetsTypes';
 import { WidgetSince } from '../../models/WidgetSince';
@@ -31,7 +31,7 @@ export class CreateWidgetPage implements OnInit {
   widgetFields: any[]
   widget: Widget
   order=0
-  Form: FormGroup // listener to the form
+  Form: UntypedFormGroup // listener to the form
 
 
   constructor(public modalCtrl: ModalController, public navParams: NavParams, public service: WidgetService, public categoriesService: CategoriesService, public paymentsService: PaymentsService, public suppliersService: SuppliersService) {
@@ -131,7 +131,7 @@ export class CreateWidgetPage implements OnInit {
     return out
   }
 
-  setForm(form: FormGroup) {
+  setForm(form: UntypedFormGroup) {
     this.Form = form
     // tslint:disable-next-line: no-string-literal
     this.Form.controls['serviceKey'].valueChanges.subscribe(ev => {

@@ -10,7 +10,12 @@ export class DeleteEntityOffline {
     key: string
     db: OfflineDbService
     entityLabel: string
-    constructor(key: string, db: OfflineDbService, entityLabel,public owner) {
+    constructor(
+      key: string,
+       db: OfflineDbService,
+        entityLabel,
+        public owner,
+        private service?:OfflineManagerService) {
         this.db = db
         this.key = key
         this.entityLabel = entityLabel
@@ -26,6 +31,6 @@ export class DeleteEntityOffline {
             // registro la modifica che sarà riportata onLine appena possibile
             await this.db.set(new Date().getTime() + '', { entityLabel: 'update', operation: OperationKey.delete, 'itemKey': this.key, 'table': this?.entityLabel })
         }
-        OfflineManagerService.publishEntity(this.entityLabel)
+        this.service.publishEntity(this.entityLabel)
     } entity: OfflineItemModelInterface
 }

@@ -1,7 +1,7 @@
 
 // tslint:disable: semicolon
 // tslint:disable: no-string-literal
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { ItemModelInterface, Genere } from '../modules/item/models/itemModelInterface';
 import { ItemFilterOPtions } from '../modules/item/models/ItemFIlterOptions';
 import { ItemServiceInterface } from '../modules/item/models/ItemServiceInterface';
@@ -158,14 +158,14 @@ export class SupplierModel implements OfflineItemModelInterface, WidgetitemIntef
         return this
     }
     buildFromActiveForm(fornitore: {
-        nome: FormControl,
-        note: FormControl,
-        key: FormControl,
-        indirizzo: FormControl,
-        longitudine: FormControl,
-        altitude: FormControl,
-        latitudine: FormControl,
-        ecommerce: FormControl
+        nome: UntypedFormControl,
+        note: UntypedFormControl,
+        key: UntypedFormControl,
+        indirizzo: UntypedFormControl,
+        longitudine: UntypedFormControl,
+        altitude: UntypedFormControl,
+        latitudine: UntypedFormControl,
+        ecommerce: UntypedFormControl
     }) {
         this.key = fornitore && fornitore.key.value || '';
         this.nome = fornitore && fornitore.nome.value || '';
