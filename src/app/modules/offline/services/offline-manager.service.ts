@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, lastValueFrom, take  } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { UsersService } from '../../user/services/users.service';
 import { CloneEntity } from '../business/cloneEntityFromFirebase';
 import { StoreSignature } from '../business/storeSignatureOnLocalDb';
@@ -16,6 +16,7 @@ import { Puller } from '../business/puller';
 import { configs } from 'src/app/configs/configs';
 import { RebaseEntity } from '../business/rebaseEntity';
 import { UserModel } from '../../user/models/userModel';
+import { take,takeLast } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -90,7 +91,7 @@ export class OfflineManagerService {
      * signs he db and store the signature for future uses
      */
     this.makeSignature(async sign => {
-       const user = lastValueFrom(this.users.loggedUser.pipe(take(2)))
+       const user = (this.users.loggedUser.pipe(takeLast(2)))
 
       //await new StoreSignature(this.localDb, sign,user.uid).execute()
     })
@@ -135,7 +136,7 @@ export class OfflineManagerService {
 
 
    
-      const user = await lastValueFrom (this.users.loggedUser.pipe(take(2)))
+      const user = <UserModel> <unknown>await (this.users.loggedUser.pipe(takeLast(1)))
 
      const signature = await new StoreSignature(this.localDb, await this.fetchSignature(user.uid),user.uid).execute()
      return signature
@@ -202,7 +203,7 @@ export class OfflineManagerService {
       console.log("user", u)
     })
     // there is not void user, so we take the first one 
-    const user = await this.users.loggedUser.pipe(take(1)).toPromise()
+    const user = await <UserModel> <unknown>this.users.loggedUser.pipe(take(1)).toPromise()
     return await this.fetchSignature(user.uid)
   }
 
@@ -250,7 +251,7 @@ export class OfflineManagerService {
   }
 
   async isLoggedUserOflineEnabled() {
-    const user = await lastValueFrom(this.users.loggedUser.pipe(take(2)))
+    const user = <UserModel><unknown>await (this.users.loggedUser.pipe(takeLast(1)))
     return user.isOfflineEnabled()
   }
 
@@ -258,7 +259,7 @@ export class OfflineManagerService {
     await this.push2Cloud() // upload not synched changes
     await this.localDb.clear()
     this.makeSignature(async sign => {
-      const user = await  lastValueFrom(this.users.loggedUser.pipe(take(2)))
+      const user = <UserModel><unknown>await  (this.users.loggedUser.pipe(takeLast(1)))
       await new StoreSignature(this.localDb, await sign, user.uid).execute()
     })
     const refreshStatus = () => { this._offlineDbStatus.next(this.evaluateDbStatus()) }
