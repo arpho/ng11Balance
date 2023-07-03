@@ -10,7 +10,7 @@ import {
   SimpleChanges,
   forwardRef
 } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, NG_VALUE_ACCESSOR, ControlValueAccessor, UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder  } from '@angular/forms';
 
 import { QuestionBase } from '../../models/question-base';
 
@@ -25,7 +25,7 @@ export class QuestionFormComponent implements OnInit, OnChanges {
 
 
 
-  constructor(private fb: UntypedFormBuilder) { }
+  constructor(private fb: FormBuilder) { }
 
   writeValue(obj: any): void {
     throw new Error('Method not implemented.');
@@ -35,7 +35,7 @@ export class QuestionFormComponent implements OnInit, OnChanges {
   }
   public value: any;
   @Input() question: QuestionBase<any>;
-  @Input() form: UntypedFormGroup;
+  @Input() form: FormGroup;
 
   ngOnInit() {
     this.value = this.question ? this.question.value : undefined;
@@ -43,8 +43,8 @@ export class QuestionFormComponent implements OnInit, OnChanges {
       ? this.form
       : this.fb.group({
         // I need an instance of formgroup for run the tests
-        name: new UntypedFormControl(this.question?.key),
-        value: new UntypedFormControl(this.question?.value)
+        name: new FormControl(this.question?.key),
+        value: new FormControl(this.question?.value)
       });
   }
 
