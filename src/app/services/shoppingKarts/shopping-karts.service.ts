@@ -167,15 +167,13 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
       const Purchase = new PurchaseModel().initialize(purchase2initialize)
 
-      const initiateCategory = (catKey2Beinirtialized) => {
+      const initiateCategory = (catKey2Beinitialized) => {
 
-        const Category = new CategoryModel(catKey2Beinirtialized)
+        let Category = new CategoryModel(catKey2Beinitialized)
 
-        if (catKey2Beinirtialized != '') {
-
-          this.categoriesService.getItem(catKey2Beinirtialized)?.on('value', (category) => {
-
-            Category.initialize(category.val())
+        if (catKey2Beinitialized != '') {
+          this.categoriesService.getItem(catKey2Beinitialized,(cat:CategoryModel)=>{
+            Category = cat
           })
         }
         return Category
@@ -202,16 +200,16 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
       const Purchase = new PurchaseModel().initialize(purchase2initialize)
 
-      const initiateCategory = (catKey2Beinirtialized) => {
+      const initiateCategory = (catKey2Beinitialized: string) => {
 
-        const Category = new CategoryModel(catKey2Beinirtialized)
+        var Category = new CategoryModel(catKey2Beinitialized)
 
-        if (catKey2Beinirtialized != '') {
-
-          this.categoriesService.getItem(catKey2Beinirtialized)?.on('value', (category) => {
-
-            Category.initialize(category.val())
+        if (catKey2Beinitialized != '') {
+          this.categoriesService.getItem(catKey2Beinitialized,(cat:CategoryModel)=>{
+            Category = cat
           })
+
+        
         }
         return Category
       }
@@ -249,10 +247,10 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     const purchaseInitializer = (purchase2initialize) => {
       const Purchase = new PurchaseModel().initialize(purchase2initialize)
       const initiateCategory = (catKey2Beinitialized) => {
-        const Category = new CategoryModel(catKey2Beinitialized)
+        let Category = new CategoryModel(catKey2Beinitialized)
         if (catKey2Beinitialized != '') {
-          this.categoriesService.getItem(catKey2Beinitialized).on('value', (category) => {
-            Category.initialize(category.val())
+          this.categoriesService.getItem(catKey2Beinitialized,(cat:CategoryModel)=>{
+            Category= cat
           })
         }
         return Category
