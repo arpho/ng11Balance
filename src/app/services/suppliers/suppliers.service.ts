@@ -146,9 +146,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
 
   async updateItem(item: SupplierModel) {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    this.manager.getLoggedUserSignature((val)=>{
-      console.log("got user signature",val)
-    })
+    
     const signature = this.manager.signature
     const Supplier = await new OfflineUpdateOperation(item, this.changes, this.localDb, signature, enabled,this).runOperations()
     return this.suppliersListRef.child(Supplier.key).update(Supplier.serialize());
