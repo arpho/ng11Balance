@@ -10,6 +10,7 @@ import * as firebase from "firebase/app";
 import { UsersService } from "./users.service";
 
 import "firebase/auth";
+import { UserModel } from "../models/userModel";
 @Injectable({
   providedIn: "root"
 })
@@ -28,7 +29,8 @@ export class AuthGuard implements CanActivate {
       firebase.default.auth().onAuthStateChanged((user: firebase.default.User) => {
         if (user) {
           console.log('authorised',user)
-          this.User.setLoggedUser(user.uid);
+          const loggedUser = new UserModel(user)
+          this.User.setLoggedUser(loggedUser);
           resolve(true);
         } else {
           console.log('not authorized')

@@ -251,15 +251,18 @@ export class OfflineManagerService {
   }
 
   async isLoggedUserOflineEnabled() {
-    const user = <UserModel><unknown>await (this.users.loggedUser.pipe(takeLast(1)))
-    return user.isOfflineEnabled()
+    const user =new UserModel(<UserModel><unknown> await (this.users.loggedUser.pipe(takeLast(1))))
+    
+    console.log("logged user",user)
+    return user?.isOfflineEnabled()
   }
 
   async rebaseDb() {
     await this.push2Cloud() // upload not synched changes
     await this.localDb.clear()
     this.makeSignature(async sign => {
-      const user = <UserModel><unknown>await  (this.users.loggedUser.pipe(takeLast(1)))
+      const user =await<UserModel><unknown>  (this.users.loggedUser.pipe(takeLast(1)))
+
       await new StoreSignature(this.localDb, await sign, user.uid).execute()
     })
     const refreshStatus = () => { this._offlineDbStatus.next(this.evaluateDbStatus()) }
