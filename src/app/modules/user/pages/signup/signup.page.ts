@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { LoadingController, AlertController } from '@ionic/angular';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-signup',
@@ -9,13 +9,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./signup.page.scss'],
 })
 export class SignupPage implements OnInit {
-  public signupForm: FormGroup;
+  public signupForm: UntypedFormGroup;
   public loading: any;
   constructor(
     private authService: AuthService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router
   ) {
     this.signupForm = this.formBuilder.group({
@@ -32,7 +32,7 @@ export class SignupPage implements OnInit {
 
   ngOnInit() { }
 
-  async signupUser(signupForm: FormGroup): Promise<void> {
+  async signupUser(signupForm: UntypedFormGroup): Promise<void> {
     if (!signupForm.valid) {
       console.log(
         'Need to complete the form, current value: ', signupForm.value

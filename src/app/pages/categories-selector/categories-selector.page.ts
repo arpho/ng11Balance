@@ -6,7 +6,7 @@ import { CategoryModel } from 'src/app/models/CategoryModel';
 import { ItemModelInterface } from 'src/app/modules/item/models/itemModelInterface';
 // import { CodegenComponentFactoryResolver } from '@angular/core/src/linker/component_factory_resolver';
 import { ComponentsPageModule } from 'src/app/modules/item/components/components.module';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators'
 // import { iterateListLike } from '@angular/core/src/change_detection/change_detection_util';
 
@@ -24,7 +24,7 @@ export class CategoriesSelectorPage implements OnInit {
   colorSelectedCategory = 'orange'
   filterString: string
   searchbar: any
-  searchControl: FormControl
+  searchControl: UntypedFormControl
   baseFilter: (item: CategoryModel) => boolean
   filterFunction: (item: CategoryModel) => boolean
   sorterFunction = (a: ItemModelInterface, b: ItemModelInterface) => (a.title < b.title ? -1 : (a.title > b.title ? 1 : 0))
@@ -40,7 +40,7 @@ export class CategoriesSelectorPage implements OnInit {
 
 
   constructor(public modalCtrl: ModalController, public service: CategoriesService, public navParams: NavParams) {
-    this.searchControl = new FormControl()
+    this.searchControl = new UntypedFormControl()
   }
   filterFactory(args: { selectedCategoriesList: Array<CategoryModel> }) {
     return (a: ItemModelInterface) => {
