@@ -5,7 +5,7 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "bp": "ng buid --configuration production",
+    "bp": "ng build --configuration production",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
