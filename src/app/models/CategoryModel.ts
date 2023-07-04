@@ -78,19 +78,11 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
         this.title = cat.title
         this.father = cat.father
         if (this.service) {
-            this.service.getItem(this.key).on('value', cat => {
-                if (cat.val()) {
-                    this.title = cat.val().title;
-                    this.fatherKey = cat.val().fatherKey
-                    if (this.fatherKey) {
-                        // this.father = new CategoryModel(this.fatherKey)
-                        // this.father.initialize()
-                    }
-                } else {
-                    this.father = undefined
-                    this.title = 'deleted'
-                }
-            });
+            this.service.getItem(this.key,(item:CategoryModel)=>{
+               Object.assign(this,item)
+            })
+            
+          
         } else {
             // this.title = 'non service'
         }

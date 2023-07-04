@@ -17,10 +17,11 @@ suppliersListRef?
 
     /**get one item from firebase
      * @param key:string
+     * @param next(item:itemModelInterface)=> void: optional callback function
      * @returns firebase.database reference
-     * @deprecated
+     
      */
-    getItem(key: string): firebase.default.database.Reference;
+    getItem(key: string,next?:(item:ItemModelInterface)=>void): firebase.default.database.Reference|void;
 
     /**modifica un item su firebase
      * @param item: ItemModelInterface the item to update

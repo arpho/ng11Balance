@@ -52,14 +52,11 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
     var Cat = new CategoryModel(cat.key).initialize(cat)
     if (Cat.fatherKey) {
-      this.getItem(Cat.fatherKey).on('value', father => { // in this case it is not posible use fetchItem
-        const FatherCategory = this.initializeCategory(father.val())
-        if (FatherCategory) {
-          FatherCategory.key = father && father.key ? father.key : FatherCategory.key
-          Cat.father = FatherCategory
+      this.getItem(Cat.fatherKey,
+        (categoria:CategoryModel)=>{
+          Cat.father= categoria
         }
-
-      })
+        )
     }
 
     return Cat
@@ -141,9 +138,26 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
 
-
-  getItem(prId: string): firebase.default.database.Reference {
-    return this.categoriesListRef?.child(prId);
+/**
+ * recupera la categoria da firebase e carica il father 
+ * @param key :string category' key
+ * @param next  callback function
+ * @todo implementare versione offline
+ */
+  getItem(key: string,next:(cat:CategoryModel)=>void){
+    if(this.categoriesListRef){
+      this.categoriesListRef.child(key).on('value',(snap=>{
+        const categoria = new CategoryModel(snap.val()).setKey(key)
+        //must set the father
+        if(categoria.fatherKey){
+          this.getItem(categoria.fatherKey,(father:CategoryModel)=>{
+            categoria.father= father
+          })
+        }
+        next(categoria)
+      }))
+    }
+   
   }
 
   async updateItem(item: OfflineItemModelInterface) {

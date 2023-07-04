@@ -48,20 +48,26 @@ static loggedUser:UserModel
     });
   }
 
-  getItem(key: string) {
-    if (this.usersRef) {
-      return this.usersRef.child(key);
-    }
+   getItem(key: string,next:(item)=>void) {
+
+ if(this.usersRef){
+  this.usersRef.child(key).once('value',(snap=>{
+    next(new UserModel(snap.val()).setKey(key))
+  }))
+
+ }
   }
 
   getLoggedUser() {
     return this.loggedUser;
   }
 
-  setLoggedUser(user: UserModel) {
+  async setLoggedUser(user: UserModel) {
     console.log('setting logged user', user)
-    this._loggedUser.next(user);
-    UsersService.loggedUser=user
+     this.getItem(user.key,(User:UserModel)=>{
+      this._loggedUser.next(User)
+      UsersService.loggedUser=User
+    })
     return this.loggedUser;
   }
 
