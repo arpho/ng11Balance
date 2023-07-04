@@ -72,8 +72,12 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     this.publish(this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel)))
   }
 
-  getItem(key: string): firebase.default.database.Reference {
-    return this.shoppingKartsListRef.child(key);
+  getItem(key: string, next?: (item: ShoppingKartModel) => void): void | firebase.default.database.Reference {
+    this.shoppingKartsListRef.child(key).on('value',(snap)=>{
+      const kart= new ShoppingKartModel(snap.val()).setKey(key)
+      next(kart)
+    })
+    
   }
 
   get entityLabel() {
