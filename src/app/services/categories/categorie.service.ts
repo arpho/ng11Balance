@@ -148,7 +148,7 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     if(this.categoriesListRef){
       this.categoriesListRef.child(key).on('value',(snap=>{
         const categoria = new CategoryModel(snap.val()).setKey(key)
-        //must set the father
+        //must set the father recursively
         if(categoria.fatherKey){
           this.getItem(categoria.fatherKey,(father:CategoryModel)=>{
             categoria.father= father
