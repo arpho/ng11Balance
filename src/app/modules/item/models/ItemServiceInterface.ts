@@ -19,9 +19,14 @@ suppliersListRef?
      * @param key:string
      * @param next(item:itemModelInterface)=> void: optional callback function
      * @returns firebase.database reference
-     
+     * @deprecated  
      */
     getItem(key: string,next?:(item:ItemModelInterface)=>void): firebase.default.database.Reference|void;
+    /**
+     * this method should replace getItem
+     * @param key :string item's key
+     */
+    getItem2(key:String): Promise<ItemModelInterface>
 
     /**modifica un item su firebase
      * @param item: ItemModelInterface the item to update
