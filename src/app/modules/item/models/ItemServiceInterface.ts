@@ -26,7 +26,7 @@ suppliersListRef?
      * this method should replace getItem
      * @param key :string item's key
      */
-    getItem2(key:String): Promise<ItemModelInterface>
+    getItem2?(key:String): Promise<ItemModelInterface>
 
     /**modifica un item su firebase
      * @param item: ItemModelInterface the item to update
