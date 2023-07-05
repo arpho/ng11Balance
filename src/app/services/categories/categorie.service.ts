@@ -159,6 +159,22 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     }
    
   }
+/**
+ * 
+ * @todo implementere funzionalità offline
+ * @returns CategoryModel
+ */
+ async getItem2(key:string){
+   const cat = await this.categoriesListRef?.child(key).once('value')
+   const category = new CategoryModel(cat.val())
+   if(category.fatherKey){
+    // carico le categorie father recursivamente 
+  const fatherCategory = await this.getItem2(category.fatherKey)  
+  category.father= fatherCategory
+  }
+
+  return category
+ }
 
   async updateItem(item: OfflineItemModelInterface) {
 
