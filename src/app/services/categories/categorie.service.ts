@@ -156,13 +156,8 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
  */
  async getItemOnLine(key:string){
    const cat = await this.categoriesListRef?.child(key).once('value')
-   const category = new CategoryModel(cat.val())
-   if(category.fatherKey){
-    // carico le categorie father recursivamente 
-  const fatherCategory = await this.getItemOnLine(category.fatherKey)  
-  category.father= fatherCategory
-  }
-
+   //load takes care of loading the father category 
+   const category = new CategoryModel().load(cat.val()).setKey(cat.key)
   return category
  }
 
