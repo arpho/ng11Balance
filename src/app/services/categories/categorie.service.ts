@@ -53,10 +53,10 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     var Cat = new CategoryModel(cat.key).initialize(cat)
     if (Cat.fatherKey) {
       this.getItem(Cat.fatherKey,
-        (categoria:CategoryModel)=>{
-          Cat.father= categoria
+        (categoria: CategoryModel) => {
+          Cat.father = categoria
         }
-        )
+      )
     }
 
     return Cat
@@ -138,28 +138,28 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
 
 
 
-/**
- * recupera la categoria da firebase e carica il father 
- * @param key :string category' key
- * @param next  callback function
- * @todo implementare versione offline
- */
-  async getItem(key: string,next:(cat:CategoryModel)=>void){
-     return  await !this.manager.isLoggedUserOflineEnabled?this.getItemOnLine(key):
-     this.getItemOffline(key)
-   
+  /**
+   * recupera la categoria da firebase e carica il father 
+   * @param key :string category' key
+   * @param next  callback function
+   * @todo implementare versione offline
+   */
+  async getItem(key: string, next: (cat: CategoryModel) => void) {
+    return await !this.manager.isLoggedUserOflineEnabled ? this.getItemOnLine(key) :
+      this.getItemOffline(key)
+
   }
-/**
- * 
- * @todo implementere funzionalità offline
- * @returns CategoryModel
- */
- async getItemOnLine(key:string){
-   const cat = await this.categoriesListRef?.child(key).once('value')
-   //load takes care of loading the father category 
-   const category = new CategoryModel().load(cat.val()).setKey(cat.key)
-  return category
- }
+  /**
+   * 
+   * @todo implementere funzionalità offline
+   * @returns CategoryModel
+   */
+  async getItemOnLine(key: string) {
+    const cat = await this.categoriesListRef?.child(key).once('value')
+    //load takes care of loading the father category 
+    const category = new CategoryModel().load(cat.val()).setKey(cat.key)
+    return category
+  }
 
   async updateItem(item: OfflineItemModelInterface) {
 
@@ -304,14 +304,14 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     return this.initializeCategory(args)
   }
 
-async  getItemOffline(key: string) {
-  const rawEntities = await this.localDb.fetchAllRawItems4Entity(this.entityLabel)
-  const rawCat = rawEntities.filter(item=>item.key==key)[0]
-  const cat = new CategoryModel().load(rawCat.item).setKey(rawCat.key) /* load takes in charge of instantiating the father
+  async getItemOffline(key: string) {
+    const rawEntities = await this.localDb.fetchAllRawItems4Entity(this.entityLabel)
+    const rawCat = rawEntities.filter(item => item.key == key)[0]
+    const cat = new CategoryModel().load(rawCat.item).setKey(rawCat.key) /* load takes in charge of instantiating the father
   categoryService.getItem uses the prope method to get the item online or offline
   */
-  
-  return cat
+
+    return cat
   }
 
 }

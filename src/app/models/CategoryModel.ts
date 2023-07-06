@@ -78,11 +78,11 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
         this.title = cat.title
         this.father = cat.father
         if (this.service) {
-            this.service.getItem(this.key,(item:CategoryModel)=>{
-               Object.assign(this,item)
+            this.service.getItem(this.key, (item: CategoryModel) => {
+                Object.assign(this, item)
             })
-            
-          
+
+
         } else {
             // this.title = 'non service'
         }
@@ -239,11 +239,11 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
 
     serialize() {
         var fatherKey = ''
-        if(this.fatherKey){
-            fatherKey=  this.fatherKey
+        if (this.fatherKey) {
+            fatherKey = this.fatherKey
         }
-        if(this.father){
-            fatherKey= this.father.getKey()
+        if (this.father) {
+            fatherKey = this.father.getKey()
         }
         return {
             title: this.title || '',
