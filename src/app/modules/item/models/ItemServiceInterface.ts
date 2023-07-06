@@ -21,19 +21,6 @@ export interface ItemServiceInterface {
      * @returns firebase.database reference
 c
 s     */
-    getItem(key: string): Promise<ItemModelInterface>;
-    /**
-     * this method fetch the Item freom the off line db
-     * @param key :string item's key
-     * @return Promise<ItemModelInterface
-     */
-    getItemOffline(key: string): Promise<ItemModelInterface>
-    /**
-     * 
-     * @param key : string key of the item
-     * @return Promise<ItemModelInterface
-     */
-    getItemOnLine(key: string): Promise<ItemModelInterface>
 
     /**modifica un item su firebase
      * @param item: ItemModelInterface the item to update
