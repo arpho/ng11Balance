@@ -75,13 +75,13 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
         return false
     }
     async load(cat: {}) { // TODO to be removed
-        Object.assign(this,cat)
-       if(this.service){
-        if(this.fatherKey){
-            const father = await  new CategoryModel().load(await this.service.getItem(this.fatherKey))
-            this.father= father            
+        Object.assign(this, cat)
+        if (this.service) {
+            if (this.fatherKey) {
+                const father = await new CategoryModel().load(await this.service.getItem(this.fatherKey))
+                this.father = father
+            }
         }
-       }
         return this
     }
     initialize(cat: any) {
