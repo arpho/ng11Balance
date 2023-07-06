@@ -21,7 +21,7 @@ export interface ItemServiceInterface {
      * @returns firebase.database reference
 c
 s     */
-    getItem(key: string, next?: (item: ItemModelInterface) => void): Promise<ItemModelInterface>;
+    getItem(key: string): Promise<ItemModelInterface>;
     /**
      * this method fetch the Item freom the off line db
      * @param key :string item's key
