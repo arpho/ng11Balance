@@ -144,19 +144,9 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
  * @param next  callback function
  * @todo implementare versione offline
  */
-  getItem(key: string,next:(cat:CategoryModel)=>void){
-    if(this.categoriesListRef){
-      this.categoriesListRef.child(key).on('value',(snap=>{
-        const categoria = new CategoryModel(snap.val()).setKey(key)
-        //must set the father recursively
-        if(categoria.fatherKey){
-          this.getItem(categoria.fatherKey,(father:CategoryModel)=>{
-            categoria.father= father
-          })
-        }
-        next(categoria)
-      }))
-    }
+  async getItem(key: string,next:(cat:CategoryModel)=>void){
+     return  await !this.manager.isLoggedUserOflineEnabled?this.getItemOnLine(key):
+     this.getItemOffline(key)
    
   }
 /**
@@ -164,12 +154,12 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
  * @todo implementere funzionalità offline
  * @returns CategoryModel
  */
- async getItem2(key:string){
+ async getItemOnLine(key:string){
    const cat = await this.categoriesListRef?.child(key).once('value')
    const category = new CategoryModel(cat.val())
    if(category.fatherKey){
     // carico le categorie father recursivamente 
-  const fatherCategory = await this.getItem2(category.fatherKey)  
+  const fatherCategory = await this.getItemOnLine(category.fatherKey)  
   category.father= fatherCategory
   }
 
@@ -319,4 +309,15 @@ export class CategoriesService implements OfflineItemServiceInterface, EntityWid
     return this.initializeCategory(args)
   }
 
+async  getItemOffline(key: string) {
+  const rawEntities = await this.localDb.fetchAllRawItems4Entity(this.entityLabel)
+  const rawCat = rawEntities.filter(item=>item.key==key)[0]
+  const cat = new CategoryModel().load(rawCat.item).setKey(rawCat.key) /* load takes in charge of instantiating the father
+  categoryService.getItem uses the prope method to get the item online or offline
+  */
+  
+  return cat
+  }
+
 }
+
