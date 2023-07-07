@@ -42,7 +42,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   _items: BehaviorSubject<Array<ExtendedShoppingKartModel>> = new BehaviorSubject([])
   readonly items: Observable<Array<ExtendedShoppingKartModel>> = this._items.asObservable()
   items_list: Array<ExtendedShoppingKartModel> = []
-  categoriesService?: ItemServiceInterface;
+  categoriesService?: CategoriesService;
 
   constructor(categories: CategoriesService,
     public payments: PaymentsService,
