@@ -38,10 +38,10 @@ export class SupplierModel implements OfflineItemModelInterface, WidgetitemIntef
 
 
     constructor({ fornitore, key }: {
-    fornitore?: {};
-    // tslint:disable-next-line: align
-    key?: string;
-} = {}) {
+        fornitore?: {};
+        // tslint:disable-next-line: align
+        key?: string;
+    } = {}) {
         this.quickActions = [
 
         ]

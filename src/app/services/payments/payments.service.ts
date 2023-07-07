@@ -141,26 +141,26 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   paymentsService?: ItemServiceInterface;
   suppliersListRef?: any;
 
-async getItemOffline(key: string): Promise<PaymentsModel> {
-  const rawPayment =
-   (await (this.localDb.fetchAllRawItems4Entity(this.entityLabel))).filter(item=>item.key==key)[0]
-  return new PaymentsModel(rawPayment.item).setKey(key)
-}
-async getItemOnLine(key: string): Promise<PaymentsModel> {
-  const rawPayment = (await this.paymentsListRef.child(key).once('value')).val()
-  return new PaymentsModel(rawPayment).setKey(key)
-}
+  async getItemOffline(key: string): Promise<PaymentsModel> {
+    const rawPayment =
+      (await (this.localDb.fetchAllRawItems4Entity(this.entityLabel))).filter(item => item.key == key)[0]
+    return new PaymentsModel(rawPayment.item).setKey(key)
+  }
+  async getItemOnLine(key: string): Promise<PaymentsModel> {
+    const rawPayment = (await this.paymentsListRef.child(key).once('value')).val()
+    return new PaymentsModel(rawPayment).setKey(key)
+  }
 
-  async getItem(key: string): Promise<PaymentsModel>{
-    return await this.manager.isLoggedUserOflineEnabled?this.getItemOffline(key):
-    this.getItemOnLine(key)
+  async getItem(key: string): Promise<PaymentsModel> {
+    return await this.manager.isLoggedUserOflineEnabled ? this.getItemOffline(key) :
+      this.getItemOnLine(key)
   }
 
   async createItem(item: ItemModelInterface) {
     var Payment: PaymentsModel = new PaymentsModel().initialize(item)
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-    Payment.setKey(await (await new OfflineCreateOperation(Payment, this.changes, signature, this.localDb, enabled,this).runOperations()).key)
+    Payment.setKey(await (await new OfflineCreateOperation(Payment, this.changes, signature, this.localDb, enabled, this).runOperations()).key)
     this.paymentsListRef.push(Payment.serialize())
 
     return Payment
@@ -170,7 +170,7 @@ async getItemOnLine(key: string): Promise<PaymentsModel> {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     const payment = new PaymentsModel().initialize(item)
-    await new OfflineUpdateOperation(payment, this.changes, this.localDb, signature, enabled,this).runOperations()
+    await new OfflineUpdateOperation(payment, this.changes, this.localDb, signature, enabled, this).runOperations()
     return this.paymentsListRef.child(item.key).update(item.serialize());
   }
 
@@ -178,7 +178,7 @@ async getItemOnLine(key: string): Promise<PaymentsModel> {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     const dummy = new PaymentsModel().setKey(key)
-    await new OfflineDeleteOperation(signature, dummy, this.localDb, this.changes, enabled,this).runOperations()
+    await new OfflineDeleteOperation(signature, dummy, this.localDb, this.changes, enabled, this).runOperations()
     return this.paymentsListRef.child(key).remove();
   }
 }

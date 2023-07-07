@@ -117,25 +117,25 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   paymentsService?: ItemServiceInterface;
   fidelityCardsListRef?: any;
 
- async getItemOffline(key: string): Promise<FidelityCardModel> {
-  const rawFidelityCard  = (await this.localDb.fetchAllRawItems4Entity(this.entityLabel)).filter(item=>item.key==key)[0]
+  async getItemOffline(key: string): Promise<FidelityCardModel> {
+    const rawFidelityCard = (await this.localDb.fetchAllRawItems4Entity(this.entityLabel)).filter(item => item.key == key)[0]
     return new FidelityCardModel(rawFidelityCard)
   }
   async getItemOnLine(key: string): Promise<FidelityCardModel> {
-   const fidelityCardRef = await this.fidelityCardsListRef.child(key).once('value').val()
+    const fidelityCardRef = await this.fidelityCardsListRef.child(key).once('value').val()
     return new FidelityCardModel(fidelityCardRef)
   }
- async  getItem(key: string) :Promise<FidelityCardModel>{
+  async getItem(key: string): Promise<FidelityCardModel> {
 
-  const out = await this.manager.isLoggedUserOflineEnabled?this.getItemOffline(key): this.getItemOnLine(key)
-    return out 
+    const out = await this.manager.isLoggedUserOflineEnabled ? this.getItemOffline(key) : this.getItemOnLine(key)
+    return out
   }
   async updateItem(item: ItemModelInterface) {
-    
+
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
     const fc = new FidelityCardModel().initialize(item)
-    await new OfflineUpdateOperation(fc,this.changes,this.localDb,signature,enabled,this).runOperations()
+    await new OfflineUpdateOperation(fc, this.changes, this.localDb, signature, enabled, this).runOperations()
     return this.fidelityCardsListRef.child(item.key).update(item.serialize())
   }
   async deleteItem(key: string) {
@@ -143,7 +143,7 @@ export class FidelityCardService implements OfflineItemServiceInterface {
     dummyCard.setKey(key)
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-    await new OfflineDeleteOperation(signature,dummyCard,this.localDb,this.changes,enabled,this).runOperations()
+    await new OfflineDeleteOperation(signature, dummyCard, this.localDb, this.changes, enabled, this).runOperations()
 
     return this.fidelityCardsListRef.child(key).remove()
   }
@@ -155,10 +155,10 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   async createItem(item: ItemModelInterface) {
 
     var fc = new FidelityCardModel().initialize(item)
-   
+
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = await this.manager.asyncSignature()
-    fc = new FidelityCardModel().initialize( await new OfflineCreateOperation(fc,this.changes,signature,this.localDb,enabled,this).runOperations())
+    fc = new FidelityCardModel().initialize(await new OfflineCreateOperation(fc, this.changes, signature, this.localDb, enabled, this).runOperations())
     await this.fidelityCardsListRef.push(fc.serialize())
     return new FidelityCardModel().initialize(fc);
   }

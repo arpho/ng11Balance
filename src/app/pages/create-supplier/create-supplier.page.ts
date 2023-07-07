@@ -63,7 +63,7 @@ export class CreateSupplierPage implements OnInit {
         order: 1
       }),
       new TextAreaBox({
-        autoGrow:true,
+        autoGrow: true,
 
         key: 'note',
 

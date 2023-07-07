@@ -47,7 +47,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
       }).reduce((pv, cv) => { return pv += cv }, 0)
     }
     this.instatiateItem = async (args: {}) => {
-      const supplier= new SupplierModel().initialize(args)
+      const supplier = new SupplierModel().initialize(args)
       return supplier
     }
 
@@ -62,17 +62,20 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
 
 
   }
-  async getItem(key:string):Promise<SupplierModel>{
-    return await this.manager.isLoggedUserOflineEnabled?this.getItemOffline(key):
-    this.getItemOnline(key)
+  getItemOnLine(key: string): Promise<ItemModelInterface> {
+    throw new Error('Method not implemented.');
   }
-  async getItemOnline(key: string):  Promise<SupplierModel> {
-  const rawSupplier = (await this.suppliersListRef.child(key).once('value')).val()
-  return new SupplierModel(rawSupplier).setKey(key)
+  async getItem(key: string): Promise<SupplierModel> {
+    return await this.manager.isLoggedUserOflineEnabled ? this.getItemOffline(key) :
+      this.getItemOnline(key)
   }
-  async getItemOffline(key: string):Promise<SupplierModel> {
-   const rawSupplier = (await this.localDb.fetchAllRawItems4Entity(this.entityLabel)).filter(item=>item.key==key)[0]
-   return new SupplierModel(rawSupplier.item).setKey(key)
+  async getItemOnline(key: string): Promise<SupplierModel> {
+    const rawSupplier = (await this.suppliersListRef.child(key).once('value')).val()
+    return new SupplierModel(rawSupplier).setKey(key)
+  }
+  async getItemOffline(key: string): Promise<SupplierModel> {
+    const rawSupplier = (await this.localDb.fetchAllRawItems4Entity(this.entityLabel)).filter(item => item.key == key)[0]
+    return new SupplierModel(rawSupplier.item).setKey(key)
   }
   async instatiateItem(args: {}) {
     return new SupplierModel({ fornitore: args })
@@ -120,7 +123,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   }
   offlineDbStatus: offLineDbStatus;
 
- 
+
   key = 'suppliers';
   get entityLabel() {
     return this.getDummyItem().entityLabel
@@ -143,7 +146,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
       initialize(item),
       this.changes,
       this.manager.signature,
-      this.localDb, await this.manager.isLoggedUserOflineEnabled(),this).runOperations()
+      this.localDb, await this.manager.isLoggedUserOflineEnabled(), this).runOperations()
     await this.suppliersListRef.push(Supplier.serialize())
     return Supplier
   }
@@ -156,15 +159,15 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
 
   async updateItem(item: SupplierModel) {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
-    
+
     const signature = this.manager.signature
-    const Supplier = await new OfflineUpdateOperation(item, this.changes, this.localDb, signature, enabled,this).runOperations()
+    const Supplier = await new OfflineUpdateOperation(item, this.changes, this.localDb, signature, enabled, this).runOperations()
     return this.suppliersListRef.child(Supplier.key).update(Supplier.serialize());
   }
   async deleteItem(key: string) {
     const enabled = await this.manager.isLoggedUserOflineEnabled()
     const signature = this.manager.signature
-    await new OfflineDeleteOperation(signature, new SupplierModel().setKey(key), this.localDb, this.changes, enabled,this).runOperations()
+    await new OfflineDeleteOperation(signature, new SupplierModel().setKey(key), this.localDb, this.changes, enabled, this).runOperations()
     return (key) ? this.suppliersListRef.child(key).remove() : undefined;
   }
 
