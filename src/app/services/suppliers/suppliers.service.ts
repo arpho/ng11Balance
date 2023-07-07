@@ -46,8 +46,9 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
         return (item.fornitoreId == entityKey) ? item.totale : 0
       }).reduce((pv, cv) => { return pv += cv }, 0)
     }
-    this.instatiateItem = (args: {}) => {
-      return new SupplierModel().initialize(args)
+    this.instatiateItem = async (args: {}) => {
+      const supplier= new SupplierModel().initialize(args)
+      return supplier
     }
 
     this.manager.isLoggedUserOflineEnabled().then(offlineEnabled => {
@@ -60,6 +61,21 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
     })
 
 
+  }
+  async getItem(key:string):Promise<SupplierModel>{
+    return await this.manager.isLoggedUserOflineEnabled?this.getItemOffline(key):
+    this.getItemOnline(key)
+  }
+  async getItemOnline(key: string):  Promise<SupplierModel> {
+  const rawSupplier = (await this.suppliersListRef.child(key).once('value')).val()
+  return new SupplierModel(rawSupplier).setKey(key)
+  }
+  async getItemOffline(key: string):Promise<SupplierModel> {
+   const rawSupplier = (await this.localDb.fetchAllRawItems4Entity(this.entityLabel)).filter(item=>item.key==key)[0]
+   return new SupplierModel(rawSupplier.item).setKey(key)
+  }
+  async instatiateItem(args: {}) {
+    return new SupplierModel({ fornitore: args })
   }
 
   setHref() {
@@ -104,9 +120,7 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
   }
   offlineDbStatus: offLineDbStatus;
 
-  instatiateItem: (args: {}) => ItemModelInterface = (item: {}) => {
-    return new SupplierModel().initialize(item)
-  }
+ 
   key = 'suppliers';
   get entityLabel() {
     return this.getDummyItem().entityLabel
@@ -134,10 +148,6 @@ export class SuppliersService implements OfflineItemServiceInterface, EntityWidg
     return Supplier
   }
 
-  getItem(prId: string): firebase.default.database.Reference {
-
-    return (this.suppliersListRef && prId) ? this.suppliersListRef.child(prId) : undefined;
-  }
 
   async loadFromFirebase() {
 
