@@ -271,7 +271,7 @@ export class ShoppingKartModel implements OfflineItemModelInterface {
     async load(next?: () => void) {
 
         // items  loaded and categories instantiated but not loaded
-        this.fornitore = new SupplierModel(undefined, this.fornitoreId)
+        this.fornitore = new SupplierModel({ fornitore: undefined, key: this.fornitoreId })
         this.pagamento = new PaymentsModel(undefined, this.pagamentoId)
         //this.fornitore.load(next)
         // this.pagamento.load()
