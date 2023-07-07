@@ -116,8 +116,19 @@ export class FidelityCardService implements OfflineItemServiceInterface {
   suppliersService?: ItemServiceInterface;
   paymentsService?: ItemServiceInterface;
   fidelityCardsListRef?: any;
-  getItem(key: string): firebase.default.database.Reference {
-    return this.fidelityCardsListRef.child(key)
+
+ async getItemOffline(key: string): Promise<FidelityCardModel> {
+  const rawFidelityCard  = (await this.localDb.fetchAllRawItems4Entity(this.entityLabel)).filter(item=>item.key==key)[0]
+    return new FidelityCardModel(rawFidelityCard)
+  }
+  async getItemOnLine(key: string): Promise<FidelityCardModel> {
+   const fidelityCardRef = await this.fidelityCardsListRef.child(key).once('value').val()
+    return new FidelityCardModel(fidelityCardRef)
+  }
+ async  getItem(key: string) :Promise<FidelityCardModel>{
+
+  const out = await this.manager.isLoggedUserOflineEnabled?this.getItemOffline(key): this.getItemOnLine(key)
+    return out 
   }
   async updateItem(item: ItemModelInterface) {
     
