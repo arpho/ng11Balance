@@ -14,7 +14,7 @@ export class CategoryModel implements FirebaseObject, OfflineItemModelInterface,
 
     key: string;
     title: string;
-    service: ItemServiceInterface;
+    service: CategoriesService;
     note: string;
     fatherKey: string;
     father: CategoryModel;
