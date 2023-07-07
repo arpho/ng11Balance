@@ -72,16 +72,16 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     this.publish(this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel)))
   }
 
-  async getItem(key: string): Promise<ShoppingKartModel>{
-   
-         return await this.manager.isLoggedUserOflineEnabled()? 
-     this.getItemOffline(key):
-     this.getItemOnLine(key)
-    
-    
+  async getItem(key: string): Promise<ShoppingKartModel> {
+
+    return await this.manager.isLoggedUserOflineEnabled() ?
+      this.getItemOffline(key) :
+      this.getItemOnLine(key)
+
+
   }
   async getItemOnLine(key: string): Promise<ExtendedShoppingKartModel> {
-    const rawKart =  (await this.shoppingKartsListRef.child(key).once('value')).val()
+    const rawKart = (await this.shoppingKartsListRef.child(key).once('value')).val()
     const kart = new ExtendedShoppingKartModel(rawKart)
     return kart
   }
@@ -136,7 +136,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
   publish: (items: ItemModelInterface[]) => void = async (items: ExtendedShoppingKartModel[]) => {
     const signature = await this.manager.asyncSignature()
-    console.log("got signature",signature)
+    console.log("got signature", signature)
     this._items.next(items)
   };
 
@@ -185,21 +185,21 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
         let Category = new CategoryModel(catKey2Beinitialized)
 
         if (catKey2Beinitialized != '') {
-         Category = await this.categoriesService.getItem(catKey2Beinitialized,)
+          Category = await this.categoriesService.getItem(catKey2Beinitialized,)
         }
         return Category
       }
-      const promisesList  = Purchase.categorieId ?  Purchase.categorieId.map( async(item)=> {return  initiateCategory(item)}) : []
-      Purchase.categorie = await  Promise.all(promisesList) // converts Promise<CategoryMosel>[] to CategoryModel[]
+      const promisesList = Purchase.categorieId ? Purchase.categorieId.map(async (item) => { return initiateCategory(item) }) : []
+      Purchase.categorie = await Promise.all(promisesList) // converts Promise<CategoryMosel>[] to CategoryModel[]
 
       return Purchase
     }
-    const kart = new ExtendedShoppingKartModel({ data: snap.val(),paymentsService:this.payments }).initialize(snap.val())
+    const kart = new ExtendedShoppingKartModel({ data: snap.val(), paymentsService: this.payments }).initialize(snap.val())
 
     kart.key = snap.key
 
-   const items = kart.items?.map(purchaseInitializer)
-   kart.items =await Promise.all(items)
+    const items = kart.items?.map(purchaseInitializer)
+    kart.items = await Promise.all(items)
 
     return kart
   }
@@ -220,7 +220,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
         if (catKey2Beinitialized != '') {
           this.categoriesService.getItem(catKey2Beinitialized)
 
-        
+
         }
         return Category
       }
@@ -228,7 +228,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
       return Purchase
     }
-    const kart = new ExtendedShoppingKartModel({data:item.item,paymentsService:this.payments}).initialize(item.item)
+    const kart = new ExtendedShoppingKartModel({ data: item.item, paymentsService: this.payments }).initialize(item.item)
 
     kart.key = item.key
 
@@ -257,15 +257,15 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
     const purchaseInitializer = async (purchase2initialize) => {
       const Purchase = new PurchaseModel().initialize(purchase2initialize)
-      const initiateCategory =  (catKey2Beinitialized) => {
+      const initiateCategory = (catKey2Beinitialized) => {
         let Category = new CategoryModel(catKey2Beinitialized)
         if (catKey2Beinitialized != '') {
           this.categoriesService.getItem(catKey2Beinitialized)
         }
         return Category
       }
-      const promises =  Purchase.categorieId ?  Purchase.categorieId.map( async(item)=> {return  initiateCategory(item)}) : []
-      Purchase.categorie = await  Promise.all(promises) // converts Promise<CategoryMosel>[] to CategoryModel[]
+      const promises = Purchase.categorieId ? Purchase.categorieId.map(async (item) => { return initiateCategory(item) }) : []
+      Purchase.categorie = await Promise.all(promises) // converts Promise<CategoryMosel>[] to CategoryModel[]
       return Purchase
     }
 
