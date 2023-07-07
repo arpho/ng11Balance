@@ -173,25 +173,24 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   paymentsService?: ItemServiceInterface;
   suppliersListRef?: any;
 
-  initializeSingleKart(snap) {
+  async initializeSingleKart(snap) {
 
 
-    const purchaseInitializer = (purchase2initialize) => {
+    const purchaseInitializer = async (purchase2initialize) => {
 
       const Purchase = new PurchaseModel().initialize(purchase2initialize)
 
-      const initiateCategory = (catKey2Beinitialized) => {
+      const initiateCategory = async (catKey2Beinitialized) => {
 
         let Category = new CategoryModel(catKey2Beinitialized)
 
         if (catKey2Beinitialized != '') {
-          this.categoriesService.getItem(catKey2Beinitialized,(cat:CategoryModel)=>{
-            Category = cat
-          })
+         Category = await this.categoriesService.getItem(catKey2Beinitialized,)
         }
         return Category
       }
-      Purchase.categorie = Purchase.categorieId ? Purchase.categorieId.map(initiateCategory) : []
+      const promisesList  = Purchase.categorieId ?  Purchase.categorieId.map( async(item)=> {return  initiateCategory(item)}) : []
+      Purchase.categorie = await  Promise.all(promisesList) // converts Promise<CategoryMosel>[] to CategoryModel[]
 
       return Purchase
     }
