@@ -17,12 +17,7 @@ export class PaymentsModel implements OfflineItemModelInterface, WidgetitemIntef
     quickActions: Array<QuickAction>
     archived: boolean;
     constructor(
-        payment?: {
-            nome?: string,
-            addebito: string,
-            note: string
-            key: string
-        },
+        payment?: {},
         // tslint:disable-next-line: align
         key?: string,
         // tslint:disable-next-line: align
