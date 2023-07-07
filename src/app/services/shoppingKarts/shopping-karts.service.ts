@@ -72,12 +72,21 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
     this.publish(this.initializeItems(await this.localDb.fetchAllRawItems4Entity(this.entityLabel)))
   }
 
-  getItem(key: string, next?: (item: ShoppingKartModel) => void): void | firebase.default.database.Reference {
-    this.shoppingKartsListRef.child(key).on('value',(snap)=>{
-      const kart= new ShoppingKartModel(snap.val()).setKey(key)
-      next(kart)
-    })
+  async getItem(key: string): Promise<ShoppingKartModel>{
+   
+         return await this.manager.isLoggedUserOflineEnabled()? 
+     this.getItemOffline(key):
+     this.getItemOnLine(key)
     
+    
+  }
+  async getItemOnLine(key: string): Promise<ExtendedShoppingKartModel> {
+    const rawKart =  (await this.shoppingKartsListRef.child(key).once('value')).val()
+    const kart = new ExtendedShoppingKartModel(rawKart)
+    return kart
+  }
+  getItemOffline(key: string): Promise<ExtendedShoppingKartModel> {
+    throw new Error('Method not implemented.');
   }
 
   get entityLabel() {
