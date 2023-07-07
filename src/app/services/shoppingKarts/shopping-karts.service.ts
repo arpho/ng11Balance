@@ -198,7 +198,8 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
 
     kart.key = snap.key
 
-    kart.items = kart.items?.map(purchaseInitializer)
+   const items = kart.items?.map(purchaseInitializer)
+   kart.items =await Promise.all(items)
 
     return kart
   }
@@ -217,9 +218,7 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
         var Category = new CategoryModel(catKey2Beinitialized)
 
         if (catKey2Beinitialized != '') {
-          this.categoriesService.getItem(catKey2Beinitialized,(cat:CategoryModel)=>{
-            Category = cat
-          })
+          this.categoriesService.getItem(catKey2Beinitialized)
 
         
         }
@@ -256,18 +255,17 @@ export class ShoppingKartsService implements OfflineItemServiceInterface {
   initializeItems(items: RawItem[]) {
     const karts: Array<ShoppingKartModel> = []
 
-    const purchaseInitializer = (purchase2initialize) => {
+    const purchaseInitializer = async (purchase2initialize) => {
       const Purchase = new PurchaseModel().initialize(purchase2initialize)
-      const initiateCategory = (catKey2Beinitialized) => {
+      const initiateCategory =  (catKey2Beinitialized) => {
         let Category = new CategoryModel(catKey2Beinitialized)
         if (catKey2Beinitialized != '') {
-          this.categoriesService.getItem(catKey2Beinitialized,(cat:CategoryModel)=>{
-            Category= cat
-          })
+          this.categoriesService.getItem(catKey2Beinitialized)
         }
         return Category
       }
-      Purchase.categorie = Purchase.categorieId ? Purchase.categorieId.map(initiateCategory) : []
+      const promises =  Purchase.categorieId ?  Purchase.categorieId.map( async(item)=> {return  initiateCategory(item)}) : []
+      Purchase.categorie = await  Promise.all(promises) // converts Promise<CategoryMosel>[] to CategoryModel[]
       return Purchase
     }
 
