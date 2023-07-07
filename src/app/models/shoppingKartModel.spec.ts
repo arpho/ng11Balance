@@ -150,8 +150,10 @@ describe('getTitle should work when no fornitore', () => {
         }
         const KartNoTitle = new ShoppingKartModel(testdata)
         KartNoTitle.fornitore = new SupplierModel({
-            title: 'supplier title', note: 'just 4 test', nome: 'dummy', key: 'test',
-            ecommerce: false
+            fornitore: {
+                title: 'supplier title', note: 'just 4 test', nome: 'dummy', key: 'test',
+                ecommerce: false
+            }
         })
         expect(KartNoTitle.getTitle().value).toBe('supplier title')
 
