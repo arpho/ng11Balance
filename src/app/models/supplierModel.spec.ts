@@ -39,8 +39,8 @@ describe('testing supplierModel', () => {
         note: "",
         onLine: true,
     }
-    const supplier = new SupplierModel(pennyData).setKey(pennyData.key)
-    const supplier2 = new SupplierModel(pennyData2)
+    const supplier = new SupplierModel({ fornitore: pennyData }).setKey(pennyData.key)
+    const supplier2 = new SupplierModel({ fornitore: pennyData2 })
     it("supplier should be correct", () => {
         expect(supplier.cliente).toBe(pennyData.cliente)
         expect(supplier.personaFisica).toBe(pennyData.personaFisica)

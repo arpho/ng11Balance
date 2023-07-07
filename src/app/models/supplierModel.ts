@@ -37,26 +37,11 @@ export class SupplierModel implements OfflineItemModelInterface, WidgetitemIntef
     quickActions: Array<QuickAction>
 
 
-    constructor(fornitore?: {
-        nome: string,
-        note: string,
-        title?: string,
-        fidelity_card?: string,
-        address?: {
-
-            address: string,
-            latitude: number,
-            longitude: number,
-            indirizzo?: string
-        }
-        altitude?: string,
-        key: string,
-        ecommerce: boolean,
-
-
-    },
-        // tslint:disable-next-line: align
-        key?: string) {
+    constructor({ fornitore, key }: {
+    fornitore?: {};
+    // tslint:disable-next-line: align
+    key?: string;
+} = {}) {
         this.quickActions = [
 
         ]

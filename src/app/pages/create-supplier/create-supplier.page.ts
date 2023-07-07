@@ -29,7 +29,7 @@ export class CreateSupplierPage implements OnInit {
 
     this.showSpinner = true
 
-    this.supplier = new SupplierModel(supplier)
+    this.supplier = new SupplierModel({ fornitore: supplier })
 
     this.supplier.build(supplier)
 
