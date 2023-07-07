@@ -141,10 +141,19 @@ export class PaymentsService implements OfflineItemServiceInterface, EntityWidge
   paymentsService?: ItemServiceInterface;
   suppliersListRef?: any;
 
+async getItemOffline(key: string): Promise<PaymentsModel> {
+  const rawPayment =
+   (await (this.localDb.fetchAllRawItems4Entity(this.entityLabel))).filter(item=>item.key==key)[0]
+  return new PaymentsModel(rawPayment.item).setKey(key)
+}
+async getItemOnLine(key: string): Promise<PaymentsModel> {
+  const rawPayment = (await this.paymentsListRef.child(key).once('value')).val()
+  return new PaymentsModel(rawPayment).setKey(key)
+}
 
-
-  getItem(prId: string): firebase.default.database.Reference {
-    return this.paymentsListRef.child(prId);
+  async getItem(key: string): Promise<PaymentsModel>{
+    return await this.manager.isLoggedUserOflineEnabled?this.getItemOffline(key):
+    this.getItemOnLine(key)
   }
 
   async createItem(item: ItemModelInterface) {
